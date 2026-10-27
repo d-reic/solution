@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { LINES } from './content';
 import { epilogue, ledgerRows, resolveEnding } from './endings';
 import { STEP } from './loop';
 import { type Action, breakOptions, floorClues, greenWidth, quotaFor, reduce } from './reducer';
@@ -226,6 +227,7 @@ describe('evenings', () => {
     expect(next.money).toBeCloseTo(s.money);
     expect(next.household).toBe(100 - T.householdLossPerBill);
     expect(greenWidth(next)).toBe(T.greenWidthNarrow);
+    expect(next.feed).toContain(LINES.events.hungry); // and the shift says why
   });
 
   it('Inge falls ill at zero household, and medicine is billed until paid', () => {

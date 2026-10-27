@@ -58,7 +58,8 @@
     "taskWon": "Brandt hebt kurz die Hand. Der Wagen fährt ab.",
     "taskLost": "Der Wagen fährt halb leer ab. Brandt schreibt etwas auf.",
     "blanksLow": "Der Stapel Rohlinge neben der Presse wird niedrig.",
-    "blanksOut": "Keine Rohlinge mehr. Die Presse steht."
+    "blanksOut": "Keine Rohlinge mehr. Die Presse steht.",
+    "hungry": "Dir knurrt der Magen. Die Hände sind unruhig, die Nadel scheint schneller als sonst."
   },
   "floor": {
     "brandt": "Brandts Pult",

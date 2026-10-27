@@ -363,6 +363,7 @@ function beginShift(state: GameState): GameState {
     },
   });
   s = planShift(s);
+  if (s.flags.hungry) s = say(s, LINES.events.hungry);
   if (s.shiftLog.inspector) s = say(s, LINES.events.inspector);
   if (s.flags.emilArrested && !s.flags.emilGoneSeen) {
     s = say({ ...s, flags: { ...s.flags, emilGoneSeen: true } }, LINES.events.emilGone);

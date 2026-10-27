@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
+import { LINES } from './content';
 import { type Action, reduce } from './reducer';
 import { endingView } from './scenes/ending';
 import { eveningView } from './scenes/evening';
@@ -102,5 +103,17 @@ describe('evening toggles', () => {
     expect(sent).toEqual([]);
     expect(bread.checked).toBe(false);
     expect(v.el.querySelector<HTMLElement>('[data-short]')!.hidden).toBe(false);
+  });
+});
+
+describe('evening lines', () => {
+  it("Lotte gives her plate to Inge as soon as food is unticked", () => {
+    let s: GameState = reduce(reduce(initialState(2), { type: 'newGame', seed: 2 }), { type: 'advance' });
+    s = reduce(run({ ...s, shift: 2, today: { good: 45, amber: 0, scrap: 0 } }, T.shiftLength), { type: 'advance' });
+    const v = eveningView(s, noop);
+    const lotte = () => v.el.querySelector('[data-lotte]')!.textContent;
+    expect(lotte()).not.toBe(LINES.evening.lotte.hungry);
+    v.update(reduce(s, { type: 'pay', bill: 'food' }));
+    expect(lotte()).toBe(LINES.evening.lotte.hungry);
   });
 });

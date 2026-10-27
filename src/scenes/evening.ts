@@ -110,7 +110,8 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
     const kitchen = $(el, '[data-kitchen]');
     kitchen.dataset.level = lv;
     $(el, '[data-scene]').textContent = E.kitchen[lv];
-    $(el, '[data-lotte]').textContent = s.flags.hungry ? E.lotte.hungry : E.lotte[lv];
+    // Follows the food box as it is ticked: no food tonight, and Lotte gives her plate to Inge.
+    $(el, '[data-lotte]').textContent = !ev.paying.food ? E.lotte.hungry : E.lotte[lv];
     const ill = s.flags.ingeIll && !s.flags.ingeRecovered;
     $(el, '[data-inge]').textContent = ill ? E.inge.ill : s.flags.ingeRecovered && lv !== 'high' ? E.inge.recovered : E.inge[lv];
 
