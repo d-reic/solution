@@ -45,8 +45,8 @@
     "6": {
       "date": "Montag, 22. Dezember 1941",
       "lines": [
-        { "text": "Am Werkstor hängt ein Tannenzweig. Daneben ein Aufruf: Wollsachen, Pelze und Skier für die Front, abzugeben bis Sonntag." },
-        { "text": "Viele in der Bahn tragen ihren zweiten Mantel. Den guten haben sie schon abgegeben." },
+        { "text": "Am Werkstor hängt ein Tannenzweig. Daneben ein frischer Aufruf: Wollsachen, Pelze und Skier für die Front. Gesammelt wird nach Weihnachten." },
+        { "text": "In der Bahn rechnen die Leute halblaut nach, welchen Mantel sie entbehren können." },
         { "text": "An Bank 9 fängt heute ein Neuer an. Keiner fragt, wo Emil ist.", "if": { "flag": "emilArrested" } },
         { "text": "Am Zaun beim Hof steht Jakub und sieht auf die Straße. Dich sieht er nicht.", "if": { "jakubFedAtLeast": 1 } }
       ]

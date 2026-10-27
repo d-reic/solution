@@ -252,16 +252,25 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
   .hud .val { font-size: 22px; }
   .hud-clock { grid-column: 1 / -1; order: 3; }
   .bench { grid-template-columns: 1fr; }
-  .floor { order: -1; padding: 10px; gap: 8px; }
+  /* The floor's parts become rows of the bench: controls and places above the press, the log below it,
+     so the gauge and the press button stay on screen without scrolling. */
+  .bench { gap: 10px; }
+  .floor { display: contents; }
+  .wear { order: -2; background: var(--floor-2); border: 1px solid var(--machine-lo); border-radius: 6px; padding: 8px 10px; }
+  .places { order: -1; flex-direction: row; overflow-x: auto; scroll-snap-type: x proximity; gap: 8px; padding-bottom: 4px; }
+  .log { order: 1; max-height: none; }
+  .log .slip:nth-child(n + 4) { display: none; }
   .wear-dial canvas { height: 46px; }
   .wear { grid-template-columns: auto 1fr 1fr; }
   .wear-dial { grid-column: auto; }
   .oil { font-size: 17px; padding: 6px 8px; }
-  .log { max-height: 7.5em; }
-  .places { flex-direction: row; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; }
-  .place { flex: 0 0 min(78vw, 260px); scroll-snap-align: start; }
+  /* One row of places: a small name tag, then that place's actions side by side. */
+  .place { flex: 0 0 auto; display: flex; gap: 6px; align-items: stretch; scroll-snap-align: start; }
+  .place h3 { flex: 0 0 auto; max-width: 5.5em; margin: 0; align-self: center; font-size: 12px; line-height: 1.15; }
+  .place .act { flex: 0 0 min(62vw, 220px); margin: 0; }
+  .place .quiet { display: none; }
   .home, .papers { grid-template-columns: 1fr; }
-  .log .slip:not(:first-child) { display: none; }
+  .machine { padding: 12px; gap: 10px; }
   .crate-row { grid-template-columns: 1fr; }
   .counts { text-align: left; display: flex; gap: 14px; align-items: baseline; }
   .press { padding: 26px 18px; }

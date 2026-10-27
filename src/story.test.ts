@@ -69,6 +69,8 @@ describe('break scenes', () => {
     s = reduce(s, { type: 'choose', sceneId: 'break', option: 'listen' });
     expect(s.clues).toContain('C4');
     expect(s.knowledge).toBe(0.5);
+    expect(s.trust.emil).toBe(1); // one conversation, one step of trust
+
   });
 
   it("skip Emil's scenes once he's gone", () => {

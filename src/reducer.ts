@@ -823,10 +823,10 @@ function applyStoryOption(state: GameState, opt: StoryOption): GameState {
   let s = state;
   if (opt.trust) s = addTrust(s, opt.trust);
   if (opt.attention) s = addAttention(s, opt.attention);
+  // The clue's knowledge only: the reply's own trust already stands for the conversation.
   if (opt.clue && !s.clues.includes(opt.clue)) {
     const c = clueById(opt.clue);
     s = addKnowledge({ ...s, clues: [...s.clues, c.id] }, c.knowledge);
-    if (c.trust) s = addTrust(s, c.trust);
   }
   return s;
 }
