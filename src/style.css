@@ -100,13 +100,14 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
 .counts .muted b { font-size: 16px; }
 
 .floor { background: var(--floor-2); border: 1px solid var(--machine-lo); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.wear { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; }
-.wear-dial { display: grid; justify-items: center; }
+.wear { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
+.wear-dial { display: grid; justify-items: center; grid-column: 1 / -1; }
 .wear-dial canvas { width: 100%; max-width: 140px; height: 70px; }
 .wear-dial b { color: var(--text); }
 .oil {
   background: transparent; color: var(--text); border: 1px solid var(--machine-hi); border-radius: 4px;
-  padding: 10px 16px; font-family: var(--f-stencil); font-weight: 800; font-size: 22px; letter-spacing: .1em;
+  padding: 8px 10px; font-family: var(--f-stencil); font-weight: 800; font-size: 20px; letter-spacing: .06em;
+  min-width: 0;
 }
 .oil:hover:not(:disabled) { background: var(--machine-lo); }
 .oil:disabled { opacity: .4; cursor: default; }
@@ -252,6 +253,8 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
   .floor { order: -1; padding: 10px; gap: 8px; }
   .wear-dial canvas { height: 46px; }
   .wear { grid-template-columns: auto 1fr 1fr; }
+  .wear-dial { grid-column: auto; }
+  .oil { font-size: 17px; padding: 6px 8px; }
   .log { max-height: 7.5em; }
   .places { flex-direction: row; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; }
   .place { flex: 0 0 min(78vw, 260px); scroll-snap-align: start; }

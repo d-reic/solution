@@ -382,7 +382,8 @@
         "fine": "Feinpassteil",
         "drift": "Wanderteil",
         "double": "Doppelteil"
-      }
+      },
+      "awayShort": "{s} Sekunden"
     },
     "report": {
       "title": "SCHICHTENDE",

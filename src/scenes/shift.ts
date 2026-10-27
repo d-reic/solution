@@ -62,8 +62,8 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
         <aside class="floor">
           <div class="wear">
             <div class="wear-dial"><canvas data-wear aria-hidden="true"></canvas><span class="lbl">${U.wear} <b data-wearpct>0%</b></span></div>
-            <button class="oil" type="button" data-oil>${U.oil}<small>${fill(U.away, { s: T.oilSeconds })}</small></button>
-            <button class="oil" type="button" data-fetch>${U.fetchBlanks}<small>${fill(U.away, { s: T.blanksSeconds })}</small></button>
+            <button class="oil" type="button" data-oil>${U.oil}<small>${fill(U.awayShort, { s: T.oilSeconds })}</small></button>
+            <button class="oil" type="button" data-fetch>${U.fetchBlanks}<small>${fill(U.awayShort, { s: T.blanksSeconds })}</small></button>
           </div>
           <div class="places" data-places></div>
           <div class="log" data-log></div>
