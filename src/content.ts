@@ -59,6 +59,19 @@ export function pick(list: readonly string[], n: number): string {
   return list[((n % list.length) + list.length) % list.length];
 }
 
+/** The game's text: German. */
+export const UI = lines.ui;
+
+/** German number formatting: 1.234 */
+export function num(n: number): string {
+  return Math.round(n).toLocaleString('de-DE');
+}
+
+/** Reichsmark, German style: 4,80 RM */
+export function rm(n: number): string {
+  return `${n.toFixed(2).replace('.', ',')} RM`;
+}
+
 /** Fills {name} slots in a line. */
 export function fill(line: string, values: Record<string, string | number>): string {
   return line.replace(/\{(\w+)\}/g, (m, k: string) => (k in values ? String(values[k]) : m));

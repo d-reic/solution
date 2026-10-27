@@ -45,7 +45,7 @@ describe('rendered scenes', () => {
   it('never show knowledge as a number', () => {
     for (const [name, v] of scenes()) {
       const text = v.el.textContent ?? '';
-      expect(text, name).not.toMatch(/3\.7|knowledge/i);
+      expect(text, name).not.toMatch(/3[.,]7|knowledge|Wissensstand/i);
       v.destroy();
     }
   });

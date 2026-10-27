@@ -1,8 +1,8 @@
 [
-  { "week": 1, "month": "October" },
-  { "week": 2, "month": "October" },
+  { "week": 1, "month": "Oktober" },
+  { "week": 2, "month": "Oktober" },
   { "week": 3, "month": "November" },
   { "week": 4, "month": "November" },
-  { "week": 5, "month": "December" },
-  { "week": 6, "month": "December" }
+  { "week": 5, "month": "Dezember" },
+  { "week": 6, "month": "Dezember" }
 ]

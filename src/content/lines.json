@@ -1,243 +1,333 @@
 {
   "shiftStart": {
     "1-1": [
-      "Brandt walks you to bench 14 and taps the gauge. \"Needle in the green, you press. Green is tolerance. Anything else is scrap, and scrap isn't paid.\"",
-      "\"Forty a shift. The press wears as you work. When it runs hot, oil it. If it seizes, you wait for the fitter, and the fitter is never quick.\""
+      "Brandt führt dich zu Bank 14 und klopft auf die Anzeige. „Nadel im Grünen, dann drückst du. Grün ist Toleranz. Alles andere ist Ausschuss, und Ausschuss wird nicht bezahlt.“",
+      "„Vierzig pro Schicht. Die Presse nutzt sich ab, während du arbeitest. Wenn sie heiß läuft, ölst du sie. Wenn sie sich festfrisst, wartest du auf den Schlosser, und der Schlosser ist nie schnell.“"
     ],
-    "1-2": ["A stack of empty crates by the loading door. Fresh stencil on the lids."],
-    "2-1": ["A new man at bench 9, older, with a union pin's hole still in his lapel. Emil. He nods at you once."],
-    "3-1": ["Men from the Ministry walk the floor with Brandt. From today an inspector pulls parts from the crates at random."],
-    "4-1": ["The bench next to yours has a new operator. He wears a \"P\" on his jacket. Brandt calls him by a number; his name is Jakub."],
-    "5-1": ["Snow on the yard. Greta from the inspector's office walks the floor more often now, a ledger under her arm."],
-    "6-1": ["A special order for the new year. Brandt chalks it on the board: seventy a shift, and a Christmas bonus for every bench that makes it."],
+    "1-2": ["Ein Stapel leerer Kisten am Ladetor. Frische Schablonenschrift auf den Deckeln."],
+    "2-1": ["Ein Neuer an Bank 9, älter, am Revers noch das Loch einer Gewerkschaftsnadel. Emil. Er nickt dir einmal zu."],
+    "3-1": ["Herren vom Ministerium gehen mit Brandt durch die Halle. Ab heute zieht ein Prüfer Stichproben aus den Kisten."],
+    "4-1": ["An der Bank neben dir steht ein neuer Arbeiter. Auf seiner Jacke ein „P“. Brandt ruft ihn mit einer Nummer; er heißt Jakub."],
+    "5-1": ["Schnee auf dem Hof. Greta aus dem Prüfbüro geht jetzt öfter durch die Halle, ein Buch unter dem Arm."],
+    "6-1": ["Ein Sonderauftrag fürs neue Jahr. Brandt schreibt es mit Kreide an die Tafel: siebzig pro Schicht, und eine Weihnachtsprämie für jede Bank, die es schafft."],
     "default": [
-      "The bell. Brandt is already at his desk with the clipboard.",
-      "Steam on the windows. Somebody at bench 9 is whistling, badly.",
-      "The press is cold for the first few strokes. Then it isn't.",
-      "The radio in Brandt's office is turned low. Marching music, then the news."
+      "Die Glocke. Brandt sitzt schon mit dem Klemmbrett am Pult.",
+      "Dampf an den Fenstern. An Bank 9 pfeift jemand, schlecht.",
+      "Die ersten Hübe ist die Presse kalt. Dann nicht mehr.",
+      "Das Radio in Brandts Büro ist leise gedreht. Marschmusik, dann die Nachrichten."
     ]
   },
   "events": {
-    "jam": "The ram seizes with a bang. Somebody shouts for the fitter.",
-    "jamClear": "The fitter wipes his hands on his trousers and walks off without a word.",
-    "oil": "You work the oil can into the guides. The ram slides easier.",
-    "wearHigh": "The press is running hot. The needle shudders.",
-    "quotaMet": "Quota. Brandt makes a mark on his clipboard.",
-    "inspector": "An inspector stands at your elbow with a notebook. He stays the whole shift.",
-    "sampleCheck": "The inspector pulls a part from your crate, turns it under the lamp, and drops it back.",
-    "caught": "The inspector holds a part up to the light, then writes something down. He keeps the part.",
-    "brandtOut": "Brandt leaves his desk and goes up to the office.",
-    "brandtBack": "Brandt is back at his desk.",
-    "railCar": "A goods wagon backs up to the loading door.",
-    "bread": "You leave the bread on the corner of Jakub's bench. He looks at it, then at you, and puts it inside his jacket.",
-    "breadSeen": "Greta is standing by the clock with her ledger. She saw.",
-    "cover": "You step into the inspector's line of sight with a question about the oil ration. Behind you, Emil keeps pressing.",
-    "coverCaught": "The inspector steps around you. \"Your bench is over there.\" He looks at Emil's crate for a long time.",
-    "gretaReports": "Greta passes your bench without looking at you. That afternoon Brandt's door stays shut for an hour.",
-    "emilGone": "Bench 9 is empty. Nobody mentions it."
+    "jam": "Der Stößel frisst sich mit einem Knall fest. Jemand ruft nach dem Schlosser.",
+    "jamClear": "Der Schlosser wischt sich die Hände an der Hose ab und geht ohne ein Wort.",
+    "oil": "Du arbeitest die Ölkanne in die Führungen. Der Stößel gleitet leichter.",
+    "wearHigh": "Die Presse läuft heiß. Die Nadel zittert.",
+    "quotaMet": "Soll erfüllt. Brandt macht einen Strich auf seinem Klemmbrett.",
+    "inspector": "Ein Prüfer steht mit einem Notizbuch neben dir. Er bleibt die ganze Schicht.",
+    "sampleCheck": "Der Prüfer zieht ein Teil aus deiner Kiste, dreht es unter der Lampe und legt es zurück.",
+    "caught": "Der Prüfer hält ein Teil gegen das Licht, dann schreibt er etwas auf. Das Teil behält er.",
+    "brandtOut": "Brandt verlässt sein Pult und geht hinauf ins Büro.",
+    "brandtBack": "Brandt ist zurück an seinem Pult.",
+    "railCar": "Ein Güterwagen setzt rückwärts ans Ladetor.",
+    "bread": "Du legst das Brot an die Ecke von Jakubs Bank. Er sieht es an, dann dich, und steckt es in seine Jacke.",
+    "breadSeen": "Greta steht mit ihrem Buch an der Stechuhr. Sie hat es gesehen.",
+    "cover": "Du stellst dich dem Prüfer in den Blick und fragst nach der Ölzuteilung. Hinter dir presst Emil weiter.",
+    "coverCaught": "Der Prüfer geht um dich herum. „Ihre Bank ist dort drüben.“ Er sieht lange in Emils Kiste.",
+    "gretaReports": "Greta geht an deiner Bank vorbei, ohne dich anzusehen. Am Nachmittag bleibt Brandts Tür eine Stunde lang zu.",
+    "emilGone": "Bank 9 ist leer. Niemand spricht davon."
   },
   "floor": {
-    "brandt": "Brandt's desk",
-    "brandtAway": "Brandt's desk · empty",
-    "crate": "Loading door",
-    "emil": "Emil · bench 9",
-    "jakub": "Jakub · bench 15",
-    "yard": "The yard",
-    "breadLabel": "Leave the bread at Jakub's bench",
-    "coverLabel": "Stand between the inspector and Emil"
+    "brandt": "Brandts Pult",
+    "brandtAway": "Brandts Pult · leer",
+    "crate": "Ladetor",
+    "emil": "Emil · Bank 9",
+    "jakub": "Jakub · Bank 15",
+    "yard": "Der Hof",
+    "breadLabel": "Das Brot an Jakubs Bank legen",
+    "coverLabel": "Zwischen Prüfer und Emil stellen"
   },
   "shiftReport": {
     "beat": [
-      "Brandt chalks the number on the board and, after a moment, underlines it.",
-      "\"Bench 14.\" Brandt writes it in his book. \"That's how it's done.\""
+      "Brandt schreibt die Zahl mit Kreide an die Tafel und unterstreicht sie nach einem Moment.",
+      "„Bank 14.“ Brandt trägt es in sein Buch ein. „So wird das gemacht.“"
     ],
     "met": [
-      "Brandt looks into the crate, nods, and moves on to bench 15.",
-      "\"Quota.\" Brandt doesn't look up from the clipboard."
+      "Brandt sieht in die Kiste, nickt und geht weiter zu Bank 15.",
+      "„Soll.“ Brandt sieht nicht vom Klemmbrett auf."
     ],
     "missed": [
-      "Brandt looks into the crate. \"{quota}, not {good}. There are men waiting for your bench.\"",
-      "\"Short again?\" Brandt makes a note. He doesn't say what it is."
+      "Brandt sieht in die Kiste. „{quota}, nicht {good}. Draußen warten Männer auf deine Bank.“",
+      "„Schon wieder zu wenig?“ Brandt macht eine Notiz. Er sagt nicht, was er schreibt."
     ],
     "underMinimum": [
-      "Brandt counts twice. \"{good}. The inspectors read these numbers too.\"",
-      "Brandt holds up the tally sheet so you can see it. He doesn't say anything."
+      "Brandt zählt zweimal. „{good}. Die Prüfer lesen diese Zahlen auch.“",
+      "Brandt hält dir den Zählzettel hin, damit du ihn sehen kannst. Er sagt nichts."
     ],
     "zero": [
-      "Brandt stands at your bench for a long moment. \"An empty crate. You understand what that looks like.\"",
-      "Brandt doesn't come over. He just writes. That is worse."
+      "Brandt steht lange an deiner Bank. „Eine leere Kiste. Du weißt, wie das aussieht.“",
+      "Brandt kommt nicht herüber. Er schreibt nur. Das ist schlimmer."
     ],
-    "inspectorNote": "Inspector's note: {checks} sample checks, {caught} rejected.",
-    "zeroWarning": "Second empty crate: Brandt has your card in his hand."
+    "inspectorNote": "Vermerk des Prüfers: {checks} Stichproben, {caught} beanstandet.",
+    "zeroWarning": "Zweite leere Kiste: Brandt hat deine Stempelkarte in der Hand."
   },
   "evening": {
     "kitchen": {
-      "high": "The kitchen is warm. Potatoes, a little bacon fat, bread under a cloth.",
-      "mid": "Soup again, thinner than last week. The lamp is turned down to save oil.",
-      "low": "A bare table. Lotte has sold the good chairs. The stove is cold before nine."
+      "high": "Die Küche ist warm. Kartoffeln, ein wenig Speckfett, Brot unter einem Tuch.",
+      "mid": "Wieder Suppe, dünner als letzte Woche. Die Lampe ist heruntergedreht, um Öl zu sparen.",
+      "low": "Ein leerer Tisch. Lotte hat die guten Stühle verkauft. Vor neun ist der Ofen kalt."
     },
     "lotte": {
-      "high": "Lotte counts the coins twice and puts them in the tin. \"We'll manage this week.\"",
-      "mid": "Lotte turns your pay packet over. \"It's less than it was. The butcher asked again.\"",
-      "low": "Lotte doesn't ask about the shift. She asks how much is left, and then she stops asking.",
-      "hungry": "Lotte puts her own plate in front of Inge without saying anything."
+      "high": "Lotte zählt die Münzen zweimal und legt sie in die Dose. „Diese Woche kommen wir hin.“",
+      "mid": "Lotte dreht deine Lohntüte um. „Es ist weniger als früher. Der Metzger hat wieder gefragt.“",
+      "low": "Lotte fragt nicht nach der Schicht. Sie fragt, wie viel übrig ist, und dann fragt sie nicht mehr.",
+      "hungry": "Lotte schiebt ihren eigenen Teller zu Inge hinüber, ohne etwas zu sagen."
     },
     "inge": {
-      "high": "Inge shows you a drawing of a train. \"Is that the one you make parts for?\"",
-      "mid": "Inge does her sums at the table, wrapped in your coat.",
-      "low": "Inge is in bed early. She says she isn't hungry.",
-      "ill": "Inge is in bed with a fever. The doctor's note on the table names a medicine, and a price.",
-      "recovered": "Inge is up again, thin, drawing at the table."
+      "high": "Inge zeigt dir eine Zeichnung von einem Zug. „Ist das der, für den du die Teile machst?“",
+      "mid": "Inge rechnet am Tisch, in deinen Mantel gewickelt.",
+      "low": "Inge liegt früh im Bett. Sie sagt, sie hat keinen Hunger.",
+      "ill": "Inge liegt mit Fieber im Bett. Auf dem Tisch der Zettel vom Arzt: ein Medikament, und ein Preis.",
+      "recovered": "Inge ist wieder auf, dünn, und zeichnet am Tisch."
     },
     "newspaper": {
-      "1": "The paper: a speech, a recipe for turnip soup, the football.",
+      "1": "Die Zeitung: eine Rede, ein Rezept für Steckrübensuppe, Fußball.",
       "2": "",
-      "3": "The paper: the Ministry praises the factories of the Reich. A photo of a production line.",
-      "4": "The paper: winter clothing collection for the front. Bring your wool.",
-      "5": "The paper: the advance has paused for the winter. Only for the winter, it says.",
-      "6": "The paper: Christmas greetings to the soldiers in the East."
+      "3": "Die Zeitung: Das Ministerium lobt die Betriebe des Reiches. Ein Foto von einem Fließband.",
+      "4": "Die Zeitung: Wintersammlung für die Front. Bringt eure Wolle.",
+      "5": "Die Zeitung: Der Vormarsch ruht über den Winter. Nur über den Winter, steht da.",
+      "6": "Die Zeitung: Weihnachtsgrüße an die Soldaten im Osten."
     },
+    "folded": "Die Abendzeitung liegt auf dem Tisch, noch gefaltet.",
     "bills": {
-      "food": "Food",
-      "rent": "Rent",
-      "coal": "Coal",
-      "medicine": "Medicine for Inge"
+      "food": "Essen",
+      "rent": "Miete",
+      "coal": "Kohle",
+      "medicine": "Medizin für Inge"
     },
-    "bread": "Wrap bread for tomorrow",
-    "notebookEmpty": "Nothing written yet."
+    "bread": "Brot für morgen einpacken",
+    "notebookEmpty": "Noch nichts aufgeschrieben."
   },
   "office": {
     "warning": {
-      "title": "BRANDT'S OFFICE",
-      "intro": "Brandt closes the door and doesn't sit down. \"People are asking about bench 14. I'm not one of them yet. Don't make me one.\"",
-      "inspectorIntro": "The inspector is at the window. \"If there's anyone on the floor we should be talking to, this is the time to say so.\""
+      "title": "BRANDTS BÜRO",
+      "intro": "Brandt schließt die Tür und setzt sich nicht. „Es wird nach Bank 14 gefragt. Noch frage ich nicht mit. Bring mich nicht dazu.“",
+      "inspectorIntro": "Der Prüfer steht am Fenster. „Wenn es in der Halle jemanden gibt, mit dem wir reden sollten, dann ist jetzt der Moment, es zu sagen.“"
     },
     "statement": {
-      "title": "THE INSPECTOR'S OFFICE",
-      "intro": "Greta puts a typed sheet in front of you and a pen beside it. \"A statement about Emil Krause. It's only what everyone on the floor has seen. Sign at the bottom.\""
+      "title": "DAS PRÜFBÜRO",
+      "intro": "Greta legt dir ein getipptes Blatt hin und einen Füller daneben. „Eine Aussage über Emil Krause. Nur was alle in der Halle gesehen haben. Unten unterschreiben.“"
     }
   },
   "officeOptions": {
     "warning": [
-      { "id": "promise", "label": "\"It won't happen again.\"", "reply": "\"Good.\" Brandt opens the door for you.", "attention": -5, "trust": { "brandt": 1 } },
-      { "id": "ask", "label": "\"What are the parts for, Herr Brandt?\"", "reply": "Brandt looks at you for a long time. \"Fill the crate. That's what they're for.\"", "attention": 8 },
-      { "id": "silent", "label": "Say nothing.", "reply": "Brandt waits, then shrugs and opens the door." }
+      { "id": "promise", "label": "„Es kommt nicht wieder vor.“", "reply": "„Gut.“ Brandt öffnet dir die Tür.", "attention": -5, "trust": { "brandt": 1 } },
+      { "id": "ask", "label": "„Wofür sind die Teile, Herr Brandt?“", "reply": "Brandt sieht dich lange an. „Füll die Kiste. Dafür sind sie.“", "attention": 8 },
+      { "id": "silent", "label": "Nichts sagen.", "reply": "Brandt wartet, zuckt dann die Schultern und öffnet die Tür." }
     ],
-    "warningReport": { "id": "report", "label": "\"Emil, at bench 9.\"", "reply": "The inspector writes the name down. Brandt looks at the floor. \"You can go back to work.\"", "report": true },
-    "warningDeny": { "id": "noone", "label": "\"No one.\"", "reply": "The inspector closes his notebook. \"We'll see.\"" },
+    "warningReport": { "id": "report", "label": "„Emil, an Bank 9.“", "reply": "Der Prüfer schreibt den Namen auf. Brandt sieht zu Boden. „Du kannst zurück an die Arbeit.“", "report": true },
+    "warningDeny": { "id": "noone", "label": "„Niemand.“", "reply": "Der Prüfer klappt sein Notizbuch zu. „Wir werden sehen.“" },
     "statement": [
-      { "id": "read", "label": "Read it first", "read": "C11" },
-      { "id": "sign", "label": "Sign it", "reply": "Greta blots the signature and smiles for the first time. \"Thank you. The Werk will remember it.\"", "report": true },
-      { "id": "refuse", "label": "\"I didn't see anything.\"", "reply": "Greta takes the sheet back and folds it once. \"I'll write that down too.\"", "attention": 10, "trust": { "greta": -2 } }
+      { "id": "read", "label": "Erst durchlesen", "read": "C11" },
+      { "id": "sign", "label": "Unterschreiben", "reply": "Greta löscht die Unterschrift ab und lächelt zum ersten Mal. „Danke. Das Werk wird es nicht vergessen.“", "report": true },
+      { "id": "refuse", "label": "„Ich habe nichts gesehen.“", "reply": "Greta nimmt das Blatt zurück und faltet es einmal. „Das schreibe ich auch auf.“", "attention": 10, "trust": { "greta": -2 } }
     ]
   },
   "weekReport": {
     "propaganda": {
-      "1": "Every part from Werk 7 is a brick in the house of the future.",
-      "2": "The front thanks the home front. Victory is a matter of output.",
-      "3": "The Ministry has noted the diligence of Werk 7.",
-      "4": "Winter will not stop the German worker.",
-      "5": "The best workers do not ask why. They ask how many.",
-      "6": "The year's last order. The Reich will remember who delivered."
+      "1": "Jedes Teil aus Werk 7 ist ein Stein im Haus der Zukunft.",
+      "2": "Die Front dankt der Heimatfront. Der Sieg ist eine Frage der Leistung.",
+      "3": "Das Ministerium hat den Fleiß von Werk 7 zur Kenntnis genommen.",
+      "4": "Der Winter hält den deutschen Arbeiter nicht auf.",
+      "5": "Die besten Arbeiter fragen nicht warum. Sie fragen wie viele.",
+      "6": "Der letzte Auftrag des Jahres. Das Reich wird nicht vergessen, wer geliefert hat."
     },
-    "quiet": "A quiet week on bench 14.",
-    "gretaWord": "Greta has put in a good word for you.",
-    "nextQuota": "Next week's quota: {quota} a shift."
+    "quiet": "Eine ruhige Woche an Bank 14.",
+    "gretaWord": "Greta hat ein gutes Wort für dich eingelegt.",
+    "nextQuota": "Soll nächste Woche: {quota} pro Schicht."
   },
   "endings": {
     "1": {
-      "name": "ARRESTED FOR SABOTAGE",
+      "name": "VERHAFTET WEGEN SABOTAGE",
       "lines": [
-        "On a Monday morning two men in coats were waiting at bench 14. One of them had a bag of your parts, each one cracked through the middle.",
-        "Brandt didn't look up."
+        "An einem Montagmorgen warteten zwei Männer in Mänteln an Bank 14. Einer von ihnen hatte einen Beutel mit deinen Teilen, jedes einzelne mittendurch gebrochen.",
+        "Brandt sah nicht auf."
       ],
-      "verdict": "You lost on points. You won the game."
+      "verdict": "Nach Punkten verloren. Das Spiel gewonnen."
     },
     "2": {
-      "name": "REFUSAL",
+      "name": "VERWEIGERUNG",
       "lines": [
-        "Once you knew what the parts were for, the crate stayed nearly empty.",
-        "They came for your card, and then for you. Bench 14 stood idle for a week before they found someone else."
+        "Als du wusstest, wofür die Teile waren, blieb die Kiste fast leer.",
+        "Sie holten deine Stempelkarte, und dann dich. Bank 14 stand eine Woche still, bis sie jemand anderen fanden."
       ],
-      "verdict": "You lost on points. You won the game."
+      "verdict": "Nach Punkten verloren. Das Spiel gewonnen."
     },
     "3": {
-      "name": "DISMISSED",
+      "name": "ENTLASSEN",
       "lines": [
-        "Bench 14 fell short too often. Brandt gave your place to the next man in line.",
-        "You never found out what the parts were for. Someone else makes them now."
+        "Bank 14 blieb zu oft unter dem Soll. Brandt gab deinen Platz dem Nächsten in der Schlange.",
+        "Du hast nie erfahren, wofür die Teile waren. Jetzt macht sie jemand anderes."
       ],
-      "verdict": "No score. No answer."
+      "verdict": "Keine Punkte. Keine Antwort."
     },
     "4": {
-      "name": "THE INFORMER",
+      "name": "DER DENUNZIANT",
       "lines": [
-        "Werk 7 awarded you its medal for loyalty, presented by the Ministry at the Christmas assembly.",
-        "Your name was read out first."
+        "Werk 7 verlieh dir seine Treuemedaille, überreicht vom Ministerium bei der Weihnachtsfeier.",
+        "Dein Name wurde als erster verlesen."
       ],
-      "verdict": "You won on points. You lost the game."
+      "verdict": "Nach Punkten gewonnen. Das Spiel verloren."
     },
     "5": {
-      "name": "THE GOOD GERMAN",
+      "name": "DER GUTE DEUTSCHE",
       "lines": [
-        "Bench 14 made fittings for the breech blocks of field guns. Every crate you filled went east by train.",
-        "You never asked, or you asked once and let it go."
+        "Bank 14 machte Passteile für die Verschlüsse von Feldgeschützen. Jede Kiste, die du gefüllt hast, ging mit dem Zug nach Osten.",
+        "Du hast nie gefragt, oder einmal gefragt und es dann gelassen."
       ],
-      "verdict": "You won on points. You lost the game."
+      "verdict": "Nach Punkten gewonnen. Das Spiel verloren."
     },
     "6": {
-      "name": "STOPPED",
+      "name": "ANGEHALTEN",
       "lines": [
-        "Once you knew, the press went quiet. You stood at the bench and made almost nothing, and somehow the year ran out before they came for you.",
-        "The war went on. It got very little more from bench 14."
+        "Als du es wusstest, wurde die Presse still. Du standst an der Bank und hast fast nichts gemacht, und irgendwie ging das Jahr zu Ende, bevor sie dich holten.",
+        "Der Krieg ging weiter. Von Bank 14 bekam er kaum noch etwas."
       ],
-      "verdict": "You lost on points. You won the game."
+      "verdict": "Nach Punkten verloren. Das Spiel gewonnen."
     },
     "7": {
-      "name": "THE QUIET SABOTEUR",
+      "name": "DER STILLE SABOTEUR",
       "lines": [
-        "Your crates went out full. Many of the parts in them were pressed a hair outside the green.",
-        "They passed at the bench. They did not pass under load."
+        "Deine Kisten gingen voll hinaus. Viele Teile darin waren um ein Haar neben dem Grünen gepresst.",
+        "An der Bank hielten sie. Unter Last hielten sie nicht."
       ],
-      "verdict": "A modest score. Many of your parts failed in the field."
+      "verdict": "Eine bescheidene Punktzahl. Viele deiner Teile versagten im Feld."
     },
     "8": {
-      "name": "THE EFFICIENT MAN",
+      "name": "DER TÜCHTIGE MANN",
       "lines": [
-        "You found out exactly what bench 14 was for.",
-        "Then you went back to the press and kept the line running."
+        "Du hast genau herausgefunden, wofür Bank 14 da war.",
+        "Dann bist du zurück an die Presse gegangen und hast die Linie am Laufen gehalten."
       ],
-      "verdict": "You knew. You won on points anyway."
+      "verdict": "Du hast es gewusst. Und trotzdem nach Punkten gewonnen."
     },
     "9": {
-      "name": "THE BARE MINIMUM",
+      "name": "DAS NÖTIGSTE",
       "lines": [
-        "Once you knew, you pressed just enough to keep the bench and the family.",
-        "Nobody looked twice at bench 14. The parts you didn't make never reached the front."
+        "Als du es wusstest, hast du gerade so viel gepresst, dass Bank und Familie blieben.",
+        "Niemand sah zweimal auf Bank 14. Die Teile, die du nicht gemacht hast, kamen nie an die Front."
       ],
-      "verdict": "A low score. A quiet refusal."
+      "verdict": "Wenig Punkte. Eine stille Weigerung."
     }
   },
   "victory": {
     "headline": "Glückwunsch!",
-    "line": "You have helped lead the Reich to victory.",
-    "honor": "Exemplary worker · Werk 7 · Bench 14",
-    "medal": "Medal for loyal service"
+    "line": "Du hast geholfen, das Reich zum Sieg zu führen.",
+    "honor": "Vorbildlicher Arbeiter · Werk 7 · Bank 14",
+    "medal": "Medaille für treue Dienste"
   },
   "epilogue": {
-    "jakub": "Jakub survived the winter. He never learned your name.",
-    "emilReported": "Bench 9 had a new operator by Monday.",
-    "emilCovered": "Emil kept pressing amber parts until the factory was bombed in 1944.",
-    "inge": "Inge recovered. The medicine cost two days' pay.",
-    "crate": "The crate was stencilled the whole time."
+    "jakub": "Jakub überlebte den Winter. Deinen Namen hat er nie erfahren.",
+    "emilReported": "Bank 9 hatte bis Montag einen neuen Arbeiter.",
+    "emilCovered": "Emil presste weiter Teile knapp neben dem Grünen, bis das Werk 1944 bombardiert wurde.",
+    "inge": "Inge wurde wieder gesund. Die Medizin kostete zwei Tageslöhne.",
+    "crate": "Die Kisten waren die ganze Zeit beschriftet."
   },
   "ledger": {
-    "title": "THE LEDGER",
-    "parts": "Parts delivered",
-    "blocks": "Field-gun breech blocks completed",
-    "failed": "Parts that failed in the field",
-    "afterKnowing": "Parts made after you knew",
-    "helped": "People you helped",
-    "reported": "People you reported"
+    "title": "DAS HAUPTBUCH",
+    "parts": "Gelieferte Teile",
+    "blocks": "Fertige Verschlüsse für Feldgeschütze",
+    "failed": "Teile, die im Feld versagten",
+    "afterKnowing": "Teile, nachdem du es wusstest",
+    "helped": "Menschen, denen du geholfen hast",
+    "reported": "Menschen, die du gemeldet hast"
+  },
+  "ui": {
+    "title": {
+      "meta": "Werk 7 · Bank 14 · Herbst 1941",
+      "lead": "Du bedienst eine Maschinenpresse. Jeder Hub macht ein Teil. Deine Punktzahl ist deine Leistung.",
+      "rules": [
+        ["DRÜCKEN", "Drück, wenn die Nadel im grünen Bereich steht. Klick oder tipp auf den roten Knopf, oder drück die Leertaste."],
+        ["ÖLEN", "Die Presse nutzt sich ab. Öle sie, bevor sie sich festfrisst. Ölen hält dich 3 Sekunden von der Presse fern."],
+        ["SOLL", "Sechzig Sekunden pro Schicht, drei Schichten pro Woche, sechs Wochen. Das Ministerium setzt das Soll."],
+        ["ZUHAUSE", "Dein Lohn ernährt eine Familie. Miete, Essen und, wenn der Winter kommt, Kohle."]
+      ],
+      "continue": "WEITER",
+      "start": "EINSTEMPELN",
+      "newGame": "NEUES SPIEL",
+      "soundOn": "Ton: an",
+      "soundOff": "Ton: aus",
+      "note": "Spielt in einer deutschen Fabrik im Jahr 1941. Enthält Bezüge zu Krieg, Zwangsarbeit und Verfolgung.",
+      "credit": "Inspiriert von dem Spiel, das Sadie in Gabrielle Zevins Roman <i>Morgen, morgen und wieder morgen</i> entwickelt."
+    },
+    "shift": {
+      "week": "Woche {week} · Schicht {shift}",
+      "clock": "Schichtuhr",
+      "clockAria": "Zeit in der Schicht",
+      "attention": "Aufmerksamkeit",
+      "score": "Punkte",
+      "inspector": "Prüfer an der Bank",
+      "press": "DRÜCKEN",
+      "pressHint": "oder Leertaste",
+      "scrap": "Ausschuss",
+      "over": "+{n} über Soll",
+      "wear": "Verschleiß",
+      "oil": "ÖLEN",
+      "away": "{s} s weg",
+      "points": "−{n} Punkte",
+      "jammed": "FESTGEFRESSEN · Schlosser in {s} s",
+      "inTolerance": "IN TOLERANZ",
+      "scrapStatus": "AUSSCHUSS",
+      "awayFor": {
+        "oil": "ÖLEN",
+        "ask": "AN BRANDTS PULT",
+        "look": "WEG VON DER PRESSE",
+        "talk": "IM GESPRÄCH",
+        "bread": "AN BANK 15",
+        "cover": "BEI BANK 9"
+      }
+    },
+    "report": {
+      "title": "SCHICHTENDE",
+      "meta": "{month} 1941 · Woche {week} · Schicht {shift}",
+      "parts": "Teile",
+      "scrap": "Ausschuss",
+      "quota": "Soll",
+      "met": "erfüllt",
+      "missed": "verfehlt",
+      "points": "Punkte",
+      "pay": "Lohn",
+      "attention": "Aufmerksamkeit",
+      "score": "Punktestand",
+      "continue": "WEITER"
+    },
+    "evening": {
+      "meta": "{month} 1941 · Woche {week} · Abend {shift}",
+      "title": "ZUHAUSE",
+      "wallet": "Geldbörse",
+      "after": "nach heute Abend: {money}",
+      "newspaper": "Zeitung",
+      "read": "Die Zeitung lesen",
+      "notebook": "Notizbuch",
+      "bed": "INS BETT",
+      "endWeek": "WOCHE BEENDEN"
+    },
+    "office": { "continue": "WEITER" },
+    "week": {
+      "meta": "Reichsministerium für Bewaffnung und Munition · {month} 1941",
+      "title": "WOCHE {week} · WERK 7",
+      "output": "Leistung, Bank 14",
+      "rank": "Rang in Werk 7",
+      "rankValue": "{rank} von {of}",
+      "score": "Punktestand",
+      "wallet": "Geldbörse",
+      "attention": "Aufmerksamkeit",
+      "next": "WOCHE {week}",
+      "continue": "WEITER"
+    },
+    "ending": {
+      "points": "Punkte",
+      "rank": "Rang {rank} von {of} in Werk 7",
+      "again": "NOCH EINMAL"
+    }
   }
 }

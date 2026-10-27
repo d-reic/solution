@@ -65,9 +65,9 @@ describe('endings', () => {
     });
     const lines = epilogue(s);
     expect(lines[0]).toMatch(/Jakub/);
-    expect(lines[1]).toMatch(/Bench 9/);
+    expect(lines[1]).toMatch(/Bank 9/);
     expect(lines[2]).toMatch(/Inge/);
-    expect(lines[3]).toMatch(/crate/);
+    expect(lines[3]).toMatch(/Kisten/);
     expect(epilogue(make({ ledger: { jakubFed: 2 } }))).toEqual([]);
   });
 
@@ -87,7 +87,7 @@ describe('clues', () => {
     expect(s.attention).toBe(T.attentionPerQuestion);
     expect(s.press.awayUntil).toBe(4);
     expect(s.clues).toContain('C1');
-    expect(s.feed.at(-1)).toMatch(/Precision fittings/);
+    expect(s.feed.at(-1)).toMatch(/Präzisionspassteile/);
   });
 
   it('shows the crate stencil from week 1, shift 2', () => {

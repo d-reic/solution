@@ -1,4 +1,4 @@
-import { LINES, clue } from '../content';
+import { LINES, UI, clue } from '../content';
 import { emilPresent, officeOptions } from '../reducer';
 import type { GameState } from '../state';
 import { $, type Dispatch, html, type View } from './view';
@@ -14,7 +14,7 @@ export function officeView(state: GameState, dispatch: Dispatch): View {
       <div class="document" data-doc hidden></div>
       <div class="replies" data-replies></div>
       <p class="said reply" data-reply hidden></p>
-      <button class="btn dark" type="button" data-next hidden>CONTINUE</button>
+      <button class="btn dark" type="button" data-next hidden>${UI.office.continue}</button>
     </section>`);
   $(el, 'h2').textContent = O.title;
   $(el, '[data-intro]').textContent = O.intro;

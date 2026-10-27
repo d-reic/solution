@@ -2,134 +2,134 @@
   {
     "id": "C1",
     "source": { "kind": "ask", "who": "brandt" },
-    "label": "Ask Brandt what the parts are for",
+    "label": "Brandt fragen, wofür die Teile sind",
     "available": {},
     "cost": { "seconds": 4, "points": 25, "attention": 8 },
     "knowledge": 0,
-    "text": "Brandt doesn't look up from the clipboard. \"Precision fittings. Don't concern yourself.\"",
-    "note": "Brandt won't say what the parts are for. Nobody here likes questions."
+    "text": "Brandt sieht nicht vom Klemmbrett auf. „Präzisionspassteile. Das braucht dich nicht zu kümmern.“",
+    "note": "Brandt sagt nicht, wofür die Teile sind. Hier mag niemand Fragen."
   },
   {
     "id": "C2",
     "source": { "kind": "look", "target": "crate" },
-    "label": "Look at the crate stencil",
+    "label": "Die Schablonenschrift auf der Kiste ansehen",
     "available": { "from": [1, 2] },
     "cost": { "seconds": 2, "points": 0, "attention": 0 },
     "knowledge": 1,
-    "text": "Fresh stencil on every lid: HWA, and a plain eagle beneath it. Heereswaffenamt. The Army Ordnance Office.",
-    "note": "The crates are stencilled HWA: the Army Ordnance Office."
+    "text": "Frische Schablonenschrift auf jedem Deckel: HWA, darunter ein schlichter Adler. Heereswaffenamt.",
+    "note": "Auf den Kisten steht HWA: das Heereswaffenamt."
   },
   {
     "id": "C3",
     "source": { "kind": "read", "target": "newspaper" },
-    "label": "Read the newspaper",
+    "label": "Die Zeitung lesen",
     "available": { "weekMin": 2 },
     "cost": { "seconds": 0, "points": 0, "attention": 0 },
     "knowledge": 0.5,
-    "text": "Front page: a long column of field guns on a muddy road, moving east. The headline promises the war will be over by Christmas.",
-    "note": "The paper is full of field guns going east."
+    "text": "Titelseite: eine lange Kolonne Feldgeschütze auf einer schlammigen Straße, unterwegs nach Osten. Die Schlagzeile verspricht, dass der Krieg zu Weihnachten vorbei ist.",
+    "note": "Die Zeitung ist voller Feldgeschütze, die nach Osten fahren."
   },
   {
     "id": "C4",
     "source": { "kind": "talk", "who": "emil" },
-    "label": "Talk to Emil at the break",
+    "label": "In der Pause mit Emil reden",
     "available": { "weekMin": 2, "trust": { "emil": 0 } },
     "cost": { "seconds": 4, "points": 0, "attention": 0 },
     "knowledge": 0.5,
     "trust": { "emil": 1 },
-    "text": "Emil wipes his hands and keeps his voice low. \"Ask yourself who pays for steel this year.\"",
-    "note": "Emil: ask yourself who pays for steel this year."
+    "text": "Emil wischt sich die Hände ab und spricht leise. „Frag dich mal, wer dieses Jahr den Stahl bezahlt.“",
+    "note": "Emil: Frag dich, wer dieses Jahr den Stahl bezahlt."
   },
   {
     "id": "C5",
     "source": { "kind": "talk", "who": "emil" },
-    "label": "Ask Emil about the drawing in his locker",
+    "label": "Emil nach der Zeichnung in seinem Spind fragen",
     "available": { "weekMin": 2, "trust": { "emil": 1 }, "clues": ["C2"] },
     "cost": { "seconds": 4, "points": 0, "attention": 0 },
     "knowledge": 1,
     "trust": { "emil": 1 },
-    "text": "Emil unfolds a creased drawing. A fitting is circled in pencil, seated inside a breech block. \"Ours. Recognise it?\"",
-    "note": "The part is a breech-block fitting. For guns."
+    "text": "Emil faltet eine zerknitterte Zeichnung auf. Ein Passteil ist mit Bleistift eingekreist, eingesetzt in einen Geschützverschluss. „Unseres. Erkennst du es?“",
+    "note": "Das Teil gehört in einen Geschützverschluss. Für Kanonen."
   },
   {
     "id": "C6",
     "source": { "kind": "look", "target": "railcar" },
-    "label": "Look at the rail car",
+    "label": "Den Güterwagen ansehen",
     "available": { "weekMin": 3, "window": "railCar" },
     "cost": { "seconds": 3, "points": 0, "attention": 0 },
     "knowledge": 0.5,
-    "text": "A goods wagon at the loading door, our crates going in. Chalked on the side: SMOLENSK.",
-    "note": "The crates go by rail to Smolensk."
+    "text": "Ein Güterwagen am Ladetor, unsere Kisten werden eingeladen. Mit Kreide an die Seite geschrieben: SMOLENSK.",
+    "note": "Die Kisten gehen mit der Bahn nach Smolensk."
   },
   {
     "id": "C7",
     "source": { "kind": "look", "target": "circular" },
-    "label": "Read the circular on Brandt's desk",
+    "label": "Das Rundschreiben auf Brandts Pult lesen",
     "available": { "weekMin": 3, "window": "brandtOut" },
     "cost": { "seconds": 4, "points": 0, "attention": 8 },
     "knowledge": 1,
-    "text": "From the Ministry: thanks to Werk 7 for its part in supplying the guns of the Eastern campaign. Targets for the coming quarter will rise.",
-    "note": "The Ministry thanks Werk 7 for the guns in the East. Quotas will rise."
+    "text": "Vom Ministerium: Dank an Werk 7 für seinen Beitrag zur Versorgung der Geschütze des Ostfeldzugs. Die Vorgaben für das kommende Quartal werden steigen.",
+    "note": "Das Ministerium dankt Werk 7 für die Geschütze im Osten. Das Soll wird steigen."
   },
   {
     "id": "C8",
     "source": { "kind": "look", "target": "barracks" },
-    "label": "Look at the new barracks",
+    "label": "Die neue Baracke ansehen",
     "available": { "weekMin": 4 },
     "cost": { "seconds": 3, "points": 0, "attention": 0 },
     "knowledge": 0.5,
-    "text": "Behind the yard, a new barracks with a wire fence and a guard at the gate. The men going in wear a \"P\" patch on their jackets.",
-    "note": "New barracks behind the yard. Wire, a guard, a \"P\" on every jacket."
+    "text": "Hinter dem Hof eine neue Baracke mit Drahtzaun und einem Posten am Tor. Die Männer, die hineingehen, tragen ein „P“ auf der Jacke.",
+    "note": "Neue Baracke hinter dem Hof. Draht, ein Posten, ein „P“ auf jeder Jacke."
   },
   {
     "id": "C9",
     "source": { "kind": "talk", "who": "jakub" },
-    "label": "Talk to Jakub",
+    "label": "Mit Jakub reden",
     "available": { "weekMin": 4, "trust": { "jakub": 0 } },
     "cost": { "seconds": 4, "points": 0, "attention": 5 },
     "knowledge": 1,
-    "text": "Jakub's German is careful. He kept the books for a sawmill near Kielce. In the spring the police closed the square and took every man of working age onto a train. He tells it plainly, then turns back to his press.",
-    "note": "Jakub was taken from his town square onto a train. He did not choose to come here."
+    "text": "Jakubs Deutsch ist vorsichtig. Er hat in einem Sägewerk bei Kielce die Bücher geführt. Im Frühjahr sperrte die Polizei den Marktplatz ab und brachte jeden Mann im arbeitsfähigen Alter auf einen Zug. Er erzählt es schlicht und wendet sich dann wieder seiner Presse zu.",
+    "note": "Jakub wurde auf seinem Marktplatz zusammengetrieben und auf einen Zug gebracht. Er ist nicht freiwillig hier."
   },
   {
     "id": "C10",
     "source": { "kind": "talk", "who": "emil" },
-    "label": "Ask Emil about bench 9",
+    "label": "Emil nach Bank 9 fragen",
     "available": { "weekMin": 2, "trust": { "emil": 2 } },
     "cost": { "seconds": 4, "points": 0, "attention": 0 },
     "knowledge": 0.5,
-    "text": "\"Two men worked bench 9 before me. They complained about the hours, then about the contract. One Monday they weren't there. Nobody asked where.\"",
-    "note": "Two men from bench 9 complained. Then they were gone."
+    "text": "„Vor mir haben zwei Männer an Bank 9 gearbeitet. Sie haben sich über die Stunden beschwert, dann über den Auftrag. An einem Montag waren sie nicht mehr da. Keiner hat gefragt, wohin.“",
+    "note": "Zwei Männer von Bank 9 haben sich beschwert. Dann waren sie weg."
   },
   {
     "id": "C11",
     "source": { "kind": "read", "target": "statement" },
-    "label": "Read the statement",
+    "label": "Die Aussage lesen",
     "available": { "weekMin": 5 },
     "cost": { "seconds": 0, "points": 0, "attention": 0 },
     "knowledge": 0,
-    "text": "Typed, single-spaced: Emil Krause, bench 9, has made remarks undermining production and spoken against the war effort. Greta has left a space for the witness's signature. Men named in statements like this one do not come back to the floor.",
-    "note": "Greta's statement would take Emil off the floor for good."
+    "text": "Getippt, einzeilig: Emil Krause, Bank 9, hat sich zersetzend über die Produktion geäußert und gegen die Kriegsanstrengungen gesprochen. Greta hat Platz für die Unterschrift eines Zeugen gelassen. Männer, die in solchen Aussagen stehen, kommen nicht zurück in die Halle.",
+    "note": "Gretas Aussage würde Emil für immer aus der Halle holen."
   },
   {
     "id": "C12",
     "source": { "kind": "ask", "who": "brandt" },
-    "label": "Ask Brandt who the parts are really for",
+    "label": "Brandt fragen, für wen die Teile wirklich sind",
     "available": { "knowledgeMin": 2 },
     "cost": { "seconds": 4, "points": 25, "attention": 12 },
     "knowledge": 1,
-    "text": "Brandt shuts the office door before he answers. \"You know who we work for. Everyone knows.\"",
-    "note": "Brandt: everyone knows who we work for."
+    "text": "Brandt schließt die Bürotür, bevor er antwortet. „Du weißt, für wen wir arbeiten. Jeder weiß es.“",
+    "note": "Brandt: Jeder weiß, für wen wir arbeiten."
   },
   {
     "id": "AMBER",
     "source": { "kind": "talk", "who": "emil" },
-    "label": "Ask Emil what he does at the gauge",
+    "label": "Emil fragen, was er an der Anzeige macht",
     "available": { "weekMin": 2, "trust": { "emil": 2 }, "knowledgeMin": 3 },
     "cost": { "seconds": 4, "points": 0, "attention": 0 },
     "knowledge": 0,
     "flags": { "amberUnlocked": true },
-    "text": "Emil taps the gauge, just past the edge of the green. \"Here. It passes at the bench. It doesn't pass under load.\" He goes back to his press without another word.",
-    "note": "Emil: a part pressed just outside the green passes at the bench and fails under load."
+    "text": "Emil tippt auf die Anzeige, knapp hinter den Rand des Grünen. „Hier. An der Bank hält es. Unter Last hält es nicht.“ Ohne ein weiteres Wort geht er zurück an seine Presse.",
+    "note": "Emil: Ein Teil knapp neben dem Grünen hält an der Bank und versagt unter Last."
   }
 ]

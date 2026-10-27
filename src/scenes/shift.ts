@@ -1,5 +1,5 @@
 import * as audio from '../audio';
-import { type Clue, LINES, WEEKS, pick } from '../content';
+import { type Clue, LINES, UI, WEEKS, fill, num, pick } from '../content';
 import { drawGauge, drawWear } from '../gauge';
 import {
   away,
@@ -27,14 +27,7 @@ function placeOf(c: Clue): Place {
   return 'crate';
 }
 
-const AWAY_LABEL: Record<string, string> = {
-  oil: 'OILING',
-  ask: "AT BRANDT'S DESK",
-  look: 'AWAY FROM THE PRESS',
-  talk: 'TALKING',
-  bread: 'AT BENCH 15',
-  cover: 'BY BENCH 9',
-};
+const U = UI.shift;
 
 export function shiftView(state: GameState, dispatch: Dispatch): View {
   const quota = quotaFor(state.week);
@@ -42,30 +35,30 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
   const el = html(`
     <section class="shift">
       <header class="hud">
-        <div><span class="lbl">${month} 1941</span><span class="val">Week ${state.week} · Shift ${state.shift}</span></div>
-        <div class="hud-clock"><span class="lbl">Shift clock</span><div class="clockbar" role="progressbar" aria-label="Time into shift"><i data-clock></i></div></div>
-        <div class="lamp-wrap" title="Attention"><span class="lamp" data-lamp aria-hidden="true"><i></i><i></i></span><span><span class="lbl">Attention</span><span class="val" data-attention>0</span></span></div>
-        <div class="hud-score"><span class="lbl">Score</span><span class="val" data-score>0</span></div>
+        <div><span class="lbl">${month} 1941</span><span class="val">${fill(U.week, { week: state.week, shift: state.shift })}</span></div>
+        <div class="hud-clock"><span class="lbl">${U.clock}</span><div class="clockbar" role="progressbar" aria-label="${U.clockAria}"><i data-clock></i></div></div>
+        <div class="lamp-wrap" title="${U.attention}"><span class="lamp" data-lamp aria-hidden="true"><i></i><i></i></span><span><span class="lbl">${U.attention}</span><span class="val" data-attention>0</span></span></div>
+        <div class="hud-score"><span class="lbl">${U.score}</span><span class="val" data-score>0</span></div>
       </header>
       <div class="bench">
         <section class="machine">
           <div class="plate"><span class="stencil">PRESSE 14</span><span class="status" data-status aria-live="polite"></span></div>
-          <p class="inspector" data-inspector hidden>Inspector at the bench</p>
+          <p class="inspector" data-inspector hidden>${U.inspector}</p>
           <canvas class="gauge" data-gauge aria-hidden="true"></canvas>
-          <button class="press" type="button" data-press>PRESS<small>or Space</small></button>
+          <button class="press" type="button" data-press>${U.press}<small>${U.pressHint}</small></button>
           <div class="crate-row">
             <div class="crate" data-crate aria-hidden="true"></div>
             <div class="counts">
               <span><b data-good>0</b> / ${quota}</span>
-              <span class="muted">Scrap <b data-scrap>0</b></span>
+              <span class="muted">${U.scrap} <b data-scrap>0</b></span>
               <span class="muted" data-over></span>
             </div>
           </div>
         </section>
         <aside class="floor">
           <div class="wear">
-            <div class="wear-dial"><canvas data-wear aria-hidden="true"></canvas><span class="lbl">Wear <b data-wearpct>0%</b></span></div>
-            <button class="oil" type="button" data-oil>OIL<small>${T.oilSeconds} s away</small></button>
+            <div class="wear-dial"><canvas data-wear aria-hidden="true"></canvas><span class="lbl">${U.wear} <b data-wearpct>0%</b></span></div>
+            <button class="oil" type="button" data-oil>${U.oil}<small>${fill(U.away, { s: T.oilSeconds })}</small></button>
           </div>
           <div class="places" data-places></div>
           <div class="log" data-log></div>
@@ -208,13 +201,13 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
     };
 
     for (const c of clues) {
-      const costs = [`${c.cost.seconds} s away`];
-      if (c.cost.points) costs.push(`−${c.cost.points} points`);
+      const costs = [fill(U.away, { s: c.cost.seconds })];
+      if (c.cost.points) costs.push(fill(U.points, { n: c.cost.points }));
       const act = c.source.kind === 'look' ? `look:${c.id}` : `ask:${c.id}`;
       add(placeOf(c), button(c.label, costs.join(' · '), act, c.source.who));
     }
-    if (cover) add('emil', button(F.coverLabel, `${T.coverSeconds} s away`, 'cover'));
-    if (bread) add('jakub', button(F.breadLabel, `${T.breadSeconds} s away`, 'bread'));
+    if (cover) add('emil', button(F.coverLabel, fill(U.away, { s: T.coverSeconds }), 'cover'));
+    if (bread) add('jakub', button(F.breadLabel, fill(U.away, { s: T.breadSeconds }), 'bread'));
     // People on the floor stay visible even with nothing to say.
     if (emilPresent(s)) add('emil');
     if (jakubPresent(s)) add('jakub');
@@ -245,7 +238,7 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
     const parts = s.today.good + s.today.amber;
 
     $(el, '[data-clock]').style.width = `${(s.clock / T.shiftLength) * 100}%`;
-    $(el, '[data-score]').textContent = s.score.toLocaleString('en-US');
+    $(el, '[data-score]').textContent = num(s.score);
     $(el, '[data-attention]').textContent = String(Math.round(s.attention));
     const lamp = $(el, '[data-lamp]');
     lamp.style.setProperty('--glow', String(s.attention / 100));
@@ -253,17 +246,17 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
     $(el, '[data-inspector]').hidden = !s.shiftLog.inspector;
     $(el, '[data-good]').textContent = String(parts);
     $(el, '[data-scrap]').textContent = String(s.today.scrap);
-    $(el, '[data-over]').textContent = parts > quota ? `+${parts - quota} over quota` : '';
+    $(el, '[data-over]').textContent = parts > quota ? fill(U.over, { n: parts - quota }) : '';
     for (let i = 0; i < cells.length; i++) cells[i].classList.toggle('on', i < parts);
     $(el, '[data-wearpct]').textContent = `${Math.round(p.wear)}%`;
 
     let status = '';
-    if (p.jammedUntil > 0) status = `JAMMED · fitter in ${Math.ceil(p.jammedUntil - s.clock)} s`;
-    else if (p.awayFor) status = `${AWAY_LABEL[p.awayFor]} · ${Math.ceil(p.awayUntil - s.clock)} s`;
-    else if (p.lastPress && s.clock - p.lastPress.at < 0.6) status = p.lastPress.result === 'scrap' ? 'SCRAP' : 'IN TOLERANCE';
+    if (p.jammedUntil > 0) status = fill(U.jammed, { s: Math.ceil(p.jammedUntil - s.clock) });
+    else if (p.awayFor) status = `${U.awayFor[p.awayFor]} · ${Math.ceil(p.awayUntil - s.clock)} s`;
+    else if (p.lastPress && s.clock - p.lastPress.at < 0.6) status = p.lastPress.result === 'scrap' ? U.scrapStatus : U.inTolerance;
     const statusEl = $(el, '[data-status]');
     statusEl.textContent = status;
-    statusEl.dataset.kind = p.jammedUntil > 0 || status === 'SCRAP' ? 'bad' : status ? 'ok' : '';
+    statusEl.dataset.kind = p.jammedUntil > 0 || status === U.scrapStatus ? 'bad' : status ? 'ok' : '';
 
     const busy = away(s);
     pressBtn.disabled = busy;
