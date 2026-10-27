@@ -24,6 +24,8 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+/* `hidden` must win over any display rule below (e.g. .toggle, .talk are grids). */
+[hidden] { display: none !important; }
 html, body { margin: 0; background: var(--floor); color: var(--text); }
 body {
   font-family: var(--f-mono);
