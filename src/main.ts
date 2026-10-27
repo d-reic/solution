@@ -1,3 +1,12 @@
+// Fonts ship with the game (no requests to Google). Latin subsets cover umlauts, ß and „“.
+import '@fontsource/big-shoulders-stencil-display/latin-600';
+import '@fontsource/big-shoulders-stencil-display/latin-800';
+import '@fontsource/courier-prime/latin-400';
+import '@fontsource/ibm-plex-mono/latin-400';
+import '@fontsource/ibm-plex-mono/latin-400-italic';
+import '@fontsource/ibm-plex-mono/latin-500';
+import '@fontsource/ibm-plex-mono/latin-600';
+import '@fontsource/unifrakturmaguntia/latin-400';
 import './style.css';
 import { whistle } from './audio';
 import { createLoop } from './loop';
