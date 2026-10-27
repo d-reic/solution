@@ -145,7 +145,7 @@ describe('Akkordserie', () => {
     let s = start();
     for (let i = 0; i < 10; i++) s = run(reduce(onBand(s), { type: 'press' }), T.pressStroke + STEP);
     s = run(s, T.shiftLength);
-    expect(s.report?.pay).toBeCloseTo(10 * T.payPerPart);
+    expect(s.report?.pay).toBeCloseTo(10 * T.payPerPart[0]);
   });
 });
 

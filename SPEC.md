@@ -377,7 +377,7 @@ Starting values for the first playable build. Keep them in one `tuning.ts` file 
 | Quota bonus | +100 points, +1.00 RM | Per shift met |
 | Question penalty | −25 points | Per foreman question |
 | Loyalty bonus | +500 points | For reporting Emil |
-| Pay per good part | 0.12 RM | 4.80 RM for a 40-part shift |
+| Pay per good part (Akkordsatz) | 0.12 / 0.11 / 0.10 / 0.11 / 0.10 / 0.09 RM | Weeks 1–6. The rate is cut as the quota rises ("Akkordschere"); week 4 rises because coal starts. The week report names next week's rate. |
 | Rent | 9.00 RM | Each week, at the last evening |
 | Food | 2.40 RM | Each evening |
 | Coal | 1.20 RM | Each evening, weeks 4–6 |
@@ -400,6 +400,7 @@ Starting values for the first playable build. Keep them in one `tuning.ts` file 
 
 - Hitting quota every shift should cover all bills with about 10% to spare.
 - Running at 50% of quota (the minimum) should leave the household unable to pay rent most weeks.
+- Both are checked by `src/playthrough.test.ts` (v2: exact quota ends six weeks about 11 RM up; the minimum misses rent 6 of 6 weeks). Perfect timing at ~140% of quota still saves about 60 RM.
 - An attentive player using amber parts at 50% of output should reach Attention 80 around week 6 without being caught, most of the time.
 
 ## Milestones

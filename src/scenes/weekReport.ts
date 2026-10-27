@@ -1,4 +1,5 @@
 import { LINES, UI, WEEKS, fill, num, rm } from '../content';
+import { pieceRate } from '../reducer';
 import type { GameState } from '../state';
 import { TUNING as T } from '../tuning';
 import { $, type Dispatch, html, type View } from './view';
@@ -26,7 +27,7 @@ export function weekReportView(state: GameState, dispatch: Dispatch): View {
   const notes: string[] = [];
   if (w.quiet) notes.push(W.quiet);
   if (w.gretaWord) notes.push(W.gretaWord);
-  if (w.nextQuota) notes.push(fill(W.nextQuota, { quota: w.nextQuota }));
+  if (w.nextQuota) notes.push(fill(W.nextQuota, { quota: w.nextQuota, rate: rm(pieceRate(w.week + 1)) }));
   $(el, '[data-notes]').textContent = notes.join(' ');
   $(el, '[data-slogan]').textContent = `„${W.propaganda[String(w.week) as keyof typeof W.propaganda]}“`;
   const next = $<HTMLButtonElement>(el, '[data-next]');

@@ -30,7 +30,10 @@ export const TUNING = {
   pointsPerPart: 10,
   quotaBonusPoints: 100,
   quotaBonusPay: 1.0, // RM
-  payPerPart: 0.12, // RM
+  // Piece rate per good part, weeks 1–6. The Werk cuts the rate as the quota rises
+  // ("Akkordschere"), so meeting quota covers the week's bills with about 10% to spare;
+  // week 4 rises a little because coal starts.
+  payPerPart: [0.12, 0.11, 0.1, 0.11, 0.1, 0.09],
 
   questionPenalty: 25, // points per foreman question
   loyaltyBonus: 500, // points for reporting Emil

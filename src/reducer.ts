@@ -36,6 +36,11 @@ export function quotaFor(week: number): number {
   return T.quotas[Math.min(Math.max(week, 1), T.weeks) - 1];
 }
 
+/** Reichsmarks per good part in a given week. */
+export function pieceRate(week: number): number {
+  return T.payPerPart[Math.min(Math.max(week, 1), T.weeks) - 1];
+}
+
 export function inspectionMinimum(week: number): number {
   return Math.ceil(quotaFor(week) * T.inspectionMinimum);
 }
@@ -573,7 +578,7 @@ function endShift(state: GameState): GameState {
   const met = parts >= quota;
   const christmas = met && state.week === T.weeks && state.shift === T.shiftsPerWeek;
   const bonusPoints = (met ? T.quotaBonusPoints : 0) + (christmas ? T.christmasBonusPoints : 0);
-  const pay = round2(parts * T.payPerPart + (met ? T.quotaBonusPay : 0) + (christmas ? T.christmasBonusPay : 0));
+  const pay = round2(parts * pieceRate(state.week) + (met ? T.quotaBonusPay : 0) + (christmas ? T.christmasBonusPay : 0));
   const attentionBefore = state.shiftLog.attentionStart;
 
   let s: GameState = state;

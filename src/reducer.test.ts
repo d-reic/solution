@@ -179,7 +179,7 @@ describe('tick', () => {
     s = run(s, T.shiftLength);
     expect(s.report?.met).toBe(true);
     expect(s.score).toBe(quotaFor(1) * T.pointsPerPart + T.quotaBonusPoints);
-    expect(s.money).toBeCloseTo(T.startingMoney + quotaFor(1) * T.payPerPart + T.quotaBonusPay);
+    expect(s.money).toBeCloseTo(T.startingMoney + quotaFor(1) * T.payPerPart[0] + T.quotaBonusPay);
     expect(s.ledger.good).toBe(quotaFor(1));
   });
 });

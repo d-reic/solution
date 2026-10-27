@@ -12,6 +12,7 @@ import {
   homeTalkOptions,
   inspectionMinimum,
   officeOptions,
+  quotaFor,
   pressBlocked,
   reduce,
 } from './reducer';
@@ -42,6 +43,7 @@ interface Run {
   minHousehold: number;
   maxAttention: number;
   unpaid: number;
+  rentUnpaid: number; // weeks the rent went unpaid
 }
 
 const knows = (s: GameState) => s.knowledge >= 3;
@@ -72,7 +74,7 @@ function shiftActions(s: GameState, bot: Bot): Action[] {
 
 function play(bot: Bot, seed: number): Run {
   let s = reduce(initialState(seed), { type: 'newGame', seed });
-  const run: Run = { state: s, minMoney: s.money, minHousehold: 100, maxAttention: 0, unpaid: 0 };
+  const run: Run = { state: s, minMoney: s.money, minHousehold: 100, maxAttention: 0, unpaid: 0, rentUnpaid: 0 };
   for (let guard = 0; guard < 500_000; guard++) {
     run.minMoney = Math.min(run.minMoney, s.money);
     run.minHousehold = Math.min(run.minHousehold, s.household);
@@ -104,6 +106,7 @@ function play(bot: Bot, seed: number): Run {
         const talk = homeTalkOptions(s);
         if (talk.length) s = reduce(s, { type: 'choose', sceneId: 'home', option: talk[talk.length - 1].id });
         run.unpaid += s.evening!.bills.filter((b) => !s.evening!.paying[b]).length;
+        if (s.evening!.bills.includes('rent') && !s.evening!.paying.rent) run.rentUnpaid++;
         s = reduce(s, { type: 'advance' });
         break;
       }
@@ -148,11 +151,25 @@ describe('whole-campaign playthroughs', () => {
       const s = r.state;
       // A line per bot, to read balance from the test output.
       console.log(
-        `${name.padEnd(14)} ending ${s.ending}  week ${s.week}/${s.shift}  score ${s.score}  money ${s.money.toFixed(2)} (min ${r.minMoney.toFixed(2)})  household min ${r.minHousehold}  unpaid ${r.unpaid}  attention max ${r.maxAttention}  parts ${s.ledger.good + s.ledger.amber}  amber ${s.ledger.amber}  fed ${s.ledger.jakubFed}  covered ${s.ledger.coveredEmil}`,
+        `${name.padEnd(14)} ending ${s.ending}  week ${s.week}/${s.shift}  score ${s.score}  money ${s.money.toFixed(2)} (min ${r.minMoney.toFixed(2)})  household min ${r.minHousehold}  unpaid ${r.unpaid} (rent ${r.rentUnpaid})  attention max ${r.maxAttention}  parts ${s.ledger.good + s.ledger.amber}  amber ${s.ledger.amber}  fed ${s.ledger.jakubFed}  covered ${s.ledger.coveredEmil}`,
       );
       expect(ending).toContain(s.ending);
     });
   }
+
+  // Balance targets from SPEC.md, with players who hit their number exactly.
+  it('meeting quota exactly covers every bill with a little to spare', () => {
+    const r = play({ target: (s) => quotaFor(s.week), office: ['silent', 'refuse'] }, 1941);
+    console.log(`at quota       money ${r.state.money.toFixed(2)} (min ${r.minMoney.toFixed(2)})  unpaid ${r.unpaid}`);
+    expect(r.unpaid).toBe(0);
+    expect(r.state.money).toBeLessThan(25);
+  });
+
+  it('pressing only the inspection minimum leaves the rent unpaid most weeks', () => {
+    const r = play({ target: (s) => inspectionMinimum(s.week), office: ['silent', 'refuse'] }, 1941);
+    console.log(`at minimum     money ${r.state.money.toFixed(2)}  rent unpaid ${r.rentUnpaid}/6  household min ${r.minHousehold}  ending ${r.state.ending}`);
+    expect(r.rentUnpaid).toBeGreaterThanOrEqual(4);
+  });
 
   it('reach the same ending from the same seed', () => {
     expect(play(BOTS['bare minimum'].bot, 7).state.ledger).toEqual(play(BOTS['bare minimum'].bot, 7).state.ledger);

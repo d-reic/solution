@@ -210,7 +210,7 @@
     },
     "quiet": "Eine ruhige Woche an Bank 14.",
     "gretaWord": "Greta hat ein gutes Wort für dich eingelegt.",
-    "nextQuota": "Soll für nächste Woche: {quota} Stück pro Schicht."
+    "nextQuota": "Soll für nächste Woche: {quota} Stück pro Schicht, zum Akkordsatz von {rate} pro Teil."
   },
   "endings": {
     "1": {
