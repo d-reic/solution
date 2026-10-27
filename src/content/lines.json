@@ -1,0 +1,40 @@
+{
+  "shiftStart": {
+    "1-1": [
+      "Brandt walks you to bench 14 and taps the gauge. \"Needle in the green, you press. Green is tolerance. Anything else is scrap, and scrap isn't paid.\"",
+      "\"Forty a shift. The press wears as you work. When it runs hot, oil it. If it seizes, you wait for the fitter, and the fitter is never quick.\""
+    ],
+    "1-2": ["A stack of empty crates by the loading door. Fresh stencil on the lids."],
+    "default": [
+      "The bell. Brandt is already at his desk with the clipboard.",
+      "Steam on the windows. Somebody at bench 9 is whistling, badly.",
+      "The press is cold for the first few strokes. Then it isn't.",
+      "The radio in Brandt's office is turned low. Marching music, then the news."
+    ]
+  },
+  "events": {
+    "jam": "The ram seizes with a bang. Somebody shouts for the fitter.",
+    "jamClear": "The fitter wipes his hands on his trousers and walks off without a word.",
+    "oil": "You work the oil can into the guides. The ram slides easier.",
+    "wearHigh": "The press is running hot. The needle shudders.",
+    "quotaMet": "Quota. Brandt makes a mark on his clipboard."
+  },
+  "shiftReport": {
+    "beat": [
+      "Brandt chalks the number on the board and, after a moment, underlines it.",
+      "\"Bench 14.\" Brandt writes it in his book. \"That's how it's done.\""
+    ],
+    "met": [
+      "Brandt looks into the crate, nods, and moves on to bench 15.",
+      "\"Quota.\" Brandt doesn't look up from the clipboard."
+    ],
+    "missed": [
+      "Brandt looks into the crate. \"{quota}, not {good}. There are men waiting for your bench.\"",
+      "\"Short again?\" Brandt makes a note. He doesn't say what it is."
+    ],
+    "underMinimum": [
+      "Brandt counts twice. \"{good}. The inspectors read these numbers too.\"",
+      "Brandt holds up the tally sheet so you can see it. He doesn't say anything."
+    ]
+  }
+}

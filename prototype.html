@@ -1,0 +1,476 @@
+<title>Solution</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@600;800&family=IBM+Plex+Mono:wght@400;500;600&family=UnifrakturMaguntia&display=swap">
+<style>
+/* Layout: one work bench on a dark shop floor. Press and crate on the left, the foreman's desk on the right, the shift ledger below. Single committed look (enamel machine green on a dark floor). */
+:root{
+  --floor:#191f1c;
+  --floor-2:#222a26;
+  --machine:#4b6152;
+  --machine-lo:#36463b;
+  --machine-hi:#6b8473;
+  --slip:#d8dacf;
+  --ink:#1d201d;
+  --text:#e3e7df;
+  --muted:#93a297;
+  --lamp:#e6a43a;
+  --warn:#cf4a33;
+  --gold:#cfa54c;
+  --black:#0c0c0b;
+  --f-stencil:"Big Shoulders Stencil Display","Arial Narrow",Impact,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-frak:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+  color-scheme:dark;
+}
+html,body{background:var(--floor);color:var(--text)}
+body{
+  font-family:var(--f-mono);font-size:14px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:20px 40px;
+}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+
+/* header */
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--machine-lo);padding-bottom:10px}
+.logo{font-family:var(--f-stencil);font-weight:800;font-size:clamp(40px,8vw,64px);letter-spacing:.06em;line-height:.9;margin:0;color:var(--text)}
+.meta{color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+
+/* intro */
+.intro{display:grid;gap:18px;max-width:62ch}
+.intro .lead{font-size:16px;margin:0}
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.rules li{display:grid;grid-template-columns:7.5em 1fr;gap:12px;border-top:1px dashed var(--machine-lo);padding-top:8px}
+.rules b{font-family:var(--f-stencil);font-weight:800;font-size:18px;letter-spacing:.06em;color:var(--lamp);line-height:1.2}
+.credit{color:var(--muted);font-size:12px;margin:0}
+.btn{background:var(--lamp);color:var(--ink);border:0;padding:12px 22px;font-family:var(--f-stencil);font-weight:800;font-size:22px;letter-spacing:.08em;border-radius:3px;justify-self:start}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--machine-hi)}
+
+/* hud */
+.hud{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
+.hud .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hud .val{font-family:var(--f-stencil);font-weight:800;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.clock{height:10px;background:var(--floor-2);border:1px solid var(--machine-lo);border-radius:2px;overflow:hidden}
+.clock i{display:block;height:100%;width:0;background:var(--machine-hi)}
+.score{text-align:right}
+
+/* bench */
+.bench{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+@media (max-width:720px){.bench{grid-template-columns:1fr}.hud{grid-template-columns:1fr 1fr}.clock{grid-column:1/-1;order:3}}
+.press-panel{position:relative;background:var(--machine);border-radius:6px;padding:18px;display:grid;gap:16px;box-shadow:inset 0 1px 0 var(--machine-hi),inset 0 -3px 0 var(--machine-lo)}
+.plate{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.plate .stencil{font-family:var(--f-stencil);font-weight:800;font-size:22px;letter-spacing:.1em;color:var(--slip);opacity:.9}
+.plate .count{font-variant-numeric:tabular-nums;color:var(--slip)}
+.crate{background:var(--machine-lo);border-radius:3px;padding:10px;display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.crate span{aspect-ratio:1;max-width:100%;border-radius:50%;background:var(--floor);box-shadow:inset 0 0 0 2px #2b362f;position:relative}
+.crate span.on{background:radial-gradient(circle at 35% 30%,#d9ddd4 0 18%,#9aa49c 40%,#5f6862 100%);box-shadow:inset 0 0 0 3px #7c867f}
+.crate span.on::after{content:"";position:absolute;inset:32%;border-radius:50%;background:var(--machine-lo)}
+.crate span.min{outline:2px solid var(--warn);outline-offset:1px}
+.over{font-size:12px;color:var(--slip);min-height:1.5em;margin:-8px 0 0}
+.press{
+  background:radial-gradient(circle at 50% 35%,#d64a35,#9d2c1f);color:#fff3e8;border:0;
+  border-radius:10px;padding:18px;font-family:var(--f-stencil);font-weight:800;font-size:34px;letter-spacing:.14em;
+  box-shadow:0 6px 0 #5c1910,0 8px 14px rgba(0,0,0,.4);transition:transform .05s,box-shadow .05s;touch-action:manipulation;user-select:none
+}
+.press:active,.press.hit{transform:translateY(5px);box-shadow:0 1px 0 #5c1910,0 2px 4px rgba(0,0,0,.4)}
+.press:disabled{filter:grayscale(.8) brightness(.6);cursor:default}
+.press small{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;font-weight:500;opacity:.8}
+.away{position:absolute;inset:0;border-radius:6px;background:rgba(17,22,19,.86);display:grid;place-content:center;text-align:center;gap:6px;padding:16px}
+.away b{font-family:var(--f-stencil);font-size:28px;letter-spacing:.08em;color:var(--lamp)}
+
+/* desk */
+.desk{background:var(--floor-2);border:1px solid var(--machine-lo);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.desk h2{font-family:var(--f-stencil);font-weight:800;font-size:20px;letter-spacing:.1em;margin:0}
+.ask{background:transparent;color:var(--text);border:1px solid var(--machine-hi);border-radius:3px;padding:10px 12px;text-align:left}
+.ask:hover:not(:disabled){background:var(--machine-lo)}
+.ask:disabled{opacity:.45;cursor:default}
+.ask .cost{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.log{display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;padding-right:4px}
+.slip{background:var(--slip);color:var(--ink);padding:10px 12px;border-radius:2px;font-size:13px;transform:rotate(var(--r,0deg))}
+.slip .q{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#5a5f58;margin-bottom:3px}
+.slip p{margin:0}
+.slip.truth{background:var(--lamp)}
+.warns{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.warns i{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--warn);display:inline-block}
+.warns i.on{background:var(--warn)}
+
+/* ledger */
+.ledger{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.ledger div{border-top:2px solid var(--machine-lo);padding-top:6px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ledger div b{display:block;font-family:var(--f-stencil);font-size:22px;color:var(--text)}
+.ledger div.cur{border-top-color:var(--lamp)}
+.ledger div.strike b{color:var(--warn)}
+
+/* shift end */
+.shift{background:var(--slip);color:var(--ink);border-radius:3px;padding:20px;display:grid;gap:12px;max-width:560px}
+.shift h3{font-family:var(--f-stencil);font-weight:800;font-size:26px;letter-spacing:.08em;margin:0}
+.shift p{margin:0}
+.shift .btn{background:var(--ink);color:var(--slip)}
+
+/* endings */
+.ending{display:grid;gap:16px;max-width:64ch}
+.ending h2{font-family:var(--f-stencil);font-weight:800;font-size:clamp(34px,7vw,52px);letter-spacing:.06em;line-height:1;margin:0;text-wrap:balance}
+.ending p{margin:0}
+.ending .big{font-family:var(--f-stencil);font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.reich{background:var(--black);border:3px double var(--gold);padding:28px 22px;text-align:center;display:grid;gap:14px;color:var(--gold)}
+.reich .frak{font-family:var(--f-frak);font-size:clamp(46px,11vw,88px);line-height:1;margin:0}
+.reich .frak2{font-family:var(--f-frak);font-size:clamp(22px,4.6vw,34px);line-height:1.2;margin:0;text-wrap:balance}
+.reich .honor{font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+.reich .big{color:#f1d38a}
+.reveal{display:grid;gap:12px;animation:fadein 1.2s ease 3s both}
+.reveal .verdict{font-family:var(--f-stencil);font-size:30px;font-weight:800;letter-spacing:.06em;line-height:1.15}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.reveal{animation:none}.press{transition:none}}
+.sound{background:none;border:0;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:4px}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="logo">SOLUTION</h1>
+    <div class="meta">Werk 7 · Bench 14 · 1941 <button class="sound" id="soundBtn" type="button">Sound: on</button></div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro" id="intro">
+    <p class="lead">You run a machine press on the factory floor. Each press makes one part. Your score is your output. The more you make, the better you do.</p>
+    <ul class="rules">
+      <li><b>PRESS</b><span>Click the red button, or hit Space. One part per press. The Ministry quota is 40 a shift.</span></li>
+      <li><b>ASK</b><span>You can stop to ask questions. It takes you away from the press and costs points.</span></li>
+      <li><b>FIVE SHIFTS</b><span>Twenty-five seconds each. Highest score wins.</span></li>
+    </ul>
+    <button class="btn" id="startBtn" type="button">CLOCK IN</button>
+    <p class="credit">After the game Sadie makes in Gabrielle Zevin's novel <i>Tomorrow, and Tomorrow, and Tomorrow</i>.</p>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" hidden>
+    <div class="wrap" style="max-width:none">
+      <div class="hud">
+        <div><div class="lbl">Shift</div><div class="val" id="dayVal">1 / 5</div></div>
+        <div class="clock" aria-label="Time left in shift"><i id="clockBar"></i></div>
+        <div class="score"><div class="lbl">Score</div><div class="val" id="scoreVal">0</div></div>
+      </div>
+
+      <div class="bench" id="bench">
+        <div class="press-panel">
+          <div class="plate"><span class="stencil" id="crateLabel">KISTE 14</span><span class="count" id="todayVal">0 / 40</span></div>
+          <div class="crate" id="crate" aria-hidden="true"></div>
+          <p class="over" id="overVal"></p>
+          <button class="press" id="pressBtn" type="button">PRESS<small>or Space</small></button>
+          <div class="away" id="away" hidden><b>AWAY FROM THE PRESS</b><span id="awayTxt">Back in 4 s</span></div>
+        </div>
+
+        <div class="desk">
+          <h2>FOREMAN'S DESK</h2>
+          <button class="ask" id="askBtn" type="button"></button>
+          <div class="warns" id="warns" hidden>Inspector's warnings <i></i><i></i></div>
+          <div class="log" id="log"></div>
+        </div>
+      </div>
+
+      <div class="ledger" id="ledger"></div>
+    </div>
+  </section>
+
+  <!-- SHIFT END -->
+  <section class="shift" id="shiftEnd" hidden>
+    <h3 id="shiftTitle">END OF SHIFT 1</h3>
+    <p id="shiftTxt"></p>
+    <button class="btn" id="nextBtn" type="button">NEXT SHIFT</button>
+  </section>
+
+  <!-- ENDING -->
+  <section class="ending" id="ending" hidden></section>
+</div>
+
+<script>
+const DAYS = 5, DAY_LEN = 25, QUOTA = 40, MIN = 20, AWAY = 4, PART = 10, ASK_COST = 25;
+
+const CLUES = [
+  { q: "What are these parts for?",
+    a: "Brandt doesn't look up. \"Fittings. Precision work. Your job is the tolerance, not the purpose.\"" },
+  { q: "Who orders them?",
+    a: "\"A government contract. Steady money in hard times. Be grateful you have a bench.\"" },
+  { q: "Look at the shipping crates.",
+    a: "Fresh stencil on every lid: HWA. Heereswaffenamt, the Army Ordnance Office. An eagle stamped beneath it." },
+  { q: "Ask the loaders where the trains go.",
+    a: "\"East,\" a loader says, eyes on the crate. \"Always east now.\"" },
+  { q: "Read the circular on Brandt's desk.",
+    a: "The Ministry thanks Werk 7. Your fittings go into the breech blocks of field guns. Targets will rise next quarter." },
+  { q: "Ask Brandt directly.",
+    a: "He shuts the office door. \"You know who we work for. Everyone here knows. The ones who said it out loud don't work here anymore.\"" }
+];
+
+const $ = id => document.getElementById(id);
+let S;
+
+function fresh(){
+  return { day:1, t:0, today:0, total:0, questions:0, clue:0, knew:false, strikes:0,
+           days:[], away:false, awayUntil:0, running:false, over:false };
+}
+
+/* ---------- audio ---------- */
+let ac = null, soundOn = true;
+function ensureAudio(){
+  try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==="suspended") ac.resume(); }catch(e){ ac = null; }
+}
+function clank(){
+  if(!ac || !soundOn) return;
+  const t = ac.currentTime;
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = "square"; o.frequency.setValueAtTime(140,t); o.frequency.exponentialRampToValueAtTime(60,t+.08);
+  g.gain.setValueAtTime(.12,t); g.gain.exponentialRampToValueAtTime(.001,t+.09);
+  o.connect(g).connect(ac.destination); o.start(t); o.stop(t+.1);
+}
+function fanfare(){
+  if(!ac || !soundOn) return;
+  // a tinny square-wave Wagner (public domain), cut down to the famous dotted figure
+  const N = {Fs4:369.99,B4:493.88,D5:587.33,Fs5:739.99,A5:880,B5:987.77};
+  const seq = [["Fs4",.12],["B4",.36],["Fs4",.12],["B4",.12],["D5",.36],["B4",.12],["D5",.12],["Fs5",.36],["D5",.12],["Fs5",.12],["A5",.72],
+               ["Fs5",.12],["A5",.12],["B5",.36],["A5",.12],["Fs5",.12],["D5",.36],["B4",.12],["Fs5",.12],["B5",1.1]];
+  let t = ac.currentTime + .1;
+  for(const [n,d] of seq){
+    for(const [type,mul,vol] of [["square",1,.07],["sawtooth",.5,.05]]){
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = type; o.frequency.value = N[n]*mul;
+      g.gain.setValueAtTime(vol,t); g.gain.setValueAtTime(vol,t+d*.8); g.gain.linearRampToValueAtTime(0,t+d*.98);
+      o.connect(g).connect(ac.destination); o.start(t); o.stop(t+d);
+    }
+    t += d;
+  }
+}
+$("soundBtn").onclick = () => { soundOn = !soundOn; $("soundBtn").textContent = "Sound: " + (soundOn ? "on" : "off"); };
+
+/* ---------- screens ---------- */
+function show(id){ for(const s of ["intro","game","shiftEnd","ending"]) $(s).hidden = s !== id; }
+
+function start(){
+  ensureAudio();
+  S = fresh();
+  $("log").innerHTML = "";
+  addSlip(null, "Brandt, the foreman, watches the floor from his desk. He doesn't like questions.");
+  buildCrate();
+  show("game");
+  S.running = true;
+  render();
+}
+
+function buildCrate(){
+  const c = $("crate"); c.innerHTML = "";
+  for(let i=0;i<QUOTA;i++) c.appendChild(document.createElement("span"));
+}
+
+/* ---------- actions ---------- */
+function press(){
+  if(!S || !S.running || S.away) return;
+  S.today++; S.total++;
+  clank();
+  const b = $("pressBtn"); b.classList.add("hit"); setTimeout(()=>b.classList.remove("hit"),60);
+  render();
+}
+
+function ask(){
+  if(!S || !S.running || S.away || S.clue >= CLUES.length) return;
+  S.questions++;
+  S.away = true; S.awayUntil = S.t + AWAY;
+  render();
+}
+
+function finishAsk(){
+  S.away = false;
+  const c = CLUES[S.clue];
+  addSlip(c.q, c.a);
+  S.clue++;
+  if(S.clue === CLUES.length){
+    S.knew = true;
+    addSlip("What you know now",
+      "Bench 14 makes parts for the Third Reich's guns. You can keep pressing at full speed. You can press the bare minimum the inspectors accept, " + MIN + " a shift. Or you can stop.", true);
+  }
+}
+
+function addSlip(q, a, truth){
+  const d = document.createElement("div");
+  d.className = "slip" + (truth ? " truth" : "");
+  d.style.setProperty("--r", ((Math.random()-.5)*1.6).toFixed(2)+"deg");
+  if(q){ const s = document.createElement("span"); s.className = "q"; s.textContent = q; d.appendChild(s); }
+  const p = document.createElement("p"); p.textContent = a; d.appendChild(p);
+  $("log").prepend(d);
+}
+
+function score(){ return S.total*PART - S.questions*ASK_COST; }
+
+/* ---------- loop ---------- */
+let last = performance.now();
+function tick(now){
+  const dt = Math.min((now-last)/1000, .25); last = now;
+  if(S && S.running){
+    S.t += dt;
+    if(S.away && S.t >= S.awayUntil) finishAsk();
+    if(S.t >= DAY_LEN) endDay();
+    render();
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+function endDay(){
+  if(S.away) finishAsk();
+  S.running = false;
+  const strike = S.today < MIN;
+  if(strike) S.strikes++;
+  S.days.push({ parts:S.today, knew:S.knew, strike });
+  render();
+
+  if(S.strikes >= 2) return finish("arrest");
+  if(S.day >= DAYS) return finish("done");
+
+  $("shiftTitle").textContent = "END OF SHIFT " + S.day;
+  let txt;
+  if(strike){
+    txt = "Inspector's note: bench 14 made " + S.today + " parts. Anything under " + MIN + " gets reported. Warning " + S.strikes + " of 2.";
+  } else if(!S.knew && S.today < QUOTA){
+    txt = "Brandt looks into the crate. \"Forty, not " + S.today + ". There are men waiting for your bench.\"";
+  } else if(!S.knew){
+    txt = "Crate sealed and loaded. " + S.today + " parts. Brandt nods. Good work.";
+  } else {
+    txt = "Crate sealed and loaded onto the eastbound train. " + S.today + " parts.";
+  }
+  $("shiftTxt").textContent = txt;
+  show("shiftEnd");
+  $("nextBtn").focus();
+}
+
+function nextShift(){
+  S.day++; S.t = 0; S.today = 0;
+  show("game"); S.running = true; render();
+}
+
+/* ---------- render ---------- */
+function render(){
+  $("dayVal").textContent = S.day + " / " + DAYS;
+  $("clockBar").style.width = Math.min(100, S.t/DAY_LEN*100) + "%";
+  $("scoreVal").textContent = score().toLocaleString("en-US");
+  $("todayVal").textContent = S.today + " / " + QUOTA;
+  const cells = $("crate").children, showMin = S.knew || S.strikes > 0;
+  for(let i=0;i<cells.length;i++){
+    cells[i].classList.toggle("on", i < S.today);
+    cells[i].classList.toggle("min", showMin && i === MIN-1);
+  }
+  $("overVal").textContent = S.today > QUOTA ? "+" + (S.today-QUOTA) + " over quota" : (showMin ? "Red ring: inspection minimum (" + MIN + ")" : "");
+  $("crateLabel").textContent = S.clue >= 3 ? "HWA · KISTE 14" : "KISTE 14";
+  $("pressBtn").disabled = S.away || !S.running;
+  $("away").hidden = !S.away;
+  if(S.away) $("awayTxt").textContent = "Back in " + Math.max(1, Math.ceil(S.awayUntil - S.t)) + " s";
+
+  const ab = $("askBtn");
+  if(S.clue < CLUES.length){
+    ab.hidden = false;
+    ab.disabled = S.away;
+    ab.innerHTML = "";
+    ab.append("Ask: " + CLUES[S.clue].q);
+    const c = document.createElement("span"); c.className = "cost"; c.textContent = "−" + ASK_COST + " points · " + AWAY + " s away from the press";
+    ab.appendChild(c);
+  } else ab.hidden = true;
+
+  $("warns").hidden = S.strikes === 0;
+  [...$("warns").querySelectorAll("i")].forEach((w,i)=>w.classList.toggle("on", i < S.strikes));
+
+  const L = $("ledger"); L.innerHTML = "";
+  for(let d=1; d<=DAYS; d++){
+    const rec = S.days[d-1], el = document.createElement("div");
+    if(d === S.day && !rec) el.className = "cur";
+    if(rec && rec.strike) el.className = "strike";
+    el.innerHTML = "Shift " + d + "<b>" + (rec ? rec.parts : (d === S.day ? S.today : "–")) + "</b>";
+    L.appendChild(el);
+  }
+}
+
+/* ---------- endings ---------- */
+function finish(kind){
+  S.running = false; S.over = true;
+  const known = S.days.filter(d => d.knew);
+  const avg = known.length ? known.reduce((a,d)=>a+d.parts,0)/known.length : 0;
+  const pts = score().toLocaleString("en-US"), parts = S.total;
+  const E = $("ending");
+  let html;
+
+  const victory = (lines, verdict) => `
+    <div class="reich">
+      <p class="frak">Glückwunsch!</p>
+      <p class="frak2">You have helped lead the Third Reich to victory.</p>
+      <p class="honor">Exemplary Worker of the Reich · Bench 14</p>
+      <p class="big">${pts}</p>
+      <p class="honor">${parts} parts delivered</p>
+    </div>
+    <div class="reveal">
+      ${lines.map(l=>`<p>${l}</p>`).join("")}
+      <p class="verdict">${verdict}</p>
+      <button class="btn ghost" type="button" data-restart>PLAY AGAIN</button>
+    </div>`;
+
+  const plain = (title, lines, verdict) => `
+    <h2>${title}</h2>
+    <div><p class="big">${pts}</p><p style="color:var(--muted)">points · ${parts} parts delivered</p></div>
+    ${lines.map(l=>`<p>${l}</p>`).join("")}
+    <p class="verdict" style="font-family:var(--f-stencil);font-size:28px;font-weight:800;letter-spacing:.06em">${verdict}</p>
+    <button class="btn ghost" type="button" data-restart>PLAY AGAIN</button>`;
+
+  if(kind === "arrest"){
+    html = S.knew
+      ? plain("YOU REFUSED", [
+          "On the morning of shift " + (S.day+1) + ", two men from the Ministry were waiting at bench 14. Brandt didn't look up.",
+          "In the last days your press made " + known.reduce((a,d)=>a+d.parts,0) + " parts. You knew what they were for, and you stopped."],
+          "You lost on points. You won the game.")
+      : plain("DISMISSED", [
+          "Bench 14 fell short twice. Brandt gave your place to the next man in line.",
+          "You never found out what the parts were for. Someone else will make them now."],
+          "No score. No answer.");
+  } else if(!S.knew){
+    const asked = S.questions === 0 ? "You never asked." : "You asked " + S.questions + (S.questions === 1 ? " question" : " questions") + ", then went back to work.";
+    html = victory([
+      "Bench 14 made fittings for the breech blocks of field guns. Every crate you filled went east by train.",
+      asked],
+      "You won on points. You lost the game.");
+  } else if(avg < 10){
+    html = plain("YOU STOPPED", [
+      "Once you knew, the press went quiet. The shift ended before the inspectors caught up with you.",
+      "The war went on. It got nothing more from bench 14."],
+      "You lost on points. You won the game.");
+  } else if(avg < 28){
+    html = plain("THE BARE MINIMUM", [
+      "Once you knew, you pressed just enough to stay off the inspector's list. About " + Math.round(avg) + " a shift instead of forty.",
+      "Nobody looked twice at bench 14. The parts you didn't make never reached the front."],
+      "A low score. A quiet sabotage.");
+  } else {
+    html = victory([
+      "You asked. You found out exactly what bench 14 was for.",
+      "Then you went back to the press and kept the line running at about " + Math.round(avg) + " parts a shift."],
+      "You knew. You won on points anyway.");
+  }
+
+  E.innerHTML = html;
+  E.querySelector("[data-restart]").onclick = () => { show("intro"); $("startBtn").focus(); };
+  show("ending");
+  if(E.querySelector(".reich")) fanfare();
+  window.scrollTo({top:0});
+}
+
+/* ---------- input ---------- */
+$("startBtn").onclick = start;
+$("pressBtn").addEventListener("pointerdown", e => { e.preventDefault(); ensureAudio(); press(); });
+$("pressBtn").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); press(); } });
+$("askBtn").onclick = ask;
+$("nextBtn").onclick = nextShift;
+document.addEventListener("keydown", e => {
+  if(e.code === "Space" && S && S.running){
+    e.preventDefault();
+    if(!e.repeat) press();
+  }
+});
+document.addEventListener("keyup", e => { if(e.code === "Space" && S && S.running) e.preventDefault(); });
+</script>
