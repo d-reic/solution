@@ -1,0 +1,210 @@
+{
+  "weekStart": {
+    "1": {
+      "date": "Montag, 6. Oktober 1941",
+      "lines": [
+        { "text": "Die Straßenbahn ist um halb sechs schon voll. Männer mit Henkelmännern, Frauen in Arbeitshosen. Keiner redet viel." },
+        { "text": "Am Tor von Werk 7 kontrolliert der Pförtner deinen Ausweis zweimal. Über dem Eingang ein frisch gemaltes Schild: Präzisionsteile." },
+        { "text": "Lotte hat dir ein Schmalzbrot eingepackt. „Für den ersten Tag“, hat sie gesagt, und dir den Kragen geradegezogen." }
+      ]
+    },
+    "2": {
+      "date": "Montag, 20. Oktober 1941",
+      "lines": [
+        { "text": "Es regnet seit Tagen. In der Bahn liest einer laut aus der Zeitung vor: Die Entscheidung im Osten sei gefallen, der Feind geschlagen." },
+        { "text": "Der Mann neben dir sagt: „Dann sind die Jungs ja bald zu Hause.“ Keiner antwortet." },
+        { "text": "Im Henkelmann ist nur die Suppe von gestern.", "if": { "householdBelow": 70 } }
+      ]
+    },
+    "3": {
+      "date": "Montag, 10. November 1941",
+      "lines": [
+        { "text": "Erster Frost. Auf dem Werkshof wird gefegt, zum ersten Mal, seit du hier bist. Das Ministerium hat sich angekündigt." },
+        { "text": "In der Bahn spricht keiner mehr vom Ende des Krieges. Man spricht vom Schlamm in Russland, von dem in der Zeitung nichts steht." },
+        { "text": "Am Ladetor stehen die Kisten in Reihen. HWA, auf jeder einzelnen.", "if": { "clue": ["C2"] } }
+      ]
+    },
+    "4": {
+      "date": "Montag, 24. November 1941",
+      "lines": [
+        { "text": "Schnee. Auf dem Hof hält ein Lastwagen, Männer in dünnen Jacken springen von der Ladefläche. Ein Posten zählt sie laut." },
+        { "text": "In der Bahn sagt eine Frau: „Polen. Fürs Werk.“ Ihr Mann zischt, sie soll still sein." },
+        { "text": "Der Kohlenhändler hat seine Preise an die Tür geschrieben. Ab jetzt muss geheizt werden." },
+        { "text": "Inge hustet seit Tagen. Lotte hat dir beim Abschied nur gesagt: „Komm pünktlich nach Hause.“", "if": { "flag": "ingeIll" } }
+      ]
+    },
+    "5": {
+      "date": "Montag, 8. Dezember 1941",
+      "lines": [
+        { "text": "In der Bahn ist es still. Gestern Abend kam im Radio, Japan habe die amerikanische Flotte angegriffen." },
+        { "text": "Einer sagt leise, vor Moskau gehe es nicht weiter. Ein anderer sagt, er solle seinen Mund halten." },
+        { "text": "Du denkst an die Zeichnung in Emils Spind.", "if": { "clue": ["C5"] } },
+        { "text": "Lotte hat heute Morgen nichts gegessen. Sie hat gesagt, sie habe keinen Hunger.", "if": { "householdBelow": 40 } }
+      ]
+    },
+    "6": {
+      "date": "Montag, 22. Dezember 1941",
+      "lines": [
+        { "text": "Am Werkstor hängt ein Tannenzweig. Daneben ein Aufruf: Wollsachen, Pelze und Skier für die Front, abzugeben bis Sonntag." },
+        { "text": "Viele in der Bahn tragen ihren zweiten Mantel. Den guten haben sie schon abgegeben." },
+        { "text": "An Bank 9 fängt heute ein Neuer an. Keiner fragt, wo Emil ist.", "if": { "flag": "emilArrested" } },
+        { "text": "Am Zaun beim Hof steht Jakub und sieht auf die Straße. Dich sieht er nicht.", "if": { "jakubFedAtLeast": 1 } }
+      ]
+    }
+  },
+  "letters": {
+    "2": {
+      "from": "Feldpost von Karl, Lottes Bruder",
+      "lines": [
+        "Liebe Lotte,",
+        "wir sind weit im Osten, weiter, als ich je gedacht hätte. Die Straßen sind Schlamm bis zum Knie. Unsere Batterie hat sechs Geschütze, und meistens ziehen wir sie mehr, als dass sie fahren.",
+        "Grüß mir Inge und deinen Mann. Sag ihm, er soll fleißig sein. Wir brauchen hier alles, was ihr schickt.",
+        "Dein Karl"
+      ]
+    },
+    "4": {
+      "from": "Feldpost von Karl",
+      "lines": [
+        "Liebe Lotte,",
+        "es ist bitterkalt. Nachts frieren die Verschlüsse der Geschütze fest, wir wickeln sie in unsere Decken und schlafen ohne. Der Unteroffizier sagt, neue Teile kommen mit dem nächsten Zug.",
+        "Zu Weihnachten bin ich wohl nicht zu Hause. Stell trotzdem eine Kerze für mich ins Fenster.",
+        "Dein Karl"
+      ]
+    },
+    "6": {
+      "from": "Feldpost von Karl",
+      "lines": [
+        "Liebe Lotte, nur kurz.",
+        "Wir sind zurückgegangen. Zwei unserer Geschütze mussten wir im Schnee stehen lassen. Die Verschlussstücke haben wir ausgebaut und mitgenommen, so ist der Befehl. Ich habe eins davon zwei Tage lang getragen.",
+        "Frohe Weihnachten euch dreien.",
+        "Dein Karl"
+      ]
+    }
+  },
+  "homeTalks": {
+    "1": {
+      "speaker": "Lotte",
+      "line": "Lotte stellt dir den Teller hin. „Und? Wie ist es in Werk 7? Was macht ihr da eigentlich?“",
+      "options": [
+        { "id": "money", "label": "„Gutes Geld. Mehr muss ich nicht wissen.“", "reply": "Lotte nickt. „Gutes Geld ist gut.“" },
+        { "id": "brandt", "label": "„Teile. Der Meister mag keine Fragen.“", "reply": "„Dann frag nicht“, sagt Lotte und lacht ein bisschen." },
+        { "id": "unsure", "label": "„Ich weiß es nicht genau.“", "reply": "Lotte sieht dich einen Moment länger an als sonst. Dann reicht sie dir das Brot." }
+      ]
+    },
+    "2": {
+      "speaker": "Inge",
+      "line": "Inge sitzt mit ihrem Schulheft am Tisch. „Papa, was machst du in der Fabrik? Wir sollen es morgen in der Schule erzählen.“",
+      "options": [
+        { "id": "machines", "label": "„Teile für Maschinen.“", "reply": "Inge schreibt es in ihr Heft: Teile für Maschinen. Sie malt ein Zahnrad dazu." },
+        { "id": "later", "label": "„Das verstehst du noch nicht.“", "reply": "Inge zieht einen Schmollmund und schreibt: Fabrik." },
+        { "id": "army", "label": "„Teile für das Heer.“", "reply": "Inge schreibt es langsam ab. „Für die Soldaten? Für Onkel Karl?“ Du nickst.", "if": { "clue": ["C2", "C5", "C7"] } }
+      ]
+    },
+    "3": {
+      "speaker": "Lotte",
+      "line": "Lotte liest Karls Brief zum dritten Mal. „Glaubst du, er ist zu Weihnachten zu Hause?“",
+      "options": [
+        { "id": "yes", "label": "„Bestimmt. Die Zeitung sagt es doch.“", "reply": "Lotte faltet den Brief zusammen und legt ihn in die Dose zu den Münzen." },
+        { "id": "dontknow", "label": "„Ich weiß es nicht.“", "reply": "„Nein“, sagt Lotte. „Das weiß keiner.“" },
+        { "id": "guns", "label": "„Sie brauchen jedes Geschütz, das sie haben.“", "reply": "Lotte sieht dich an. „Woher willst du das wissen?“ Du antwortest nicht.", "if": { "clue": ["C5", "C7"] } }
+      ]
+    },
+    "4": {
+      "speaker": "Lotte",
+      "line": "Lotte erzählt von der Nachbarin. „Bei euch im Werk sind jetzt Polen, sagt sie. Hinter Draht. Stimmt das?“",
+      "options": [
+        { "id": "work", "label": "„Sie arbeiten. Wie wir.“", "reply": "„Nicht wie wir“, sagt Lotte leise. „Wir gehen abends nach Hause.“" },
+        { "id": "notours", "label": "„Das geht uns nichts an.“", "reply": "Lotte nickt und räumt die Teller ab." },
+        { "id": "jakub", "label": "„Einer heißt Jakub. Er steht an der Bank neben mir.“", "reply": "Lotte hält mit dem Abwasch inne. Dann sagt sie: „Pass auf dich auf.“", "if": { "jakubFedAtLeast": 1 } }
+      ]
+    },
+    "5": {
+      "speaker": "Inge",
+      "line": "Inge hat einen Wunschzettel geschrieben, in Schönschrift. Ganz oben steht: ein Schlitten.",
+      "options": [
+        { "id": "quota", "label": "„Wenn das Soll stimmt, vielleicht.“", "reply": "Inge strahlt. Sie weiß nicht, was ein Soll ist, aber es klingt nach Ja." },
+        { "id": "notyear", "label": "„Dieses Jahr nicht, Inge.“", "reply": "Inge streicht den Schlitten durch. Darunter schreibt sie: Fäustlinge." },
+        { "id": "see", "label": "„Wir werden sehen.“", "reply": "Inge legt den Zettel aufs Fensterbrett, wo das Christkind ihn findet." }
+      ]
+    },
+    "6": {
+      "speaker": "Lotte",
+      "line": "Heiligabend ist in zwei Tagen. Lotte sitzt am Fenster, wo die Kerze für Karl steht. „Wenn der Krieg vorbei ist“, sagt sie, „was machen wir dann?“",
+      "options": [
+        { "id": "chairs", "label": "„Dann kaufen wir die Stühle zurück.“", "reply": "Lotte lacht, zum ersten Mal seit Wochen." },
+        { "id": "forget", "label": "„Dann vergessen wir das alles.“", "reply": "Lotte nickt langsam. „Ja“, sagt sie. „Das werden wir.“" },
+        { "id": "know", "label": "„Dann werden die Leute fragen, was wir gemacht haben.“", "reply": "Lotte sieht dich lange an. Dann bläst sie die Kerze aus.", "if": { "clue": ["C9", "C10", "C11"] } }
+      ]
+    }
+  },
+  "breaks": {
+    "1": {
+      "title": "MITTAGSPAUSE",
+      "intro": "Brandt sitzt allein auf einer Kiste am Ladetor und isst ein Brot aus Zeitungspapier. Er sieht auf, als du vorbeikommst.",
+      "options": [
+        { "id": "sit", "label": "Dich zu ihm setzen", "reply": "Ihr esst schweigend. Dann sagt er: „Mein Junge ist bei der Marine. Schreibt nie.“ Mehr sagt er nicht.", "trust": { "brandt": 1 } },
+        { "id": "ask", "label": "Ihn nach dem Auftrag fragen", "reply": "„In der Pause wird nicht über die Arbeit geredet.“ Er faltet das Zeitungspapier zusammen und geht.", "attention": 3 },
+        { "id": "walk", "label": "Weitergehen", "reply": "Du isst an deiner Bank. Brandt sieht dir nicht nach." }
+      ]
+    },
+    "2": {
+      "title": "MITTAGSPAUSE",
+      "intro": "Emil sitzt auf der Treppe zum Hof und dreht sich eine Zigarette aus Kippen. „Vierzehn Jahre in der Gewerkschaft“, sagt er, ohne dass du gefragt hast. „Und jetzt sieh uns an.“",
+      "if": { "emilPresent": true },
+      "options": [
+        { "id": "listen", "label": "Dich setzen und zuhören", "reply": "Er erzählt vom Streik von 1928, von den Versammlungen im Hinterzimmer. Am Ende sagt er leise: „Frag dich mal, wer dieses Jahr den Stahl bezahlt.“", "trust": { "emil": 1 }, "clue": "C4" },
+        { "id": "careful", "label": "„Pass auf, was du sagst.“", "reply": "Emil lacht kurz. „Das sagen alle. Deshalb sagt keiner mehr was.“" },
+        { "id": "leave", "label": "Aufstehen und gehen", "reply": "Emil raucht weiter und sieht auf den Hof.", "trust": { "emil": -1 } }
+      ]
+    },
+    "3": {
+      "title": "IN DER KANTINE",
+      "intro": "Greta setzt sich mit ihrem Tablett zu dir. Ihr Verlobter ist bei der Luftwaffe, in Frankreich. „Herr Brandt sagt, auf Bank 14 ist Verlass“, sagt sie. „Zuverlässige Leute braucht das Werk.“",
+      "options": [
+        { "id": "agree", "label": "„Man tut, was man kann.“", "reply": "Greta lächelt. „Ich wusste es.“ Sie schreibt etwas in ihre Kladde, vielleicht auch nichts.", "trust": { "greta": 1 } },
+        { "id": "fiance", "label": "Nach ihrem Verlobten fragen", "reply": "Sie zeigt dir ein Foto, ein junger Mann in Uniform vor einem Flugzeug. „Nach dem Krieg heiraten wir.“" },
+        { "id": "silent", "label": "Schweigend weiteressen", "reply": "Greta wartet einen Moment. Dann steht sie auf. „Guten Appetit.“", "trust": { "greta": -1 } }
+      ]
+    },
+    "4": {
+      "title": "AM ZAUN",
+      "intro": "Die neuen Arbeiter essen getrennt, hinter dem Draht am Hof. Jakub steht am Zaun, eine Blechschüssel mit Suppe in der Hand. Er sieht dich in der Tür stehen.",
+      "options": [
+        { "id": "nod", "label": "Ihm zunicken", "reply": "Jakub nickt zurück. Es ist nur ein Nicken.", "trust": { "jakub": 1 } },
+        { "id": "ask", "label": "Ihn fragen, woher er kommt", "reply": "„Aus der Nähe von Kielce.“ Ein Posten ruft etwas, und Jakub geht zurück zur Baracke.", "trust": { "jakub": 1 }, "attention": 3 },
+        { "id": "away", "label": "Zurück in die Halle gehen", "reply": "Du gehst zurück in die Halle. Die Tür fällt hinter dir zu." }
+      ]
+    },
+    "5": {
+      "title": "IM WASCHRAUM",
+      "intro": "Emil fängt dich im Waschraum ab und dreht den Hahn auf, damit man nichts hört. „Greta fragt herum. Über mich.“ Er sieht dich an. „Was wirst du sagen?“",
+      "if": { "emilPresent": true },
+      "options": [
+        { "id": "nothing", "label": "„Nichts.“", "reply": "Emil nickt. „Gut. Dann weiß ich das.“", "trust": { "emil": 1 } },
+        { "id": "trouble", "label": "„Ich will keinen Ärger.“", "reply": "„Den will keiner.“ Er dreht den Hahn zu und geht.", "trust": { "emil": -1 } },
+        { "id": "stop", "label": "„Hör auf mit dem, was du tust.“", "reply": "„Und dann?“, fragt Emil. „Dann machen wir alle einfach weiter?“ Er wartet nicht auf eine Antwort." }
+      ]
+    },
+    "6": {
+      "title": "AN BRANDTS PULT",
+      "intro": "Brandt winkt dich in der Pause an sein Pult. Er sieht müde aus. „Siebzig pro Schicht. Das Ministerium will Zahlen für den Jahresbericht.“ Er reibt sich die Augen. „Und das hast du nicht von mir: Sie zählen nicht nur die Teile.“",
+      "options": [
+        { "id": "manage", "label": "„Ich schaffe die siebzig.“", "reply": "„Das weiß ich.“ Es klingt nicht wie ein Lob.", "trust": { "brandt": 1 } },
+        { "id": "what", "label": "„Was zählen sie noch?“", "reply": "„Wer fragt.“ Er schickt dich zurück an die Bank.", "attention": 3 },
+        { "id": "nod", "label": "Nicken und gehen", "reply": "Brandt sieht dir nach, bis du an deiner Bank bist." }
+      ]
+    }
+  },
+  "epilogue": {
+    "karl": "Karl kam 1949 aus der Kriegsgefangenschaft zurück. Über den Winter 1941 hat er nie gesprochen.",
+    "ingeTold": "Als Inge erwachsen war, fragte sie dich nie, was du in Werk 7 gemacht hast. Du hattest es ihr gesagt.",
+    "ingeAsked": "Als Inge erwachsen war, fragte sie dich, was du in Werk 7 gemacht hast. Du hast gesagt: Teile.",
+    "lotte": "Lotte hat den Winter 1941 später nie wieder erwähnt."
+  },
+  "ui": {
+    "toWork": "ZUR ARBEIT",
+    "continue": "WEITER",
+    "talk": "Am Tisch",
+    "letter": "Feldpost"
+  }
+}

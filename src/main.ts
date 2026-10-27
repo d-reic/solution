@@ -20,6 +20,8 @@ import { shiftReportView } from './scenes/shiftReport';
 import { titleView } from './scenes/title';
 import type { View } from './scenes/view';
 import { weekReportView } from './scenes/weekReport';
+import { weekStartView } from './scenes/weekStart';
+import { breakView } from './scenes/break';
 import { type GameState, initialState } from './state';
 
 const root = document.getElementById('app')!;
@@ -43,6 +45,10 @@ function dispatch(action: Action) {
 
 function viewFor(s: GameState): View {
   switch (s.scene) {
+    case 'weekStart':
+      return weekStartView(s, dispatch);
+    case 'break':
+      return breakView(s, dispatch);
     case 'shift':
       return shiftView(s, dispatch);
     case 'shiftReport':

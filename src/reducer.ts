@@ -1,7 +1,18 @@
-import { CLUES, type Clue, LINES, OFFICE_OPTIONS, type OfficeOption, clue as clueById } from './content';
+import {
+  CLUES,
+  type Clue,
+  type Condition,
+  LINES,
+  OFFICE_OPTIONS,
+  type OfficeOption,
+  STORY,
+  type StoryOption,
+  clue as clueById,
+  fill,
+} from './content';
 import { rankFor, resolveEnding } from './endings';
 import { nextRandom } from './rng';
-import type { AwayFor, Bill, CoworkerId, GameState, PressResult, PressState, ShiftReport } from './state';
+import type { AwayFor, Bill, CoworkerId, GameState, PartType, PressResult, PressState, ShiftReport } from './state';
 import { initialState } from './state';
 import { TUNING as T } from './tuning';
 
@@ -10,6 +21,7 @@ export type Action =
   | { type: 'tick'; dt: number }
   | { type: 'press' }
   | { type: 'oil' }
+  | { type: 'fetchBlanks' }
   | { type: 'look'; target: string }
   | { type: 'ask'; who: string; clue: string }
   | { type: 'coverEmil' }
@@ -39,9 +51,70 @@ export function greenWidth(state: GameState): number {
   return state.press.wear > T.narrowWearAbove || state.flags.hungry ? T.greenWidthNarrow : T.greenWidth;
 }
 
-/** True while the player can't use the press: jammed, away, or mid-stroke. */
+/** The green band(s) for the part in the die: centre and full width. */
+export function bands(state: GameState): { center: number; width: number }[] {
+  const w = greenWidth(state);
+  const p = state.press;
+  if (p.part === 'fine') return [{ center: p.bandCenter, width: w * T.fineWidthScale }];
+  if (p.part === 'double') {
+    return [
+      { center: p.bandCenter, width: w * T.doubleWidthScale },
+      { center: p.bandCenter2, width: w * T.doubleWidthScale },
+    ];
+  }
+  return [{ center: p.bandCenter, width: w }];
+}
+
+/** Akkordserie: the points multiplier for a run of this many parts in a row. */
+export function streakMultiplier(streak: number): number {
+  return Math.min(T.streakMultMax, 1 + Math.floor(streak / T.streakStep) * T.streakMultStep);
+}
+
+/** True while the player can't use the press: jammed, away, mid-stroke, or out of blanks. */
 export function pressBlocked(state: GameState): boolean {
-  return state.scene !== 'shift' || away(state) || state.clock < state.press.readyAt;
+  return state.scene !== 'shift' || away(state) || state.clock < state.press.readyAt || state.press.blanks <= 0;
+}
+
+/** Whether a story line or option applies. */
+export function meets(state: GameState, c: Condition | undefined): boolean {
+  if (!c) return true;
+  if (c.flag && !state.flags[c.flag]) return false;
+  if (c.householdBelow !== undefined && state.household >= c.householdBelow) return false;
+  if (c.clue && !c.clue.some((id) => state.clues.includes(id))) return false;
+  if (c.jakubFedAtLeast !== undefined && state.ledger.jakubFed < c.jakubFedAtLeast) return false;
+  if (c.emilPresent !== undefined && emilPresent(state) !== c.emilPresent) return false;
+  return true;
+}
+
+/** This week's break scene, if it applies and hasn't been played. */
+export function breakFor(state: GameState) {
+  const b = STORY.breaks[String(state.week)];
+  return b && meets(state, b.if) && !(String(state.week) in state.story.breaks) ? b : null;
+}
+
+export function breakOptions(state: GameState): StoryOption[] {
+  const b = STORY.breaks[String(state.breakScene?.week ?? state.week)];
+  return b ? b.options.filter((o) => meets(state, o.if)) : [];
+}
+
+/** Tonight's talk at home, if there is one. */
+export function homeTalk(state: GameState) {
+  if (state.scene !== 'evening' || state.shift !== T.homeTalkEvening) return null;
+  return STORY.homeTalks[String(state.week)] ?? null;
+}
+
+export function homeTalkOptions(state: GameState): StoryOption[] {
+  return homeTalk(state)?.options.filter((o) => meets(state, o.if)) ?? [];
+}
+
+/** Karl's letter, if one arrives tonight. */
+export function letterTonight(state: GameState) {
+  if (state.scene !== 'evening' || state.shift !== T.letterEvening) return null;
+  return STORY.letters[String(state.week)] ?? null;
+}
+
+export function canFetchBlanks(state: GameState): boolean {
+  return state.scene === 'shift' && !away(state) && state.press.blanks < T.blanksPerStack;
 }
 
 /** Jammed, oiling, or off somewhere on the floor. */
@@ -125,13 +198,15 @@ export function eveningSpend(state: GameState): number {
 export function reduce(state: GameState, action: Action): GameState {
   switch (action.type) {
     case 'newGame':
-      return beginShift(initialState(action.seed));
+      return openWeekStart(initialState(action.seed));
     case 'tick':
       return tick(state, action.dt);
     case 'press':
       return press(state);
     case 'oil':
       return oil(state);
+    case 'fetchBlanks':
+      return canFetchBlanks(state) ? goAway(state, T.blanksSeconds, 'blanks') : state;
     case 'look':
       return useClue(state, action.target, ['look']);
     case 'ask':
@@ -158,9 +233,47 @@ function random(state: GameState): [number, GameState] {
   return [r, { ...state, rng }];
 }
 
+/** Moves the green band(s) somewhere new: after every part, and on a part change. */
 function newBandCenter(state: GameState): GameState {
-  const [r, s] = random(state);
-  return { ...s, press: { ...s.press, bandCenter: T.bandCenterMin + r * (T.bandCenterMax - T.bandCenterMin) } };
+  const span = T.bandCenterMax - T.bandCenterMin;
+  const [r, s1] = random(state);
+  const [r2, s] = random(s1);
+  const bandCenter = T.bandCenterMin + r * span;
+  // The second band sits a good way off the first, wrapping round inside the range.
+  const bandCenter2 = T.bandCenterMin + ((bandCenter - T.bandCenterMin + span * (0.4 + r2 * 0.3)) % span);
+  return { ...s, press: { ...s.press, bandCenter, bandCenter2 } };
+}
+
+/** Plans this shift's part changes and Brandt's task. Week 1 is plain work. */
+function planShift(state: GameState): GameState {
+  let s = state;
+  const partPlan: { at: number; part: PartType }[] = [{ at: 0, part: 'standard' }];
+  if (s.week >= T.partsFromWeek) {
+    const kinds: PartType[] = s.week >= 3 ? ['fine', 'drift', 'double'] : ['fine', 'drift'];
+    const times = s.week >= 4 ? [20, 40] : [30];
+    for (const at of times) {
+      let r: number;
+      [r, s] = random(s);
+      const prev = partPlan[partPlan.length - 1].part;
+      const options = kinds.filter((k) => k !== prev);
+      partPlan.push({ at, part: options[Math.floor(r * options.length)] });
+    }
+  }
+  let task = null;
+  if (s.week >= T.tasksFromWeek) {
+    let r: number;
+    [r, s] = random(s);
+    const [from, to] = T.taskWindow;
+    task = {
+      at: from + r * (to - from),
+      need: Math.round(T.taskNeedWeek2 + (s.week - 2) * T.taskNeedPerWeek),
+      seconds: T.taskSeconds,
+      start: 0,
+      result: null,
+      active: false,
+    };
+  }
+  return { ...s, partPlan, task };
 }
 
 /** Raises or lowers Attention. Any rise counts against a quiet shift and a quiet week. */
@@ -237,9 +350,14 @@ function beginShift(state: GameState): GameState {
       awayUntil: 0,
       awayFor: null,
       readyAt: 0,
+      streak: 0,
+      part: 'standard',
+      bandDir: 1,
+      blanks: T.blanksPerStack,
       lastPress: null,
     },
   });
+  s = planShift(s);
   if (s.shiftLog.inspector) s = say(s, LINES.events.inspector);
   if (s.flags.emilArrested && !s.flags.emilGoneSeen) {
     s = say({ ...s, flags: { ...s.flags, emilGoneSeen: true } }, LINES.events.emilGone);
@@ -283,29 +401,80 @@ function tick(state: GameState, rawDt: number): GameState {
   }
   if (press.awayUntil > 0 && clock >= press.awayUntil) {
     if (press.awayFor === 'oil') press.wear = 0;
+    if (press.awayFor === 'blanks') press.blanks = T.blanksPerStack;
     press.awayUntil = 0;
     press.awayFor = null;
   }
+  if (press.part === 'drift') {
+    // The band wanders, bouncing inside the usual range.
+    let c = press.bandCenter + press.bandDir * T.driftSpeed * dt;
+    if (c > T.bandCenterMax) [c, press.bandDir] = [2 * T.bandCenterMax - c, -1];
+    if (c < T.bandCenterMin) [c, press.bandDir] = [2 * T.bandCenterMin - c, 1];
+    press.bandCenter = c;
+  }
 
-  const next = { ...state, clock, press };
+  let next: GameState = { ...state, clock, press };
+  next = changeParts(next, state.clock);
+  next = runTask(next);
   return clock >= T.shiftLength ? endShift(next) : next;
+}
+
+/** A planned part change: new die, new bands, and a moment's setup away from the press. */
+function changeParts(state: GameState, before: number): GameState {
+  const due = state.partPlan.find((x) => x.at > before && x.at <= state.clock);
+  if (!due || due.part === state.press.part) return state;
+  let s: GameState = newBandCenter({ ...state, press: { ...state.press, part: due.part } });
+  const p = s.press;
+  s =
+    p.awayUntil > 0
+      ? { ...s, press: { ...p, awayUntil: p.awayUntil + T.setupSeconds } }
+      : goAway(s, T.setupSeconds, 'setup');
+  return say(s, LINES.events.parts[due.part as keyof typeof LINES.events.parts]);
+}
+
+/** Brandt's task: starts at its time, won when enough parts are in, lost when time runs out. */
+function runTask(state: GameState): GameState {
+  const t = state.task;
+  if (!t || t.result) return state;
+  const parts = state.today.good + state.today.amber;
+  if (!t.active) {
+    if (state.clock < t.at) return state;
+    return say({ ...state, task: { ...t, active: true, start: parts } }, fill(LINES.events.task, { need: t.need, s: t.seconds }));
+  }
+  if (parts - t.start >= t.need) {
+    return say(
+      { ...state, score: state.score + T.taskBonusPoints, task: { ...t, active: false, result: 'won' } },
+      LINES.events.taskWon,
+    );
+  }
+  if (state.clock >= t.at + t.seconds || state.clock >= T.shiftLength) {
+    return say(addAttention({ ...state, task: { ...t, active: false, result: 'lost' } }, T.taskFailAttention), LINES.events.taskLost);
+  }
+  return state;
 }
 
 function press(state: GameState): GameState {
   if (pressBlocked(state)) return state;
   const p = state.press;
-  const dist = Math.abs(p.needle - p.bandCenter);
-  const half = greenWidth(state) / 2;
-  let result: PressResult =
-    dist <= half ? 'good' : state.flags.amberUnlocked && dist <= half + T.amberWidth ? 'amber' : 'scrap';
+  // The best result over the bands on the gauge.
+  let result: PressResult = 'scrap';
+  for (const b of bands(state)) {
+    const dist = Math.abs(p.needle - b.center);
+    if (dist <= b.width / 2) result = 'good';
+    else if (result === 'scrap' && state.flags.amberUnlocked && dist <= b.width / 2 + T.amberWidth) result = 'amber';
+  }
   const wear = Math.min(100, p.wear + T.wearPerPress);
+  const streak = result === 'scrap' ? 0 : p.streak + 1;
+  const points = result === 'scrap' ? 0 : Math.round(T.pointsPerPart * streakMultiplier(streak));
 
   let s: GameState = newBandCenter({
     ...state,
-    score: state.score + (result === 'scrap' ? 0 : T.pointsPerPart),
+    score: state.score + points,
     press: {
       ...p,
       wear,
+      streak,
+      blanks: p.blanks - 1,
       jammedUntil: wear >= 100 ? state.clock + T.jamSeconds : 0,
       readyAt: state.clock + T.pressStroke,
     },
@@ -323,6 +492,7 @@ function press(state: GameState): GameState {
         [r, s] = random(s);
         if (r < (s.attention >= T.inspectorAt ? T.amberCatchWatched : T.amberCatch)) {
           result = 'scrap';
+          s = { ...s, press: { ...s.press, streak: 0 } };
           s = addAttention(s, T.attentionCaught);
           s = addTrust(s, { greta: -1 });
           s = say({ ...s, shiftLog: { ...s.shiftLog, caught: s.shiftLog.caught + 1 } }, LINES.events.caught);
@@ -479,7 +649,7 @@ function finish(state: GameState): GameState {
 }
 
 function advance(state: GameState): GameState {
-  const between = ['shiftReport', 'office', 'evening', 'weekReport'].includes(state.scene);
+  const between = ['shiftReport', 'office', 'break', 'evening', 'weekReport'].includes(state.scene);
   if (between && (state.attention >= T.arrestAt || state.flags.dismissed)) return finish(state);
 
   switch (state.scene) {
@@ -492,20 +662,37 @@ function advance(state: GameState): GameState {
           flags: { ...state.flags, officeWarned: true },
         };
       }
-      return openEvening(state);
+      return breakOrEvening(state);
     case 'office':
       if (!state.office?.reply) return state;
-      return openEvening({ ...state, office: null });
+      return state.office.id === 'warning' ? breakOrEvening({ ...state, office: null }) : openEvening({ ...state, office: null });
+    case 'break':
+      if (!state.breakScene?.reply) return state;
+      return openEvening({ ...state, breakScene: null });
+    case 'weekStart':
+      return beginShift(state);
     case 'evening':
       return closeEvening(state);
     case 'weekReport':
       if (state.week >= T.weeks) return finish(state);
-      return beginShift({ ...state, week: state.week + 1, shift: 1, weekLog: { good: 0, quota: 0, flagged: false } });
+      return openWeekStart({ ...state, week: state.week + 1, shift: 1, weekLog: { good: 0, quota: 0, flagged: false } });
     case 'ending':
       return { ...state, scene: 'ledger' };
     default:
       return state;
   }
+}
+
+function openWeekStart(state: GameState): GameState {
+  return { ...state, scene: 'weekStart', weekSummary: null, report: null };
+}
+
+/** After a shift report: the week's break scene, if it's due, then home. */
+function breakOrEvening(state: GameState): GameState {
+  if (state.shift === T.breakAfterShift && breakFor(state)) {
+    return { ...state, scene: 'break', breakScene: { week: state.week, reply: null } };
+  }
+  return openEvening(state);
 }
 
 function openEvening(state: GameState): GameState {
@@ -526,7 +713,9 @@ function openEvening(state: GameState): GameState {
       left -= cost;
     }
   }
-  return { ...state, scene: 'evening', evening: { bills, paying, bread: false } };
+  const letter = state.shift === T.letterEvening && STORY.letters[String(state.week)];
+  const flags = letter ? { ...state.flags, [`letter${state.week}`]: true } : state.flags;
+  return { ...state, flags, scene: 'evening', evening: { bills, paying, bread: false } };
 }
 
 function togglePay(state: GameState, bill: Bill): GameState {
@@ -579,6 +768,8 @@ function openWeekReport(state: GameState): GameState {
 function choose(state: GameState, sceneId: string, option: string): GameState {
   if (sceneId === 'evening') return chooseEvening(state, option);
   if (sceneId === 'office') return chooseOffice(state, option);
+  if (sceneId === 'break') return chooseBreak(state, option);
+  if (sceneId === 'home') return chooseHome(state, option);
   return state;
 }
 
@@ -625,4 +816,39 @@ function chooseOffice(state: GameState, option: string): GameState {
   }
   const flags = o.id === 'statement' ? { ...s.flags, statementDone: true } : s.flags;
   return { ...s, flags, office: { ...o, reply: opt.reply ?? '' } };
+}
+
+/** Applies a story answer's small effects: trust, Attention, a clue learned in passing. */
+function applyStoryOption(state: GameState, opt: StoryOption): GameState {
+  let s = state;
+  if (opt.trust) s = addTrust(s, opt.trust);
+  if (opt.attention) s = addAttention(s, opt.attention);
+  if (opt.clue && !s.clues.includes(opt.clue)) {
+    const c = clueById(opt.clue);
+    s = addKnowledge({ ...s, clues: [...s.clues, c.id] }, c.knowledge);
+    if (c.trust) s = addTrust(s, c.trust);
+  }
+  return s;
+}
+
+function chooseBreak(state: GameState, option: string): GameState {
+  const b = state.breakScene;
+  if (state.scene !== 'break' || !b || b.reply) return state;
+  const opt = breakOptions(state).find((x) => x.id === option);
+  if (!opt) return state;
+  const s = applyStoryOption(state, opt);
+  return {
+    ...s,
+    story: { ...s.story, breaks: { ...s.story.breaks, [String(b.week)]: opt.id } },
+    breakScene: { ...b, reply: opt.reply },
+  };
+}
+
+function chooseHome(state: GameState, option: string): GameState {
+  const week = String(state.week);
+  if (!homeTalk(state) || week in state.story.talks) return state;
+  const opt = homeTalkOptions(state).find((x) => x.id === option);
+  if (!opt) return state;
+  const s = applyStoryOption(state, opt);
+  return { ...s, story: { ...s.story, talks: { ...s.story.talks, [week]: opt.id } } };
 }

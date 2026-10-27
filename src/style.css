@@ -100,7 +100,7 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
 .counts .muted b { font-size: 16px; }
 
 .floor { background: var(--floor-2); border: 1px solid var(--machine-lo); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.wear { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+.wear { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; }
 .wear-dial { display: grid; justify-items: center; }
 .wear-dial canvas { width: 100%; max-width: 140px; height: 70px; }
 .wear-dial b { color: var(--text); }
@@ -123,6 +123,19 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
 .report dd { margin: 0; font-weight: 600; }
 .report .said { font-family: var(--f-type); font-size: 15px; margin: 0; border-top: 1px dashed #9a9e93; padding-top: 12px; }
 .report .btn { justify-self: start; }
+
+/* Monday morning: the week's start, on a slip of paper under the factory lamp. */
+.week-start { display: grid; gap: 18px; max-width: 62ch; margin: 8vh auto 0; }
+.week-start h2 { font-family: var(--f-stencil); font-weight: 800; font-size: clamp(30px, 6vw, 44px); letter-spacing: .05em; margin: 0; line-height: 1.05; }
+.morning { background: var(--slip); color: var(--ink); padding: 18px 20px; border-radius: 2px; font-family: var(--f-type); font-size: 16px; line-height: 1.55; display: grid; gap: 12px; transform: rotate(.25deg); }
+.morning p { margin: 0; }
+.week-start .btn { justify-self: start; }
+
+/* Workpiece, Akkordserie, Brandt's task */
+.workpiece { display: flex; justify-content: space-between; gap: 8px; margin-top: -8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--slip); }
+.streak { font-variant-numeric: tabular-nums; color: var(--muted); }
+.streak[data-hot='yes'] { color: var(--lamp); font-weight: 600; }
+.task { margin: -4px 0 0; padding: 6px 10px; border-radius: 3px; background: var(--lamp); color: var(--ink); font-family: var(--f-stencil); font-weight: 800; font-size: 18px; letter-spacing: .06em; font-variant-numeric: tabular-nums; }
 
 /* Attention lamp: the foreman's eyes. Brighter as Attention rises. */
 .lamp-wrap { display: flex; gap: 8px; align-items: end; }
@@ -186,6 +199,16 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
 .notebook ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; }
 .evening .btn { justify-self: start; }
 
+/* Karl's letter and the talk at the table */
+.letter { background: #efe6cf; color: #2b241b; border-radius: 2px; padding: 14px 18px; font-family: var(--f-type); font-size: 15px; line-height: 1.5; transform: rotate(-.4deg); box-shadow: 0 2px 0 #b9a582; }
+.letter .lbl { color: #7a6a52; }
+.letter .from { margin: 4px 0 10px; font-size: 12px; color: #7a6a52; }
+.letter p { margin: 0 0 8px; }
+.talk { display: grid; gap: 10px; border-top: 1px dashed #5b4430; padding-top: 14px; }
+.talk .said { margin: 0; font-family: var(--f-type); font-size: 15px; }
+.talk .reply-btn { color: var(--home-text); border-color: #7a6a52; }
+.talk .reply-btn:hover { background: var(--home-2); }
+
 /* Office */
 .office { background: var(--slip); color: var(--ink); border-radius: 3px; padding: 22px; display: grid; gap: 14px; max-width: 620px; margin: 6vh auto 0; }
 .office p { margin: 0; }
@@ -195,6 +218,7 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
 .reply-btn:hover { background: #c9ccbf; }
 .office .reply { border-top: 1px dashed #9a9e93; padding-top: 12px; }
 .office .btn { justify-self: start; }
+.break { border-top: 6px solid var(--machine-hi); }
 
 /* Endings */
 .ending { display: grid; gap: 20px; max-width: 68ch; margin: 4vh auto 0; }
@@ -227,7 +251,7 @@ button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
   .bench { grid-template-columns: 1fr; }
   .floor { order: -1; padding: 10px; gap: 8px; }
   .wear-dial canvas { height: 46px; }
-  .wear { grid-template-columns: auto 1fr auto; }
+  .wear { grid-template-columns: auto 1fr 1fr; }
   .log { max-height: 7.5em; }
   .places { flex-direction: row; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; }
   .place { flex: 0 0 min(78vw, 260px); scroll-snap-align: start; }

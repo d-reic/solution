@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { epilogue, ledgerRows, resolveEnding } from './endings';
 import { STEP } from './loop';
-import { type Action, floorClues, greenWidth, quotaFor, reduce } from './reducer';
+import { type Action, breakOptions, floorClues, greenWidth, quotaFor, reduce } from './reducer';
 import { type GameState, type Ledger, initialState } from './state';
 import { TUNING as T } from './tuning';
 
-const start = (seed = 1) => reduce(initialState(seed), { type: 'newGame', seed });
+const start = (seed = 1) => reduce(reduce(initialState(seed), { type: 'newGame', seed }), { type: 'advance' });
 const at = (s: GameState, patch: Partial<GameState>): GameState => ({ ...s, ...patch });
 const run = (s: GameState, seconds: number) => {
   for (let t = 0; t < seconds - 1e-9 && s.scene === 'shift'; t += STEP) s = reduce(s, { type: 'tick', dt: STEP });
@@ -14,6 +14,12 @@ const run = (s: GameState, seconds: number) => {
 /** Ends the current shift with this many good parts. */
 const finishShift = (s: GameState, good: number) => run(at(s, { today: { good, amber: 0, scrap: 0 } }), T.shiftLength);
 const advance = (s: GameState) => reduce(s, { type: 'advance' });
+/** From a shift report to the evening, through the week's break scene with its last (quietest) reply. */
+const home = (s: GameState) => {
+  s = advance(s);
+  if (s.scene === 'break') s = advance(reduce(s, { type: 'choose', sceneId: 'break', option: breakOptions(s).at(-1)!.id }));
+  return s;
+};
 
 describe('endings', () => {
   const base = initialState(1);
@@ -158,7 +164,7 @@ describe('attention', () => {
   it('an empty crate draws a large gain, and two of them end the game', () => {
     let s = finishShift(start(), 0);
     expect(s.attention).toBe(T.attentionZeroShift);
-    s = advance(advance(s));
+    s = advance(home(s));
     s = finishShift(s, 0);
     expect(s.flags.dismissed).toBe(true);
     s = advance(s);
@@ -180,11 +186,11 @@ describe('attention', () => {
     expect(advance(s)).toBe(s); // must answer first
     s = reduce(s, { type: 'choose', sceneId: 'office', option: 'promise' });
     expect(s.office?.reply).toBeTruthy();
-    expect(advance(s).scene).toBe('evening');
+    expect(advance(s).scene).toBe('break'); // the week's break follows shift 1
   });
 
   it('puts an inspector at the bench at 80', () => {
-    const s = advance(advance(at(finishShift(start(), quotaFor(1)), { attention: 85, flags: { officeWarned: true } })));
+    const s = advance(home(at(finishShift(start(), quotaFor(1)), { attention: 85, flags: { officeWarned: true } })));
     expect(s.scene).toBe('shift');
     expect(s.shiftLog.inspector).toBe(true);
   });
@@ -197,7 +203,7 @@ describe('attention', () => {
 });
 
 describe('evenings', () => {
-  const evening = (patch: Partial<GameState> = {}) => advance(finishShift(at(start(), patch), quotaFor(1)));
+  const evening = (patch: Partial<GameState> = {}) => home(finishShift(at(start(), patch), quotaFor(1)));
 
   it('bills food each evening and rent on the last evening of the week', () => {
     expect(evening().evening?.bills).toEqual(['food']);
@@ -226,7 +232,7 @@ describe('evenings', () => {
     let s = evening({ household: 10 });
     s = advance(reduce(s, { type: 'pay', bill: 'food' }));
     expect(s.flags.ingeIll).toBe(true);
-    s = advance(finishShift(s, quotaFor(1)));
+    s = home(finishShift(s, quotaFor(1)));
     expect(s.evening?.bills).toContain('medicine');
   });
 
@@ -299,18 +305,23 @@ describe('covering for Emil', () => {
 describe('a whole campaign', () => {
   // A scripted player: presses on a timetable, oils when hot, pays bills, asks one question.
   function script(seed: number): Action[] {
-    const a: Action[] = [{ type: 'newGame', seed }];
+    const a: Action[] = [{ type: 'newGame', seed }, { type: 'advance' }];
     for (let shift = 0; shift < 18; shift++) {
       for (let f = 0; f < T.shiftLength * T.tickRate + 5; f++) {
         a.push({ type: 'tick', dt: STEP });
         if (f % 23 === 0) a.push({ type: 'press' });
         if (f % 1300 === 650) a.push({ type: 'oil' });
         if (shift === 1 && f === 100) a.push({ type: 'look', target: 'C2' });
+        if (f % 900 === 450) a.push({ type: 'fetchBlanks' });
       }
-      // Report, maybe an office, evening, maybe a week report.
-      for (let i = 0; i < 4; i++) {
+      // Report, maybe an office, a break, evening, maybe a week report and the next week's start.
+      for (let i = 0; i < 7; i++) {
         a.push({ type: 'choose', sceneId: 'office', option: 'silent' });
         a.push({ type: 'choose', sceneId: 'office', option: 'refuse' });
+        for (const option of ['walk', 'careful', 'silent', 'away', 'trouble', 'nod']) {
+          a.push({ type: 'choose', sceneId: 'break', option });
+        }
+        a.push({ type: 'choose', sceneId: 'home', option: 'dontknow' });
         a.push({ type: 'advance' });
       }
     }

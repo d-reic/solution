@@ -1,5 +1,5 @@
-import { CLUES, LINES, UI, WEEKS, fill, rm } from '../content';
-import { billCost, clueAvailable, eveningSpend, jakubPresent } from '../reducer';
+import { CLUES, LINES, STORY, UI, WEEKS, fill, rm } from '../content';
+import { billCost, clueAvailable, eveningSpend, homeTalk, homeTalkOptions, jakubPresent, letterTonight } from '../reducer';
 import type { Bill, GameState } from '../state';
 import { TUNING as T } from '../tuning';
 import { $, type Dispatch, html, type View } from './view';
@@ -26,6 +26,17 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
           <label class="toggle" data-bread-row hidden><input type="checkbox" data-bread /> <span>${LINES.evening.bread}</span><span class="price">${rm(T.food)}</span></label>
           <p class="short" data-short hidden>${U.short}</p>
         </div>
+      </div>
+      <div class="letter" data-letter hidden>
+        <span class="lbl">${STORY.ui.letter}</span>
+        <p class="from" data-from></p>
+        <div data-letter-lines></div>
+      </div>
+      <div class="talk" data-talk hidden>
+        <span class="lbl">${STORY.ui.talk}</span>
+        <p class="said" data-talk-line></p>
+        <div class="replies" data-talk-options></div>
+        <p class="said reply" data-talk-reply hidden></p>
       </div>
       <div class="papers">
         <div class="paper">
@@ -71,6 +82,24 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
   );
   $(el, '[data-read]').onclick = () => dispatch({ type: 'choose', sceneId: 'evening', option: 'newspaper' });
   $(el, '[data-next]').onclick = () => dispatch({ type: 'advance' });
+  $(el, '[data-talk-options]').addEventListener('click', (ev) => {
+    const b = (ev.target as HTMLElement).closest<HTMLButtonElement>('button[data-option]');
+    if (b) dispatch({ type: 'choose', sceneId: 'home', option: b.dataset.option! });
+  });
+
+  // Karl's letter doesn't change during the evening, so it's laid out once.
+  const letter = letterTonight(state);
+  if (letter) {
+    $(el, '[data-letter]').hidden = false;
+    $(el, '[data-from]').textContent = letter.from;
+    $(el, '[data-letter-lines]').replaceChildren(
+      ...letter.lines.map((l) => {
+        const p = document.createElement('p');
+        p.textContent = l;
+        return p;
+      }),
+    );
+  }
 
   function update(s: GameState) {
     const ev = s.evening;
@@ -97,6 +126,27 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
     breadRow.hidden = !jakubPresent(s);
     breadInput.checked = ev.bread;
     breadRow.classList.toggle('tight', !ev.bread && spend + T.food > s.money + 1e-9);
+
+    const talk = homeTalk(s);
+    $(el, '[data-talk]').hidden = !talk;
+    if (talk) {
+      $(el, '[data-talk-line]').textContent = talk.line;
+      const chosen = s.story.talks[String(s.week)];
+      const reply = talk.options.find((o) => o.id === chosen)?.reply ?? '';
+      $(el, '[data-talk-options]').replaceChildren(
+        ...(chosen ? [] : homeTalkOptions(s)).map((o) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'reply-btn';
+          b.dataset.option = o.id;
+          b.textContent = o.label;
+          return b;
+        }),
+      );
+      const r = $(el, '[data-talk-reply]');
+      r.hidden = !chosen;
+      r.textContent = reply;
+    }
 
     const news = E.newspaper[String(s.week) as keyof typeof E.newspaper];
     const c3 = CLUES.find((c) => c.id === 'C3')!;

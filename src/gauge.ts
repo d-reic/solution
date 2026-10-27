@@ -31,8 +31,8 @@ export function fitCanvas(canvas: HTMLCanvasElement) {
 
 export interface GaugeView {
   needle: number;
-  bandCenter: number;
-  bandWidth: number;
+  /** One green band, or two for a double part. */
+  bands: { center: number; width: number }[];
   /** Amber band on each side of green; 0 until it's unlocked. */
   amberWidth: number;
   /** Where the last press landed, and how long ago (s). */
@@ -69,12 +69,14 @@ export function drawGauge(canvas: HTMLCanvasElement, v: GaugeView) {
     ctx.stroke();
   };
   arc(0, 1, C.scrap);
-  if (v.amberWidth > 0) {
-    const half = v.bandWidth / 2;
-    arc(v.bandCenter - half - v.amberWidth, v.bandCenter - half, C.lamp);
-    arc(v.bandCenter + half, v.bandCenter + half + v.amberWidth, C.lamp);
+  for (const b of v.bands) {
+    const half = b.width / 2;
+    if (v.amberWidth > 0) {
+      arc(b.center - half - v.amberWidth, b.center - half, C.lamp);
+      arc(b.center + half, b.center + half + v.amberWidth, C.lamp);
+    }
   }
-  arc(v.bandCenter - v.bandWidth / 2, v.bandCenter + v.bandWidth / 2, C.green);
+  for (const b of v.bands) arc(b.center - b.width / 2, b.center + b.width / 2, C.green);
 
   // Ticks
   ctx.strokeStyle = C.ink;

@@ -1,4 +1,4 @@
-import { LINES } from './content';
+import { LINES, STORY } from './content';
 import type { EndingId, GameState, Ledger } from './state';
 import { TUNING as T } from './tuning';
 
@@ -44,6 +44,12 @@ export function epilogue(state: GameState): string[] {
   else if (state.ledger.coveredEmil > 0) out.push(E.emilCovered);
   if (state.flags.ingeIll) out.push(E.inge);
   if (!knew(state) && state.flags.crateSeen && !state.clues.includes('C2')) out.push(E.crate);
+  // The family: Karl if his letters reached you, what Inge was told, how the winter sat with Lotte.
+  const S = STORY.epilogue;
+  if (state.flags.letter2) out.push(S.karl);
+  const told = state.story.talks['2'];
+  if (told) out.push(told === 'army' ? S.ingeTold : S.ingeAsked);
+  if (state.household < 35 || state.flags.ingeIll) out.push(S.lotte);
   return out;
 }
 

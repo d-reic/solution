@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { STEP, accumulate } from './loop';
-import { type Action, greenWidth, needleSpeed, quotaFor, reduce } from './reducer';
+import { type Action, breakOptions, greenWidth, needleSpeed, quotaFor, reduce } from './reducer';
 import { nextRandom } from './rng';
 import { type GameState, initialState } from './state';
 import { TUNING as T } from './tuning';
 
-const start = (seed = 1) => reduce(initialState(seed), { type: 'newGame', seed });
+// A new game opens on the week's start scene; one advance puts you at the press.
+const start = (seed = 1) => reduce(reduce(initialState(seed), { type: 'newGame', seed }), { type: 'advance' });
 
 /** Puts the needle exactly where we want it, without touching anything else. */
 const needleAt = (s: GameState, needle: number): GameState => ({ ...s, press: { ...s.press, needle } });
@@ -193,10 +194,16 @@ describe('advance', () => {
       s = run(s, T.shiftLength);
       expect(s.scene).toBe('shiftReport');
       s = reduce(s, { type: 'advance' });
+      if (s.scene === 'break') {
+        s = reduce(s, { type: 'choose', sceneId: 'break', option: breakOptions(s)[0].id });
+        s = reduce(s, { type: 'advance' });
+      }
       expect(s.scene).toBe('evening');
       s = reduce(s, { type: 'advance' });
       if (i === 2) {
         expect(s.scene).toBe('weekReport');
+        s = reduce(s, { type: 'advance' });
+        expect(s.scene).toBe('weekStart');
         s = reduce(s, { type: 'advance' });
       }
     }
@@ -218,14 +225,16 @@ describe('fixed-step loop', () => {
 describe('determinism', () => {
   // A scripted player: presses on a fixed timetable, oils when it runs hot.
   function script(): Action[] {
-    const actions: Action[] = [{ type: 'newGame', seed: 1941 }];
+    const actions: Action[] = [{ type: 'newGame', seed: 1941 }, { type: 'advance' }];
     for (let shift = 0; shift < 3; shift++) {
       for (let f = 0; f < T.shiftLength * T.tickRate + 5; f++) {
         actions.push({ type: 'tick', dt: STEP });
         if (f % 37 === 0) actions.push({ type: 'press' });
         if (f % 1300 === 650) actions.push({ type: 'oil' });
+        if (f % 900 === 450) actions.push({ type: 'fetchBlanks' });
       }
-      actions.push({ type: 'advance' });
+      for (const option of ['walk', 'careful']) actions.push({ type: 'choose', sceneId: 'break', option });
+      actions.push({ type: 'advance' }, { type: 'advance' }, { type: 'advance' });
     }
     return actions;
   }

@@ -88,6 +88,38 @@ export const TUNING = {
   partsPerBreechBlock: 12,
   operatorsOnWerk7: 120,
 
+  // Akkordserie: every streakStep parts in a row add streakMultStep to the points multiplier.
+  // Points only: the pay packet doesn't care. Not in SPEC before v2.
+  streakStep: 5,
+  streakMultStep: 0.5,
+  streakMultMax: 3,
+
+  // Part types (weeks 2–6). One or two changes per shift, each costing setup time.
+  partsFromWeek: 2,
+  setupSeconds: 2,
+  fineWidthScale: 0.7, // 'fine' parts: narrower band
+  doubleWidthScale: 0.6, // 'double' parts: two narrower bands
+  driftSpeed: 0.12, // 'drift' parts: band moves this many gauge widths per second
+
+  // Brandt's task: so many parts within so many seconds, once a shift from week 2.
+  tasksFromWeek: 2,
+  taskWindow: [12, 38] as [number, number], // when in the shift he calls it
+  taskSeconds: 10,
+  taskNeedWeek2: 5,
+  taskNeedPerWeek: 0.5, // extra parts per week after 2
+  taskBonusPoints: 60,
+  taskFailAttention: 4,
+
+  // Blanks: the stack beside the press. Fetching more takes you away.
+  blanksPerStack: 25,
+  blanksSeconds: 2,
+  blanksLow: 5,
+
+  // Story
+  breakAfterShift: 1, // the week's break scene follows this shift's report
+  homeTalkEvening: 2, // the week's talk at home happens on this evening
+  letterEvening: 1, // Karl's letters arrive on this evening of weeks 2, 4, 6
+
   tickRate: 60, // Hz
   maxTickDt: 0.25, // seconds; longer gaps (a hidden tab) are clipped
 } as const;

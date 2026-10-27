@@ -47,7 +47,18 @@
     "cover": "Du stellst dich dem Prüfer in den Weg und fragst nach der Ölzuteilung. Hinter dir presst Emil weiter.",
     "coverCaught": "Der Prüfer tritt um dich herum. „Ihr Platz ist dort drüben.“ Lange sieht er in Emils Kiste.",
     "gretaReports": "Greta geht an deiner Bank vorbei, ohne dich anzusehen. Am Nachmittag bleibt Brandts Tür eine Stunde lang geschlossen.",
-    "emilGone": "Bank 9 ist leer. Keiner spricht darüber."
+    "emilGone": "Bank 9 ist leer. Keiner spricht darüber.",
+    "parts": {
+      "standard": "Wieder das Standardteil im Werkzeug.",
+      "fine": "Brandt lässt ein Feinpassteil einrichten. Die Toleranz ist enger, die Nadel bleibt gleich schnell.",
+      "drift": "Neues Werkzeug für eine schwierige Legierung. Die Toleranz wandert, während das Material sich setzt.",
+      "double": "Ein Doppelteil: zwei Bohrungen, zwei Toleranzen. Jede für sich ist schmal."
+    },
+    "task": "Brandt ruft quer durch die Halle: „Bank 14! {need} Stück in {s} Sekunden, der Wagen wartet!“",
+    "taskWon": "Brandt hebt kurz die Hand. Der Wagen fährt ab.",
+    "taskLost": "Der Wagen fährt halb leer ab. Brandt schreibt etwas auf.",
+    "blanksLow": "Der Stapel Rohlinge neben der Presse wird niedrig.",
+    "blanksOut": "Keine Rohlinge mehr. Die Presse steht."
   },
   "floor": {
     "brandt": "Brandts Pult",
@@ -357,7 +368,20 @@
         "look": "WEG VON DER PRESSE",
         "talk": "IM GESPRÄCH",
         "bread": "AN BANK 15",
-        "cover": "BEI BANK 9"
+        "cover": "BEI BANK 9",
+        "blanks": "ROHLINGE HOLEN",
+        "setup": "RÜSTEN"
+      },
+      "blanks": "Rohlinge",
+      "fetchBlanks": "ROHLINGE",
+      "noBlanks": "KEINE ROHLINGE",
+      "streak": "Akkordserie",
+      "task": "Sonderauftrag: {done} / {need} · {s} s",
+      "partNames": {
+        "standard": "Standardteil",
+        "fine": "Feinpassteil",
+        "drift": "Wanderteil",
+        "double": "Doppelteil"
       }
     },
     "report": {

@@ -1,10 +1,22 @@
 import { TUNING as T } from './tuning';
 
-export type Scene = 'title' | 'shift' | 'shiftReport' | 'evening' | 'office' | 'weekReport' | 'ending' | 'ledger';
+export type Scene =
+  | 'title'
+  | 'weekStart'
+  | 'shift'
+  | 'shiftReport'
+  | 'break'
+  | 'evening'
+  | 'office'
+  | 'weekReport'
+  | 'ending'
+  | 'ledger';
 export type CoworkerId = 'brandt' | 'emil' | 'greta' | 'jakub' | 'lotte';
 export type PressResult = 'good' | 'amber' | 'scrap';
 export type Bill = 'rent' | 'food' | 'coal' | 'medicine';
-export type AwayFor = 'oil' | 'ask' | 'look' | 'talk' | 'bread' | 'cover';
+export type AwayFor = 'oil' | 'ask' | 'look' | 'talk' | 'bread' | 'cover' | 'blanks' | 'setup';
+/** What's in the die: each part type behaves differently at the gauge. */
+export type PartType = 'standard' | 'fine' | 'drift' | 'double';
 export type OfficeId = 'warning' | 'statement';
 export type EndingId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
@@ -18,6 +30,11 @@ export interface PressState {
   awayUntil: number; // shift clock; 0 when at the press
   awayFor: AwayFor | null;
   readyAt: number; // shift clock when the ram is back up
+  streak: number; // good or amber parts in a row (Akkordserie)
+  part: PartType;
+  bandCenter2: number; // second band, for 'double' parts
+  bandDir: 1 | -1; // which way a 'drift' band is moving
+  blanks: number; // blanks in the stack beside the press
   lastPress: { at: number; pos: number; result: PressResult } | null;
 }
 
@@ -52,6 +69,16 @@ export interface WeekLog {
   good: number; // good + amber parts
   quota: number; // sum of quotas
   flagged: boolean;
+}
+
+/** Brandt's short task during a shift: so many parts by a deadline. */
+export interface Task {
+  at: number; // shift clock when Brandt calls it
+  need: number;
+  seconds: number;
+  start: number; // parts in the crate when it began
+  result: 'won' | 'lost' | null;
+  active: boolean;
 }
 
 export interface Evening {
@@ -108,6 +135,12 @@ export interface GameState {
   evening: Evening | null;
   office: Office | null;
   weekSummary: WeekSummary | null;
+  /** Part changes planned for this shift: from `at` seconds, the die holds `part`. */
+  partPlan: { at: number; part: PartType }[];
+  task: Task | null;
+  /** The player's answers in story scenes, by week: what they said at home and in the break. */
+  story: { talks: Record<string, string>; breaks: Record<string, string> };
+  breakScene: { week: number; reply: string | null } | null;
   /** Lines said on the floor this shift, oldest first. Cleared at each shift. */
   feed: string[];
   zeroShifts: number;
@@ -144,6 +177,11 @@ export function initialState(seed: number): GameState {
       awayUntil: 0,
       awayFor: null,
       readyAt: 0,
+      streak: 0,
+      part: 'standard',
+      bandCenter2: 0.5,
+      bandDir: 1,
+      blanks: T.blanksPerStack,
       lastPress: null,
     },
     today: { good: 0, amber: 0, scrap: 0 },
@@ -153,6 +191,10 @@ export function initialState(seed: number): GameState {
     evening: null,
     office: null,
     weekSummary: null,
+    partPlan: [],
+    task: null,
+    story: { talks: {}, breaks: {} },
+    breakScene: null,
     feed: [],
     zeroShifts: 0,
     quotaWorked: 0,

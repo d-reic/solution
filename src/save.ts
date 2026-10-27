@@ -1,7 +1,7 @@
 import type { GameState } from './state';
 
 const KEY = 'solution.save';
-const VERSION = 2;
+const VERSION = 3; // bump when GameState changes shape
 
 /** Autosave at each scene change. Storage can be blocked; the game still runs without it. */
 export function saveGame(state: GameState) {

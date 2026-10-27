@@ -1,5 +1,6 @@
 import clues from './content/clues.json';
 import lines from './content/lines.json';
+import story from './content/story.json';
 import weeks from './content/weeks.json';
 import type { CoworkerId } from './state';
 
@@ -37,6 +38,36 @@ export interface OfficeOption {
   report?: boolean;
   read?: string;
 }
+
+/** When a story line or option shows. All keys must hold. */
+export interface Condition {
+  flag?: string;
+  householdBelow?: number;
+  clue?: string[]; // any of these
+  jakubFedAtLeast?: number;
+  emilPresent?: boolean;
+}
+
+export interface StoryOption {
+  id: string;
+  label: string;
+  reply: string;
+  if?: Condition;
+  trust?: Partial<Record<CoworkerId, number>>;
+  attention?: number;
+  clue?: string;
+}
+
+export interface Story {
+  weekStart: Record<string, { date: string; lines: { text: string; if?: Condition }[] }>;
+  letters: Record<string, { from: string; lines: string[] }>;
+  homeTalks: Record<string, { speaker: string; line: string; options: StoryOption[] }>;
+  breaks: Record<string, { title: string; intro: string; if?: Condition; options: StoryOption[] }>;
+  epilogue: { karl: string; ingeTold: string; ingeAsked: string; lotte: string };
+  ui: { toWork: string; continue: string; talk: string; letter: string };
+}
+
+export const STORY = story as Story;
 
 export const WEEKS: WeekContent[] = weeks;
 export const LINES = lines;

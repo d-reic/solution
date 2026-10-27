@@ -3,11 +3,12 @@ import { type Clue, LINES, UI, WEEKS, fill, num, pick } from '../content';
 import { drawGauge, drawWear } from '../gauge';
 import {
   away,
+  bands,
+  streakMultiplier,
   canCoverEmil,
   canLeaveBread,
   emilPresent,
   floorClues,
-  greenWidth,
   jakubPresent,
   quotaFor,
   windowOpen,
@@ -43,6 +44,8 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
       <div class="bench">
         <section class="machine">
           <div class="plate"><span class="stencil">PRESSE 14</span><span class="status" data-status aria-live="polite"></span></div>
+          <div class="workpiece"><span data-part></span><span class="streak" data-streak></span></div>
+          <p class="task" data-task hidden></p>
           <p class="inspector" data-inspector hidden>${U.inspector}</p>
           <canvas class="gauge" data-gauge aria-hidden="true"></canvas>
           <button class="press" type="button" data-press>${U.press}<small>${U.pressHint}</small></button>
@@ -51,6 +54,7 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
             <div class="counts">
               <span><b data-good>0</b> / ${quota}</span>
               <span class="muted">${U.scrap} <b data-scrap>0</b></span>
+              <span class="muted">${U.blanks} <b data-blanks>0</b></span>
               <span class="muted" data-over></span>
             </div>
           </div>
@@ -59,6 +63,7 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
           <div class="wear">
             <div class="wear-dial"><canvas data-wear aria-hidden="true"></canvas><span class="lbl">${U.wear} <b data-wearpct>0%</b></span></div>
             <button class="oil" type="button" data-oil>${U.oil}<small>${fill(U.away, { s: T.oilSeconds })}</small></button>
+            <button class="oil" type="button" data-fetch>${U.fetchBlanks}<small>${fill(U.away, { s: T.blanksSeconds })}</small></button>
           </div>
           <div class="places" data-places></div>
           <div class="log" data-log></div>
@@ -105,6 +110,8 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
     }
   });
   oilBtn.addEventListener('click', () => dispatch({ type: 'oil' }));
+  const fetchBtn = $<HTMLButtonElement>(el, '[data-fetch]');
+  fetchBtn.addEventListener('click', () => dispatch({ type: 'fetchBlanks' }));
   places.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-act]');
     if (!b || b.disabled) return;
@@ -120,6 +127,8 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
       if (!e.repeat) press();
     } else if (e.code === 'KeyO' && !e.repeat) {
       dispatch({ type: 'oil' });
+    } else if (e.code === 'KeyR' && !e.repeat) {
+      dispatch({ type: 'fetchBlanks' });
     }
   };
   const swallowSpace = (e: KeyboardEvent) => {
@@ -152,6 +161,8 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
     if (p.jammedUntil === 0 && was.jammedUntil > 0) slip(LINES.events.jamClear);
     if (p.awayFor === 'oil' && was.awayFor !== 'oil') slip(LINES.events.oil);
     if (p.wear > T.narrowWearAbove && was.wear <= T.narrowWearAbove) slip(LINES.events.wearHigh);
+    if (p.blanks <= T.blanksLow && was.blanks > T.blanksLow && p.blanks > 0) slip(LINES.events.blanksLow);
+    if (p.blanks === 0 && was.blanks > 0) slip(LINES.events.blanksOut);
     const parts = s.today.good + s.today.amber;
     if (parts >= quota && seen.today.good + seen.today.amber < quota) slip(LINES.events.quotaMet);
     const out = windowOpen(s, 'brandtOut');
@@ -253,21 +264,39 @@ export function shiftView(state: GameState, dispatch: Dispatch): View {
     let status = '';
     if (p.jammedUntil > 0) status = fill(U.jammed, { s: Math.ceil(p.jammedUntil - s.clock) });
     else if (p.awayFor) status = `${U.awayFor[p.awayFor]} · ${Math.ceil(p.awayUntil - s.clock)} s`;
+    else if (p.blanks <= 0) status = U.noBlanks;
     else if (p.lastPress && s.clock - p.lastPress.at < 0.6) status = p.lastPress.result === 'scrap' ? U.scrapStatus : U.inTolerance;
     const statusEl = $(el, '[data-status]');
     statusEl.textContent = status;
-    statusEl.dataset.kind = p.jammedUntil > 0 || status === U.scrapStatus ? 'bad' : status ? 'ok' : '';
+    statusEl.dataset.kind = p.jammedUntil > 0 || status === U.scrapStatus || status === U.noBlanks ? 'bad' : status ? 'ok' : '';
 
     const busy = away(s);
-    pressBtn.disabled = busy;
+    pressBtn.disabled = busy || p.blanks <= 0;
+    fetchBtn.disabled = busy || p.blanks >= T.blanksPerStack;
+    fetchBtn.classList.toggle('urge', !busy && p.blanks <= T.blanksLow);
+    $(el, '[data-blanks]').textContent = String(p.blanks);
+    $(el, '[data-part]').textContent = U.partNames[p.part];
+    const mult = streakMultiplier(p.streak);
+    const streakEl = $(el, '[data-streak]');
+    streakEl.textContent = p.streak > 0 ? `${U.streak} ${p.streak} · ×${mult.toLocaleString('de-DE')}` : '';
+    streakEl.dataset.hot = mult > 1 ? 'yes' : '';
+    const task = s.task;
+    const taskEl = $(el, '[data-task]');
+    taskEl.hidden = !task?.active;
+    if (task?.active) {
+      taskEl.textContent = fill(U.task, {
+        done: Math.min(parts - task.start, task.need),
+        need: task.need,
+        s: Math.max(0, Math.ceil(task.at + task.seconds - s.clock)),
+      });
+    }
     oilBtn.disabled = busy || p.wear === 0;
     oilBtn.classList.toggle('urge', !busy && p.wear > T.narrowWearAbove);
     renderPlaces(s);
 
     drawGauge(gauge, {
       needle: p.needle,
-      bandCenter: p.bandCenter,
-      bandWidth: greenWidth(s),
+      bands: bands(s),
       amberWidth: s.flags.amberUnlocked ? T.amberWidth : 0,
       mark: p.lastPress ? { pos: p.lastPress.pos, result: p.lastPress.result, age: s.clock - p.lastPress.at } : null,
       idle: busy,

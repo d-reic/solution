@@ -1,6 +1,6 @@
 # Solution — Game Design Spec
 
-Oct 27, 2026
+Oct 27, 2026 · v2: story scenes and production variety added
 
 ## Overview
 
@@ -21,23 +21,27 @@ The premise comes from the game Sadie makes in Gabrielle Zevin's novel *Tomorrow
 - Length: 6 weeks × 3 shifts of 60 seconds, plus an evening at home after each shift and a report at the end of each week.
 - Input: click or tap, plus Space for the press.
 - Save: one autosave slot in local storage.
+- Language: German. All player-facing text lives in `src/content/*.json`.
 
 ## Core loop
 
-A shift lasts 60 seconds, an evening follows every shift, and a week report follows every third evening. Six weeks make the campaign. The real result, the ledger, appears only once at the very end.
+Each week opens with a short Monday-morning scene. A shift lasts 60 seconds, an evening follows every shift, and a week report follows every third evening. After the first shift of each week comes a break scene with one coworker. Six weeks make the campaign. The real result, the ledger, appears only once at the very end.
 
 ```mermaid
 flowchart LR
-  Shift["Shift<br/>60 s at the press"] --> Report["Shift report<br/>pay, quota, warnings"]
-  Report --> Evening["Evening at home<br/>bills, family, notebook"]
+  WeekStart["Week start<br/>Monday morning"] --> Shift["Shift<br/>60 s at the press"]
+  Shift --> Report["Shift report<br/>pay, quota, warnings"]
+  Report -- "shift 1" --> Break["Break<br/>one coworker, 3 replies"]
+  Break --> Evening
+  Report -- "shifts 2–3" --> Evening["Evening at home<br/>bills, family, letters, notebook"]
   Evening -- "next shift, until shift 3" --> Shift
   Evening -- "after shift 3" --> Week["Week report<br/>rank, next quota"]
-  Week -- "next week, until week 6" --> Shift
+  Week -- "next week, until week 6" --> WeekStart
   Week -- "after week 6" --> Ending["Ending<br/>victory or plain"]
   Ending --> Ledger["Ledger<br/>what your work did"]
 ```
 
-An office scene can interrupt any shift report when Attention reaches 50, and the week 5 statement scene runs inside the second evening of that week.
+An office scene can interrupt any shift report when Attention reaches 50 (it runs before the break), and the week 5 statement scene runs inside the second evening of that week.
 
 ## Systems
 
@@ -51,6 +55,10 @@ Each press is a timing check. A needle sweeps across a tolerance gauge; pressing
 - **Machine wear:** wear rises with every press. Above 70% the green band narrows; at 100% the press jams for 8 seconds. Oiling the press takes 3 seconds and resets wear.
 - **Quota:** a per-shift number set by the Ministry. Meeting it pays a bonus; missing it draws attention.
 - **Amber band (unlocked later):** a narrow band just outside green. Parts pressed there look fine at the bench but fail under load. This is the sabotage mechanic (see Player choices).
+- **Akkordserie (streak):** good or amber parts in a row raise a points multiplier (×1.5 at 5, up to ×3 at 20). Scrap, or an amber part caught in a sample check, resets it. It changes points only, never pay: the score rewards rhythm and willingness, the wage packet does not care.
+- **Part types (from week 2):** the die changes once a shift (twice from week 4). Each change costs 2 seconds of setup away from the press. *Standard*: one band. *Feinpassteil*: one narrower band (×0.7). *Wanderteil*: the band drifts slowly across the gauge. *Doppelteil* (from week 3): two narrower bands (×0.6 each); either one makes a good part.
+- **Brandt's task (from week 2):** once a shift, at a random moment, Brandt calls for N parts within 10 seconds (5 in week 2, rising by half a part per week). Meeting it pays a points bonus; missing it adds a little Attention.
+- **Blanks:** the press draws from a stack of 25 blanks. An empty stack stops the press. Fetching a full stack takes 2 seconds away from the press.
 
 ### 2. Wages and household
 
@@ -165,6 +173,17 @@ Each clue raises knowledge by its value, capped at 4. A clue with a requirement 
 
 A player who takes every clue reaches 4 by week 4. A player who never questions Brandt can still reach 3 by looking around and talking to coworkers.
 
+## Story
+
+The story runs alongside the work in four kinds of scene. They follow the same rules as everything else: no lectures, nothing forced, and no answer is marked as the right one. Story answers move trust or Attention a little at most; they never change points, pay or the ending row. Text lives in `src/content/story.json`.
+
+| Element | When | What it is |
+| --- | --- | --- |
+| Week start | Before the first shift of each week | Monday morning: the tram, the factory gate, what people say. Fixed dates (6 Oct, 20 Oct, 10 Nov, 24 Nov, 8 Dec, 22 Dec 1941) carry the arc from the October victory reports through the first snow and the stalled advance before Moscow to Christmas. Some lines appear only under conditions (household low, Inge ill, Emil gone, a clue found, Jakub fed). |
+| Feldpost | First evening of weeks 2, 4 and 6 | Letters from Karl, Lotte's brother, with an artillery battery on the Eastern front: mud, then frozen breech blocks, then a retreat in which the crew carries the breech blocks away. He never says where the parts come from. |
+| Talk at home | Second evening of each week | Lotte or Inge asks something; 2–3 replies. A truthful reply appears only once the player has found the clue behind it (e.g. telling Inge "Teile für das Heer" needs C2, C5 or C7). |
+| Break | After the first shift report of each week | One coworker, one short scene, 3 replies: Brandt (weeks 1 and 6), Emil (2 and 5), Greta (3), Jakub (4). Replies shift trust by ±1 or Attention by +3; listening to Emil in week 2 also yields C4. Emil's scenes are skipped once he is gone. |
+
 ## Endings
 
 Nine endings, picked by the first matching row below, top to bottom. "Knew" means knowledge 3 or higher. "Output after knowing" is the average good parts per shift from the shift where knowledge reached 3, as a share of that shift's quota.
@@ -191,6 +210,9 @@ After the verdict, add one line for each flag that applies, in this order:
 - **Emil:** reported → "Bench 9 had a new operator by Monday." Covered for him → "Emil kept pressing amber parts until the factory was bombed in 1944."
 - **Inge:** fell ill → "Inge recovered. The medicine cost two days' pay." (This line also appears on victory screens: the score was not free either.)
 - **Clues skipped:** finished without knowing, but C2 was on screen and not clicked → "The crate was stencilled the whole time."
+- **Karl:** his first letter arrived → "Karl came back from captivity in 1949. He never spoke about the winter of 1941."
+- **What Inge was told:** answered her in week 2 → told her the truth: "She never asked what you did at Werk 7. You had told her." Anything else: "She asked what you did at Werk 7. You said: parts."
+- **Lotte:** household below 35 at the end, or Inge fell ill → "Lotte never mentioned the winter of 1941 again."
 
 ### How the two scores are shown
 
@@ -217,10 +239,12 @@ Eight screens. The shift screen is where 80% of play happens, so it gets the mos
 
 | Screen | Purpose | What's on it |
 | --- | --- | --- |
-| Title | Start or continue | Logo, Continue (if a save exists), New game, Sound toggle, a one-line credit to Zevin's novel |
-| Shift | Production and observation | Tolerance gauge and press button; parts crate filling up; quota and score; shift clock; Attention lamp; machine wear dial and Oil button; clickable world objects (crate, notice board, rail car, coworkers' benches); a slip log of what people said |
+| Title | Start or continue | Logo, backstory (the shoe factory closed, the labour office sent you to Werk 7, Lotte and Inge at home), rules, Continue (if a save exists), New game, Sound toggle, content note, a one-line credit to Zevin's novel |
+| Week start | Monday morning | Date, 2–4 lines on a paper slip, "Zur Arbeit" |
+| Shift | Production and observation | Tolerance gauge (one or two bands) and press button; current part type and Akkordserie multiplier; Brandt's task banner while one runs; parts crate filling up; quota, scrap and blanks counts; score; shift clock; Attention lamp; machine wear dial, Oil and Blanks buttons; clickable world objects (crate, notice board, rail car, coworkers' benches); a slip log of what people said |
 | Shift report | End of shift | Parts, scrap, pay earned, quota met or missed, the foreman's line, any inspector note |
-| Evening | Home and choices | Kitchen scene; wallet; bills to pay (rent, food, coal, medicine) as toggles; Lotte's and Inge's lines; the newspaper; the notebook of things learned; from week 4 a "Wrap bread for tomorrow" toggle |
+| Break | One coworker | Scene text, 3 replies (all styled alike), the reply, Continue |
+| Evening | Home and choices | Kitchen scene; household money; bills to pay (rent, food, coal, medicine) as toggles, with a short note instead of a greyed-out box when money runs short; Lotte's and Inge's lines; Karl's letter (weeks 2, 4, 6); the talk at the table (second evening); the newspaper; the notebook of things learned; from week 4 a "Wrap bread for tomorrow" toggle |
 | Office scene | Warnings and confrontations | Triggered at Attention 50, and by the week 5 statement; dialogue with 2–3 replies |
 | Week report | Ministry summary | Week's output, rank on Werk 7, next week's quota, a propaganda line |
 | Ending | Verdict | Victory or plain variant (see Endings) |
@@ -240,7 +264,7 @@ Eight screens. The shift screen is where 80% of play happens, so it gets the mos
 
 **Sound**
 
-- Press clank, needle tick, machine jam, train whistle at shift end.
+- Press clank, needle tick, machine jam, factory whistle at shift end, a distant train whistle when the goods wagon arrives.
 - No music during shifts. The fanfare on the victory screen is the only music in the game.
 
 ## Architecture and data model
@@ -256,7 +280,7 @@ Build it as a TypeScript app with no game engine: a pure state reducer, data fil
 | `state.ts` | `GameState` type and `initialState()` | — |
 | `reducer.ts` | `reduce(state, action) → state`, all rules | state, content, rng |
 | `rng.ts` | Seeded PRNG (mulberry32) so runs replay exactly | — |
-| `content/*.json` | Weeks, clues, characters, dialogue, events | — |
+| `content/*.json` | Weeks, clues, dialogue, events, UI text (`lines.json`), story scenes and letters (`story.json`) | — |
 | `endings.ts` | `resolveEnding(ledger, state) → EndingId` and epilogue lines | state |
 | `scenes/*.ts` | One view per screen; render from state, dispatch actions | reducer |
 | `loop.ts` | Fixed 60 Hz tick during shifts; dispatches `tick` | reducer |
@@ -266,7 +290,7 @@ Build it as a TypeScript app with no game engine: a pure state reducer, data fil
 ### Core types
 
 ```ts
-type Scene = 'title' | 'shift' | 'shiftReport' | 'evening' | 'office' | 'weekReport' | 'ending' | 'ledger';
+type Scene = 'title' | 'weekStart' | 'shift' | 'shiftReport' | 'break' | 'evening' | 'office' | 'weekReport' | 'ending' | 'ledger';
 
 interface GameState {
   seed: number;
@@ -303,6 +327,7 @@ type Action =
   | { type: 'tick'; dt: number }
   | { type: 'press' }
   | { type: 'oil' }
+  | { type: 'fetchBlanks' }
   | { type: 'look'; target: string }
   | { type: 'ask'; who: string; clue: string }
   | { type: 'coverEmil' }
@@ -363,6 +388,13 @@ Starting values for the first playable build. Keep them in one `tuning.ts` file 
 | Sample check chance | 1 per 25 parts; 1 per 10 at Attention ≥ 80 | |
 | Amber catch rate per check | 20%; 40% at Attention ≥ 80 | +25 Attention when caught |
 | Parts per breech block | 12 | Ledger only |
+| Akkordserie | ×1.5 per 5 parts in a row, max ×3 | Points only |
+| Part changes | 1 per shift in weeks 2–3, 2 from week 4 | 2 s setup each |
+| Feinpassteil / Doppelteil band | ×0.7 / ×0.6 of the green width | Doppelteil from week 3 |
+| Wanderteil drift | 0.12 gauge widths per second | |
+| Brandt's task | 5 parts in 10 s (week 2), +0.5 parts per week | +60 points / +4 Attention |
+| Blanks | 25 per stack | Fetching takes 2 s |
+| Break replies | trust ±1, Attention +3 at most | |
 
 **Balance targets to check in playtests**
 
@@ -403,6 +435,12 @@ Four milestones, each playable at the end. Build the shift screen first, because
 - [ ] Victory and plain ending screens, epilogue lines, ledger screen
 - [ ] Sound pass and phone layout
 - [ ] Full playtest: at least one tester reaches each ending; no tester reports being told what to do during play
+
+### M5 · Story and variety
+
+- [x] Week-start scenes, Karl's letters, talks at home, break scenes, family epilogue lines
+- [x] Akkordserie, part types, Brandt's task, blanks
+- [ ] Playtest: does the shift still feel fair at week 6 with part changes, tasks and blanks together?
 
 ## Tone and content guidelines
 

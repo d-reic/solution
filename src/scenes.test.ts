@@ -3,12 +3,14 @@ import { describe, expect, it } from 'vitest';
 import { type Action, reduce } from './reducer';
 import { endingView } from './scenes/ending';
 import { eveningView } from './scenes/evening';
+import { breakView } from './scenes/break';
 import { officeView } from './scenes/office';
 import { shiftView } from './scenes/shift';
 import { shiftReportView } from './scenes/shiftReport';
 import { titleView } from './scenes/title';
 import type { View } from './scenes/view';
 import { weekReportView } from './scenes/weekReport';
+import { weekStartView } from './scenes/weekStart';
 import { type GameState, initialState } from './state';
 import { TUNING as T } from './tuning';
 
@@ -22,8 +24,10 @@ const run = (s: GameState, seconds: number) => {
 /** Plays forward to each scene, with an unusual knowledge value that would be easy to spot. */
 function scenes(): [string, View][] {
   const knowledge = 3.7;
-  let s: GameState = { ...reduce(initialState(5), { type: 'newGame', seed: 5 }), knowledge, week: 5, shift: 2, clues: ['C2', 'C5'] };
-  const out: [string, View][] = [['title', titleView(noop, () => {})], ['shift', shiftView(s, noop)]];
+  const fresh = reduce(initialState(5), { type: 'newGame', seed: 5 });
+  const opening = weekStartView(fresh, noop);
+  let s: GameState = { ...reduce(fresh, { type: 'advance' }), knowledge, week: 5, shift: 2, clues: ['C2', 'C5'] };
+  const out: [string, View][] = [['title', titleView(noop, () => {})], ['weekStart', opening], ['shift', shiftView(s, noop)]];
   s = run({ ...s, today: { good: 50, amber: 0, scrap: 2 } }, T.shiftLength);
   out.push(['shiftReport', shiftReportView(s, noop)]);
   s = reduce(s, { type: 'advance' });
@@ -32,6 +36,9 @@ function scenes(): [string, View][] {
   out.push(['evening', eveningView(s, noop)]);
   s = reduce({ ...s, shift: 3, evening: { ...s.evening!, bills: [] } }, { type: 'advance' });
   out.push(['weekReport', weekReportView(s, noop)]);
+  let b: GameState = { ...reduce(fresh, { type: 'advance' }), knowledge, week: 2 };
+  b = reduce(run({ ...b, today: { good: 50, amber: 0, scrap: 0 } }, T.shiftLength), { type: 'advance' });
+  out.push(['break', breakView(b, noop)]);
   s = { ...s, scene: 'ending', ending: 9 };
   out.push(['ending', endingView(s, noop)]);
   return out;
@@ -39,7 +46,17 @@ function scenes(): [string, View][] {
 
 describe('rendered scenes', () => {
   it('reach every screen', () => {
-    expect(scenes().map(([name]) => name)).toEqual(['title', 'shift', 'shiftReport', 'office', 'evening', 'weekReport', 'ending']);
+    expect(scenes().map(([name]) => name)).toEqual([
+      'title',
+      'weekStart',
+      'shift',
+      'shiftReport',
+      'office',
+      'evening',
+      'weekReport',
+      'break',
+      'ending',
+    ]);
   });
 
   it('never show knowledge as a number', () => {
@@ -59,8 +76,9 @@ describe('rendered scenes', () => {
 
 describe('evening toggles', () => {
   const evening = (money: number) => {
-    let s: GameState = { ...reduce(initialState(2), { type: 'newGame', seed: 2 }), week: 4 };
+    let s: GameState = { ...reduce(reduce(initialState(2), { type: 'newGame', seed: 2 }), { type: 'advance' }), week: 4 };
     s = reduce(run({ ...s, today: { good: 55, amber: 0, scrap: 0 } }, T.shiftLength), { type: 'advance' });
+    s = reduce(reduce(s, { type: 'choose', sceneId: 'break', option: 'nod' }), { type: 'advance' });
     return { ...s, money };
   };
 
