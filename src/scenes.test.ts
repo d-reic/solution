@@ -56,3 +56,33 @@ describe('rendered scenes', () => {
     expect(classes.size).toBeLessThanOrEqual(1);
   });
 });
+
+describe('evening toggles', () => {
+  const evening = (money: number) => {
+    let s: GameState = { ...reduce(initialState(2), { type: 'newGame', seed: 2 }), week: 4 };
+    s = reduce(run({ ...s, today: { good: 55, amber: 0, scrap: 0 } }, T.shiftLength), { type: 'advance' });
+    return { ...s, money };
+  };
+
+  it('wraps the bread when there is money for it', () => {
+    const sent: Action[] = [];
+    const v = eveningView(evening(20), (a) => sent.push(a));
+    const bread = v.el.querySelector<HTMLInputElement>('[data-bread]')!;
+    expect(bread.disabled).toBe(false);
+    bread.checked = true;
+    bread.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(sent).toEqual([{ type: 'choose', sceneId: 'evening', option: 'bread' }]);
+  });
+
+  it('says why when the money runs short, instead of greying the box out', () => {
+    const sent: Action[] = [];
+    const v = eveningView(evening(T.food + T.coal + 1), (a) => sent.push(a));
+    const bread = v.el.querySelector<HTMLInputElement>('[data-bread]')!;
+    expect(bread.disabled).toBe(false);
+    bread.checked = true;
+    bread.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(sent).toEqual([]);
+    expect(bread.checked).toBe(false);
+    expect(v.el.querySelector<HTMLElement>('[data-short]')!.hidden).toBe(false);
+  });
+});

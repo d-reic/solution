@@ -9,6 +9,9 @@ export function titleView(dispatch: Dispatch, onContinue: (() => void) | null): 
     <section class="title-screen">
       <h1 class="logo">SOLUTION</h1>
       <p class="meta">${U.meta}</p>
+      <div class="story" aria-label="${U.storyLabel}">
+        ${U.story.map((p) => `<p>${p}</p>`).join('')}
+      </div>
       <p class="lead">${U.lead}</p>
       <ul class="rules">
         ${U.rules.map(([name, text]) => `<li><b>${name}</b><span>${text}</span></li>`).join('')}

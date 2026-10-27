@@ -24,6 +24,7 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
           <div class="wallet"><span class="lbl">${U.wallet}</span><span class="val" data-wallet></span><span class="muted" data-left></span></div>
           <div class="bills" data-bills></div>
           <label class="toggle" data-bread-row hidden><input type="checkbox" data-bread /> <span>${LINES.evening.bread}</span><span class="price">${rm(T.food)}</span></label>
+          <p class="short" data-short hidden>${U.short}</p>
         </div>
       </div>
       <div class="papers">
@@ -47,17 +48,34 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
     row.querySelector('span')!.textContent = LINES.evening.bills[b];
     bills.append(row);
   }
+  // Ticking something the wallet can't cover stays possible to try: it explains instead of greying out.
+  let current = state;
+  const short = $(el, '[data-short]');
+  const tryToggle = (input: HTMLInputElement, cost: number, action: Parameters<Dispatch>[0]) => {
+    if (input.checked && eveningSpend(current) + cost > current.money + 1e-9) {
+      input.checked = false;
+      short.hidden = false;
+      return;
+    }
+    short.hidden = true;
+    dispatch(action);
+  };
   bills.addEventListener('change', (ev) => {
     const input = ev.target as HTMLInputElement;
-    dispatch({ type: 'pay', bill: input.dataset.bill as Bill });
+    const bill = input.dataset.bill as Bill;
+    tryToggle(input, billCost(bill), { type: 'pay', bill });
   });
-  $(el, '[data-bread]').addEventListener('change', () => dispatch({ type: 'choose', sceneId: 'evening', option: 'bread' }));
+  const breadInput = $<HTMLInputElement>(el, '[data-bread]');
+  breadInput.addEventListener('change', () =>
+    tryToggle(breadInput, T.food, { type: 'choose', sceneId: 'evening', option: 'bread' }),
+  );
   $(el, '[data-read]').onclick = () => dispatch({ type: 'choose', sceneId: 'evening', option: 'newspaper' });
   $(el, '[data-next]').onclick = () => dispatch({ type: 'advance' });
 
   function update(s: GameState) {
     const ev = s.evening;
     if (s.scene !== 'evening' || !ev) return;
+    current = s;
     const E = LINES.evening;
     const lv = level(s.household);
     const kitchen = $(el, '[data-kitchen]');
@@ -73,13 +91,12 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
     for (const input of el.querySelectorAll<HTMLInputElement>('[data-bill]')) {
       const b = input.dataset.bill as Bill;
       input.checked = ev.paying[b];
-      input.disabled = !ev.paying[b] && spend + billCost(b) > s.money + 1e-9;
+      input.closest('label')!.classList.toggle('tight', !ev.paying[b] && spend + billCost(b) > s.money + 1e-9);
     }
     const breadRow = $(el, '[data-bread-row]');
     breadRow.hidden = !jakubPresent(s);
-    const bread = $<HTMLInputElement>(el, '[data-bread]');
-    bread.checked = ev.bread;
-    bread.disabled = !ev.bread && spend + T.food > s.money + 1e-9;
+    breadInput.checked = ev.bread;
+    breadRow.classList.toggle('tight', !ev.bread && spend + T.food > s.money + 1e-9);
 
     const news = E.newspaper[String(s.week) as keyof typeof E.newspaper];
     const c3 = CLUES.find((c) => c.id === 'C3')!;

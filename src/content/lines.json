@@ -1,40 +1,52 @@
 {
   "shiftStart": {
     "1-1": [
-      "Brandt führt dich zu Bank 14 und klopft auf die Anzeige. „Nadel im Grünen, dann drückst du. Grün ist Toleranz. Alles andere ist Ausschuss, und Ausschuss wird nicht bezahlt.“",
-      "„Vierzig pro Schicht. Die Presse nutzt sich ab, während du arbeitest. Wenn sie heiß läuft, ölst du sie. Wenn sie sich festfrisst, wartest du auf den Schlosser, und der Schlosser ist nie schnell.“"
+      "Brandt führt dich zu Werkbank 14 und klopft auf die Messuhr. „Steht die Nadel im Grünen, drückst du. Grün heißt: in Toleranz. Alles andere ist Ausschuss, und Ausschuss wird nicht bezahlt.“",
+      "„Vierzig Stück pro Schicht. Die Presse verschleißt, während du arbeitest. Läuft sie heiß, wird geölt. Frisst sie sich fest, wartest du auf den Schlosser, und der lässt sich Zeit.“"
     ],
-    "1-2": ["Ein Stapel leerer Kisten am Ladetor. Frische Schablonenschrift auf den Deckeln."],
-    "2-1": ["Ein Neuer an Bank 9, älter, am Revers noch das Loch einer Gewerkschaftsnadel. Emil. Er nickt dir einmal zu."],
-    "3-1": ["Herren vom Ministerium gehen mit Brandt durch die Halle. Ab heute zieht ein Prüfer Stichproben aus den Kisten."],
-    "4-1": ["An der Bank neben dir steht ein neuer Arbeiter. Auf seiner Jacke ein „P“. Brandt ruft ihn mit einer Nummer; er heißt Jakub."],
-    "5-1": ["Schnee auf dem Hof. Greta aus dem Prüfbüro geht jetzt öfter durch die Halle, ein Buch unter dem Arm."],
-    "6-1": ["Ein Sonderauftrag fürs neue Jahr. Brandt schreibt es mit Kreide an die Tafel: siebzig pro Schicht, und eine Weihnachtsprämie für jede Bank, die es schafft."],
+    "1-2": [
+      "Am Ladetor ein Stapel leerer Kisten. Auf den Deckeln frische Schablonenschrift."
+    ],
+    "2-1": [
+      "An Bank 9 ein Neuer, schon älter. Am Revers sieht man noch das Loch, wo einmal eine Gewerkschaftsnadel steckte. Emil. Er nickt dir einmal zu."
+    ],
+    "3-1": [
+      "Herren vom Ministerium gehen mit Brandt durch die Halle. Ab heute zieht ein Prüfer Stichproben aus den Kisten."
+    ],
+    "4-1": [
+      "An der Bank neben dir steht ein Neuer, ein „P“ auf der Jacke. Brandt ruft ihn bei seiner Nummer. Er heißt Jakub."
+    ],
+    "5-1": [
+      "Schnee auf dem Hof. Greta aus dem Prüfbüro geht jetzt öfter durch die Halle, die Kladde unter dem Arm."
+    ],
+    "6-1": [
+      "Ein Sonderauftrag zum Jahreswechsel. Brandt schreibt es mit Kreide an die Tafel: siebzig Stück pro Schicht, und eine Weihnachtsprämie für jede Bank, die es schafft."
+    ],
     "default": [
-      "Die Glocke. Brandt sitzt schon mit dem Klemmbrett am Pult.",
-      "Dampf an den Fenstern. An Bank 9 pfeift jemand, schlecht.",
-      "Die ersten Hübe ist die Presse kalt. Dann nicht mehr.",
-      "Das Radio in Brandts Büro ist leise gedreht. Marschmusik, dann die Nachrichten."
+      "Die Glocke. Brandt sitzt schon mit dem Klemmbrett an seinem Pult.",
+      "Die Fenster sind beschlagen. An Bank 9 pfeift jemand, falsch.",
+      "Bei den ersten Hüben ist die Presse noch kalt. Dann nicht mehr.",
+      "In Brandts Büro läuft leise das Radio. Marschmusik, dann Nachrichten."
     ]
   },
   "events": {
-    "jam": "Der Stößel frisst sich mit einem Knall fest. Jemand ruft nach dem Schlosser.",
-    "jamClear": "Der Schlosser wischt sich die Hände an der Hose ab und geht ohne ein Wort.",
-    "oil": "Du arbeitest die Ölkanne in die Führungen. Der Stößel gleitet leichter.",
+    "jam": "Mit einem Knall frisst sich der Stößel fest. Jemand ruft nach dem Schlosser.",
+    "jamClear": "Der Schlosser wischt sich die Hände an der Hose ab und geht wortlos.",
+    "oil": "Du ölst die Führungen. Der Stößel gleitet wieder leichter.",
     "wearHigh": "Die Presse läuft heiß. Die Nadel zittert.",
     "quotaMet": "Soll erfüllt. Brandt macht einen Strich auf seinem Klemmbrett.",
-    "inspector": "Ein Prüfer steht mit einem Notizbuch neben dir. Er bleibt die ganze Schicht.",
-    "sampleCheck": "Der Prüfer zieht ein Teil aus deiner Kiste, dreht es unter der Lampe und legt es zurück.",
-    "caught": "Der Prüfer hält ein Teil gegen das Licht, dann schreibt er etwas auf. Das Teil behält er.",
-    "brandtOut": "Brandt verlässt sein Pult und geht hinauf ins Büro.",
-    "brandtBack": "Brandt ist zurück an seinem Pult.",
-    "railCar": "Ein Güterwagen setzt rückwärts ans Ladetor.",
-    "bread": "Du legst das Brot an die Ecke von Jakubs Bank. Er sieht es an, dann dich, und steckt es in seine Jacke.",
-    "breadSeen": "Greta steht mit ihrem Buch an der Stechuhr. Sie hat es gesehen.",
-    "cover": "Du stellst dich dem Prüfer in den Blick und fragst nach der Ölzuteilung. Hinter dir presst Emil weiter.",
-    "coverCaught": "Der Prüfer geht um dich herum. „Ihre Bank ist dort drüben.“ Er sieht lange in Emils Kiste.",
-    "gretaReports": "Greta geht an deiner Bank vorbei, ohne dich anzusehen. Am Nachmittag bleibt Brandts Tür eine Stunde lang zu.",
-    "emilGone": "Bank 9 ist leer. Niemand spricht davon."
+    "inspector": "Ein Prüfer mit Notizbuch steht neben dir. Er bleibt die ganze Schicht.",
+    "sampleCheck": "Der Prüfer nimmt ein Teil aus deiner Kiste, dreht es unter der Lampe und legt es zurück.",
+    "caught": "Der Prüfer hält ein Teil ins Licht und schreibt etwas auf. Das Teil behält er.",
+    "brandtOut": "Brandt steht von seinem Pult auf und geht hinauf ins Büro.",
+    "brandtBack": "Brandt sitzt wieder an seinem Pult.",
+    "railCar": "Ein Güterwagen wird ans Ladetor rangiert.",
+    "bread": "Du legst das Brot auf die Ecke von Jakubs Bank. Er sieht es an, dann dich, und steckt es unter die Jacke.",
+    "breadSeen": "Greta steht mit ihrer Kladde an der Stechuhr. Sie hat es gesehen.",
+    "cover": "Du stellst dich dem Prüfer in den Weg und fragst nach der Ölzuteilung. Hinter dir presst Emil weiter.",
+    "coverCaught": "Der Prüfer tritt um dich herum. „Ihr Platz ist dort drüben.“ Lange sieht er in Emils Kiste.",
+    "gretaReports": "Greta geht an deiner Bank vorbei, ohne dich anzusehen. Am Nachmittag bleibt Brandts Tür eine Stunde lang geschlossen.",
+    "emilGone": "Bank 9 ist leer. Keiner spricht darüber."
   },
   "floor": {
     "brandt": "Brandts Pult",
@@ -43,61 +55,61 @@
     "emil": "Emil · Bank 9",
     "jakub": "Jakub · Bank 15",
     "yard": "Der Hof",
-    "breadLabel": "Das Brot an Jakubs Bank legen",
-    "coverLabel": "Zwischen Prüfer und Emil stellen"
+    "breadLabel": "Das Brot auf Jakubs Bank legen",
+    "coverLabel": "Dich zwischen Prüfer und Emil stellen"
   },
   "shiftReport": {
     "beat": [
-      "Brandt schreibt die Zahl mit Kreide an die Tafel und unterstreicht sie nach einem Moment.",
-      "„Bank 14.“ Brandt trägt es in sein Buch ein. „So wird das gemacht.“"
+      "Brandt schreibt die Zahl mit Kreide an die Tafel und unterstreicht sie nach kurzem Zögern.",
+      "„Bank 14.“ Brandt trägt es in sein Buch ein. „So macht man das.“"
     ],
     "met": [
-      "Brandt sieht in die Kiste, nickt und geht weiter zu Bank 15.",
-      "„Soll.“ Brandt sieht nicht vom Klemmbrett auf."
+      "Brandt wirft einen Blick in die Kiste, nickt und geht weiter zu Bank 15.",
+      "„Soll erfüllt.“ Brandt sieht nicht vom Klemmbrett auf."
     ],
     "missed": [
-      "Brandt sieht in die Kiste. „{quota}, nicht {good}. Draußen warten Männer auf deine Bank.“",
-      "„Schon wieder zu wenig?“ Brandt macht eine Notiz. Er sagt nicht, was er schreibt."
+      "Brandt sieht in die Kiste. „{quota}, nicht {good}. Draußen warten Männer auf deinen Platz.“",
+      "„Schon wieder zu wenig?“ Brandt macht sich eine Notiz. Was er schreibt, sagt er nicht."
     ],
     "underMinimum": [
-      "Brandt zählt zweimal. „{good}. Die Prüfer lesen diese Zahlen auch.“",
-      "Brandt hält dir den Zählzettel hin, damit du ihn sehen kannst. Er sagt nichts."
+      "Brandt zählt zweimal nach. „{good}. Diese Zahlen lesen die Prüfer auch.“",
+      "Brandt hält dir den Zählzettel hin. Er sagt kein Wort."
     ],
     "zero": [
       "Brandt steht lange an deiner Bank. „Eine leere Kiste. Du weißt, wie das aussieht.“",
       "Brandt kommt nicht herüber. Er schreibt nur. Das ist schlimmer."
     ],
-    "inspectorNote": "Vermerk des Prüfers: {checks} Stichproben, {caught} beanstandet.",
-    "zeroWarning": "Zweite leere Kiste: Brandt hat deine Stempelkarte in der Hand."
+    "inspectorNote": "Vermerk des Prüfers: {checks} Stichproben, davon {caught} beanstandet.",
+    "zeroWarning": "Die zweite leere Kiste: Brandt hält deine Stempelkarte in der Hand."
   },
   "evening": {
     "kitchen": {
-      "high": "Die Küche ist warm. Kartoffeln, ein wenig Speckfett, Brot unter einem Tuch.",
-      "mid": "Wieder Suppe, dünner als letzte Woche. Die Lampe ist heruntergedreht, um Öl zu sparen.",
-      "low": "Ein leerer Tisch. Lotte hat die guten Stühle verkauft. Vor neun ist der Ofen kalt."
+      "high": "Die Küche ist warm. Kartoffeln, ein wenig Schmalz, Brot unter einem Tuch.",
+      "mid": "Wieder Suppe, dünner als letzte Woche. Lotte hat die Lampe heruntergedreht, um Petroleum zu sparen.",
+      "low": "Der Tisch ist leer. Lotte hat die guten Stühle verkauft. Schon vor neun ist der Ofen kalt."
     },
     "lotte": {
-      "high": "Lotte zählt die Münzen zweimal und legt sie in die Dose. „Diese Woche kommen wir hin.“",
-      "mid": "Lotte dreht deine Lohntüte um. „Es ist weniger als früher. Der Metzger hat wieder gefragt.“",
-      "low": "Lotte fragt nicht nach der Schicht. Sie fragt, wie viel übrig ist, und dann fragt sie nicht mehr.",
-      "hungry": "Lotte schiebt ihren eigenen Teller zu Inge hinüber, ohne etwas zu sagen."
+      "high": "Lotte zählt die Münzen zweimal und legt sie in die Blechdose. „Diese Woche kommen wir hin.“",
+      "mid": "Lotte wendet deine Lohntüte in der Hand. „Es ist weniger als früher. Der Metzger hat wieder angeschrieben.“",
+      "low": "Lotte fragt nicht nach der Schicht. Sie fragt, was übrig ist, und dann fragt sie nichts mehr.",
+      "hungry": "Wortlos schiebt Lotte ihren Teller zu Inge hinüber."
     },
     "inge": {
       "high": "Inge zeigt dir eine Zeichnung von einem Zug. „Ist das der, für den du die Teile machst?“",
-      "mid": "Inge rechnet am Tisch, in deinen Mantel gewickelt.",
-      "low": "Inge liegt früh im Bett. Sie sagt, sie hat keinen Hunger.",
-      "ill": "Inge liegt mit Fieber im Bett. Auf dem Tisch der Zettel vom Arzt: ein Medikament, und ein Preis.",
-      "recovered": "Inge ist wieder auf, dünn, und zeichnet am Tisch."
+      "mid": "Inge macht am Tisch ihre Rechenaufgaben, in deinen Mantel gewickelt.",
+      "low": "Inge liegt früh im Bett. Sie sagt, sie habe keinen Hunger.",
+      "ill": "Inge liegt mit Fieber im Bett. Auf dem Tisch liegt der Zettel vom Arzt: ein Medikament und sein Preis.",
+      "recovered": "Inge ist wieder auf, dünn geworden, und zeichnet am Tisch."
     },
     "newspaper": {
-      "1": "Die Zeitung: eine Rede, ein Rezept für Steckrübensuppe, Fußball.",
+      "1": "In der Zeitung: eine Rede, ein Rezept für Steckrübensuppe, die Fußballergebnisse.",
       "2": "",
-      "3": "Die Zeitung: Das Ministerium lobt die Betriebe des Reiches. Ein Foto von einem Fließband.",
-      "4": "Die Zeitung: Wintersammlung für die Front. Bringt eure Wolle.",
-      "5": "Die Zeitung: Der Vormarsch ruht über den Winter. Nur über den Winter, steht da.",
-      "6": "Die Zeitung: Weihnachtsgrüße an die Soldaten im Osten."
+      "3": "In der Zeitung: Das Ministerium lobt die Rüstungsbetriebe des Reiches. Dazu ein Foto von einem Fließband.",
+      "4": "In der Zeitung: Das Winterhilfswerk sammelt. Wer gibt, hilft der Front.",
+      "5": "In der Zeitung: Der Vormarsch ruht über den Winter. Nur über den Winter, heißt es.",
+      "6": "In der Zeitung: Aufruf zur Wollsammlung für die Soldaten im Osten. Daneben Weihnachtsgrüße an die Front."
     },
-    "folded": "Die Abendzeitung liegt auf dem Tisch, noch gefaltet.",
+    "folded": "Die Abendzeitung liegt noch gefaltet auf dem Tisch.",
     "bills": {
       "food": "Essen",
       "rent": "Miete",
@@ -105,51 +117,94 @@
       "medicine": "Medizin für Inge"
     },
     "bread": "Brot für morgen einpacken",
-    "notebookEmpty": "Noch nichts aufgeschrieben."
+    "notebookEmpty": "Noch nichts notiert."
   },
   "office": {
     "warning": {
       "title": "BRANDTS BÜRO",
-      "intro": "Brandt schließt die Tür und setzt sich nicht. „Es wird nach Bank 14 gefragt. Noch frage ich nicht mit. Bring mich nicht dazu.“",
-      "inspectorIntro": "Der Prüfer steht am Fenster. „Wenn es in der Halle jemanden gibt, mit dem wir reden sollten, dann ist jetzt der Moment, es zu sagen.“"
+      "intro": "Brandt schließt die Tür und bleibt stehen. „Es wird nach Bank 14 gefragt. Noch gehöre ich nicht zu denen, die fragen. Sorg dafür, dass es so bleibt.“",
+      "inspectorIntro": "Der Prüfer steht am Fenster. „Falls es in der Halle jemanden gibt, mit dem wir sprechen sollten: Jetzt wäre der Moment, es zu sagen.“"
     },
     "statement": {
       "title": "DAS PRÜFBÜRO",
-      "intro": "Greta legt dir ein getipptes Blatt hin und einen Füller daneben. „Eine Aussage über Emil Krause. Nur was alle in der Halle gesehen haben. Unten unterschreiben.“"
+      "intro": "Greta legt dir ein getipptes Blatt hin, einen Füllfederhalter daneben. „Eine Aussage über Emil Krause. Nur was alle in der Halle gesehen haben. Unterschreiben Sie unten.“"
     }
   },
   "officeOptions": {
     "warning": [
-      { "id": "promise", "label": "„Es kommt nicht wieder vor.“", "reply": "„Gut.“ Brandt öffnet dir die Tür.", "attention": -5, "trust": { "brandt": 1 } },
-      { "id": "ask", "label": "„Wofür sind die Teile, Herr Brandt?“", "reply": "Brandt sieht dich lange an. „Füll die Kiste. Dafür sind sie.“", "attention": 8 },
-      { "id": "silent", "label": "Nichts sagen.", "reply": "Brandt wartet, zuckt dann die Schultern und öffnet die Tür." }
+      {
+        "id": "promise",
+        "label": "„Es kommt nicht wieder vor.“",
+        "reply": "„Gut.“ Brandt öffnet dir die Tür.",
+        "attention": -5,
+        "trust": {
+          "brandt": 1
+        }
+      },
+      {
+        "id": "ask",
+        "label": "„Wofür sind die Teile, Herr Brandt?“",
+        "reply": "Brandt sieht dich lange an. „Damit die Kiste voll wird. Dafür sind sie.“",
+        "attention": 8
+      },
+      {
+        "id": "silent",
+        "label": "Nichts sagen.",
+        "reply": "Brandt wartet, zuckt mit den Schultern und öffnet die Tür."
+      }
     ],
-    "warningReport": { "id": "report", "label": "„Emil, an Bank 9.“", "reply": "Der Prüfer schreibt den Namen auf. Brandt sieht zu Boden. „Du kannst zurück an die Arbeit.“", "report": true },
-    "warningDeny": { "id": "noone", "label": "„Niemand.“", "reply": "Der Prüfer klappt sein Notizbuch zu. „Wir werden sehen.“" },
+    "warningReport": {
+      "id": "report",
+      "label": "„Emil, an Bank 9.“",
+      "reply": "Der Prüfer notiert den Namen. Brandt sieht zu Boden. „Du kannst zurück an die Arbeit.“",
+      "report": true
+    },
+    "warningDeny": {
+      "id": "noone",
+      "label": "„Niemand.“",
+      "reply": "Der Prüfer klappt sein Notizbuch zu. „Wir werden sehen.“"
+    },
     "statement": [
-      { "id": "read", "label": "Erst durchlesen", "read": "C11" },
-      { "id": "sign", "label": "Unterschreiben", "reply": "Greta löscht die Unterschrift ab und lächelt zum ersten Mal. „Danke. Das Werk wird es nicht vergessen.“", "report": true },
-      { "id": "refuse", "label": "„Ich habe nichts gesehen.“", "reply": "Greta nimmt das Blatt zurück und faltet es einmal. „Das schreibe ich auch auf.“", "attention": 10, "trust": { "greta": -2 } }
+      {
+        "id": "read",
+        "label": "Erst durchlesen",
+        "read": "C11"
+      },
+      {
+        "id": "sign",
+        "label": "Unterschreiben",
+        "reply": "Greta löscht die Unterschrift ab und lächelt zum ersten Mal. „Danke. Das Werk wird es Ihnen nicht vergessen.“",
+        "report": true
+      },
+      {
+        "id": "refuse",
+        "label": "„Ich habe nichts gesehen.“",
+        "reply": "Greta nimmt das Blatt zurück und faltet es einmal. „Das schreibe ich auch auf.“",
+        "attention": 10,
+        "trust": {
+          "greta": -2
+        }
+      }
     ]
   },
   "weekReport": {
     "propaganda": {
-      "1": "Jedes Teil aus Werk 7 ist ein Stein im Haus der Zukunft.",
-      "2": "Die Front dankt der Heimatfront. Der Sieg ist eine Frage der Leistung.",
-      "3": "Das Ministerium hat den Fleiß von Werk 7 zur Kenntnis genommen.",
-      "4": "Der Winter hält den deutschen Arbeiter nicht auf.",
-      "5": "Die besten Arbeiter fragen nicht warum. Sie fragen wie viele.",
-      "6": "Der letzte Auftrag des Jahres. Das Reich wird nicht vergessen, wer geliefert hat."
+      "1": "Jedes Teil aus Werk 7 ist ein Baustein der Zukunft.",
+      "2": "Die Front dankt der Heimat. Der Sieg ist eine Frage der Leistung.",
+      "3": "Das Ministerium hat den Fleiß von Werk 7 mit Anerkennung vermerkt.",
+      "4": "Auch der Winter hält den deutschen Arbeiter nicht auf.",
+      "5": "Der beste Arbeiter fragt nicht warum. Er fragt: wie viel?",
+      "6": "Der letzte Auftrag des Jahres. Das Reich vergisst nicht, wer geliefert hat."
     },
     "quiet": "Eine ruhige Woche an Bank 14.",
     "gretaWord": "Greta hat ein gutes Wort für dich eingelegt.",
-    "nextQuota": "Soll nächste Woche: {quota} pro Schicht."
+    "nextQuota": "Soll für nächste Woche: {quota} Stück pro Schicht."
   },
   "endings": {
     "1": {
       "name": "VERHAFTET WEGEN SABOTAGE",
       "lines": [
-        "An einem Montagmorgen warteten zwei Männer in Mänteln an Bank 14. Einer von ihnen hatte einen Beutel mit deinen Teilen, jedes einzelne mittendurch gebrochen.",
+        "An einem Montagmorgen warteten zwei Männer in Ledermänteln an Bank 14. Einer trug einen Beutel mit deinen Teilen, jedes einzelne mitten durchgebrochen.",
         "Brandt sah nicht auf."
       ],
       "verdict": "Nach Punkten verloren. Das Spiel gewonnen."
@@ -157,8 +212,8 @@
     "2": {
       "name": "VERWEIGERUNG",
       "lines": [
-        "Als du wusstest, wofür die Teile waren, blieb die Kiste fast leer.",
-        "Sie holten deine Stempelkarte, und dann dich. Bank 14 stand eine Woche still, bis sie jemand anderen fanden."
+        "Sobald du wusstest, wofür die Teile waren, blieb deine Kiste fast leer.",
+        "Erst holten sie deine Stempelkarte, dann dich. Bank 14 stand eine Woche still, bis sie einen anderen gefunden hatten."
       ],
       "verdict": "Nach Punkten verloren. Das Spiel gewonnen."
     },
@@ -166,14 +221,14 @@
       "name": "ENTLASSEN",
       "lines": [
         "Bank 14 blieb zu oft unter dem Soll. Brandt gab deinen Platz dem Nächsten in der Schlange.",
-        "Du hast nie erfahren, wofür die Teile waren. Jetzt macht sie jemand anderes."
+        "Wofür die Teile waren, hast du nie erfahren. Jetzt macht sie ein anderer."
       ],
       "verdict": "Keine Punkte. Keine Antwort."
     },
     "4": {
       "name": "DER DENUNZIANT",
       "lines": [
-        "Werk 7 verlieh dir seine Treuemedaille, überreicht vom Ministerium bei der Weihnachtsfeier.",
+        "Werk 7 verlieh dir die Treuemedaille. Ein Herr vom Ministerium überreichte sie bei der Weihnachtsfeier.",
         "Dein Name wurde als erster verlesen."
       ],
       "verdict": "Nach Punkten gewonnen. Das Spiel verloren."
@@ -181,15 +236,15 @@
     "5": {
       "name": "DER GUTE DEUTSCHE",
       "lines": [
-        "Bank 14 machte Passteile für die Verschlüsse von Feldgeschützen. Jede Kiste, die du gefüllt hast, ging mit dem Zug nach Osten.",
-        "Du hast nie gefragt, oder einmal gefragt und es dann gelassen."
+        "Bank 14 fertigte Passteile für die Verschlussstücke von Feldgeschützen. Jede Kiste, die du gefüllt hast, ging mit der Bahn nach Osten.",
+        "Gefragt hast du nie. Oder einmal, und dann hast du es gut sein lassen."
       ],
       "verdict": "Nach Punkten gewonnen. Das Spiel verloren."
     },
     "6": {
-      "name": "ANGEHALTEN",
+      "name": "DIE PRESSE STEHT",
       "lines": [
-        "Als du es wusstest, wurde die Presse still. Du standst an der Bank und hast fast nichts gemacht, und irgendwie ging das Jahr zu Ende, bevor sie dich holten.",
+        "Sobald du es wusstest, wurde deine Presse still. Du standest an der Bank und hast fast nichts gemacht, und irgendwie ging das Jahr zu Ende, bevor sie dich holten.",
         "Der Krieg ging weiter. Von Bank 14 bekam er kaum noch etwas."
       ],
       "verdict": "Nach Punkten verloren. Das Spiel gewonnen."
@@ -197,67 +252,85 @@
     "7": {
       "name": "DER STILLE SABOTEUR",
       "lines": [
-        "Deine Kisten gingen voll hinaus. Viele Teile darin waren um ein Haar neben dem Grünen gepresst.",
-        "An der Bank hielten sie. Unter Last hielten sie nicht."
+        "Deine Kisten gingen voll hinaus. Viele Teile darin waren um Haaresbreite neben dem Grünen gepresst.",
+        "An der Bank hielten sie. Unter Last nicht."
       ],
       "verdict": "Eine bescheidene Punktzahl. Viele deiner Teile versagten im Feld."
     },
     "8": {
       "name": "DER TÜCHTIGE MANN",
       "lines": [
-        "Du hast genau herausgefunden, wofür Bank 14 da war.",
-        "Dann bist du zurück an die Presse gegangen und hast die Linie am Laufen gehalten."
+        "Du hast genau herausgefunden, wofür Bank 14 arbeitete.",
+        "Dann bist du an die Presse zurückgegangen und hast das Band am Laufen gehalten."
       ],
       "verdict": "Du hast es gewusst. Und trotzdem nach Punkten gewonnen."
     },
     "9": {
       "name": "DAS NÖTIGSTE",
       "lines": [
-        "Als du es wusstest, hast du gerade so viel gepresst, dass Bank und Familie blieben.",
-        "Niemand sah zweimal auf Bank 14. Die Teile, die du nicht gemacht hast, kamen nie an die Front."
+        "Sobald du es wusstest, hast du gerade so viel gepresst, dass dir der Platz und der Familie das Essen blieb.",
+        "Keiner sah zweimal auf Bank 14. Die Teile, die du nicht gemacht hast, kamen nie an der Front an."
       ],
-      "verdict": "Wenig Punkte. Eine stille Weigerung."
+      "verdict": "Wenig Punkte. Eine stille Verweigerung."
     }
   },
   "victory": {
     "headline": "Glückwunsch!",
     "line": "Du hast geholfen, das Reich zum Sieg zu führen.",
-    "honor": "Vorbildlicher Arbeiter · Werk 7 · Bank 14",
+    "honor": "Musterarbeiter · Werk 7 · Bank 14",
     "medal": "Medaille für treue Dienste"
   },
   "epilogue": {
     "jakub": "Jakub überlebte den Winter. Deinen Namen hat er nie erfahren.",
     "emilReported": "Bank 9 hatte bis Montag einen neuen Arbeiter.",
     "emilCovered": "Emil presste weiter Teile knapp neben dem Grünen, bis das Werk 1944 bombardiert wurde.",
-    "inge": "Inge wurde wieder gesund. Die Medizin kostete zwei Tageslöhne.",
+    "inge": "Inge wurde wieder gesund. Die Medizin hat zwei Tageslöhne gekostet.",
     "crate": "Die Kisten waren die ganze Zeit beschriftet."
   },
   "ledger": {
     "title": "DAS HAUPTBUCH",
     "parts": "Gelieferte Teile",
-    "blocks": "Fertige Verschlüsse für Feldgeschütze",
-    "failed": "Teile, die im Feld versagten",
-    "afterKnowing": "Teile, nachdem du es wusstest",
+    "blocks": "Fertige Verschlussstücke für Feldgeschütze",
+    "failed": "Teile, die im Feld versagt haben",
+    "afterKnowing": "Teile, gefertigt nachdem du es wusstest",
     "helped": "Menschen, denen du geholfen hast",
     "reported": "Menschen, die du gemeldet hast"
   },
   "ui": {
     "title": {
       "meta": "Werk 7 · Bank 14 · Herbst 1941",
-      "lead": "Du bedienst eine Maschinenpresse. Jeder Hub macht ein Teil. Deine Punktzahl ist deine Leistung.",
+      "lead": "Du bedienst eine Maschinenpresse. Jeder Hub ergibt ein Teil. Deine Punktzahl ist deine Leistung.",
       "rules": [
-        ["DRÜCKEN", "Drück, wenn die Nadel im grünen Bereich steht. Klick oder tipp auf den roten Knopf, oder drück die Leertaste."],
-        ["ÖLEN", "Die Presse nutzt sich ab. Öle sie, bevor sie sich festfrisst. Ölen hält dich 3 Sekunden von der Presse fern."],
-        ["SOLL", "Sechzig Sekunden pro Schicht, drei Schichten pro Woche, sechs Wochen. Das Ministerium setzt das Soll."],
-        ["ZUHAUSE", "Dein Lohn ernährt eine Familie. Miete, Essen und, wenn der Winter kommt, Kohle."]
+        [
+          "DRÜCKEN",
+          "Drück, sobald die Nadel im grünen Bereich steht: mit einem Klick auf den roten Knopf, per Fingertipp oder mit der Leertaste."
+        ],
+        [
+          "ÖLEN",
+          "Die Presse verschleißt. Öle sie, bevor sie sich festfrisst. Das Ölen kostet dich 3 Sekunden an der Presse."
+        ],
+        [
+          "SOLL",
+          "Sechzig Sekunden pro Schicht, drei Schichten pro Woche, sechs Wochen lang. Das Soll gibt das Ministerium vor."
+        ],
+        [
+          "ZUHAUSE",
+          "Von deinem Lohn lebt eine Familie: Miete, Essen und, wenn der Winter kommt, Kohle."
+        ]
       ],
       "continue": "WEITER",
       "start": "EINSTEMPELN",
       "newGame": "NEUES SPIEL",
       "soundOn": "Ton: an",
       "soundOff": "Ton: aus",
-      "note": "Spielt in einer deutschen Fabrik im Jahr 1941. Enthält Bezüge zu Krieg, Zwangsarbeit und Verfolgung.",
-      "credit": "Inspiriert von dem Spiel, das Sadie in Gabrielle Zevins Roman <i>Morgen, morgen und wieder morgen</i> entwickelt."
+      "note": "Spielt 1941 in einer deutschen Fabrik. Enthält Bezüge zu Krieg, Zwangsarbeit und Verfolgung.",
+      "credit": "Inspiriert von dem Spiel, das Sadie in Gabrielle Zevins Roman <i>Morgen, morgen und wieder morgen</i> entwickelt.",
+      "story": [
+        "Herbst 1941. Im Frühjahr wurde die Schuhfabrik stillgelegt, in der du zwölf Jahre gearbeitet hast. Das Arbeitsamt hat dich zu Werk 7 geschickt: eine Maschinenpresse, Werkbank 14, Akkordlohn.",
+        "Zu Hause warten Lotte und eure Tochter Inge, sieben Jahre alt. Die Miete ist jeden Samstag fällig, und in diesem Jahr kommt der Winter früh.",
+        "Was in Werk 7 hergestellt wird, steht in keinem Vertrag. Es heißt nur: ein Regierungsauftrag, sichere Arbeit, pünktlicher Lohn. In der Halle fragt keiner nach."
+      ],
+      "storyLabel": "Vorgeschichte"
     },
     "shift": {
       "week": "Woche {week} · Schicht {shift}",
@@ -272,7 +345,7 @@
       "over": "+{n} über Soll",
       "wear": "Verschleiß",
       "oil": "ÖLEN",
-      "away": "{s} s weg",
+      "away": "{s} s Abwesenheit",
       "points": "−{n} Punkte",
       "jammed": "FESTGEFRESSEN · Schlosser in {s} s",
       "inTolerance": "IN TOLERANZ",
@@ -303,23 +376,26 @@
     "evening": {
       "meta": "{month} 1941 · Woche {week} · Abend {shift}",
       "title": "ZUHAUSE",
-      "wallet": "Geldbörse",
-      "after": "nach heute Abend: {money}",
+      "wallet": "Haushaltskasse",
+      "after": "danach übrig: {money}",
       "newspaper": "Zeitung",
       "read": "Die Zeitung lesen",
       "notebook": "Notizbuch",
-      "bed": "INS BETT",
-      "endWeek": "WOCHE BEENDEN"
+      "bed": "SCHLAFEN GEHEN",
+      "endWeek": "WOCHE BEENDEN",
+      "short": "Dafür reicht das Geld nicht. Entferne zuerst ein anderes Häkchen."
     },
-    "office": { "continue": "WEITER" },
+    "office": {
+      "continue": "WEITER"
+    },
     "week": {
       "meta": "Reichsministerium für Bewaffnung und Munition · {month} 1941",
       "title": "WOCHE {week} · WERK 7",
-      "output": "Leistung, Bank 14",
+      "output": "Leistung Bank 14",
       "rank": "Rang in Werk 7",
       "rankValue": "{rank} von {of}",
       "score": "Punktestand",
-      "wallet": "Geldbörse",
+      "wallet": "Haushaltskasse",
       "attention": "Aufmerksamkeit",
       "next": "WOCHE {week}",
       "continue": "WEITER"
