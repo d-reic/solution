@@ -8,6 +8,7 @@ import { breakView } from './scenes/break';
 import { officeView } from './scenes/office';
 import { shiftView } from './scenes/shift';
 import { shiftReportView } from './scenes/shiftReport';
+import { tableSvg } from './scenes/table';
 import { titleView } from './scenes/title';
 import type { View } from './scenes/view';
 import { weekReportView } from './scenes/weekReport';
@@ -115,5 +116,16 @@ describe('evening lines', () => {
     expect(lotte()).not.toBe(LINES.evening.lotte.hungry);
     v.update(reduce(s, { type: 'pay', bill: 'food' }));
     expect(lotte()).toBe(LINES.evening.lotte.hungry);
+  });
+});
+
+describe('kitchen table', () => {
+  const count = (svg: string, color: string) => svg.split(color).length - 1;
+  it('grows barer with the household, and goes empty but for Inge when food is skipped', () => {
+    const potato = '#c9a25a';
+    expect(count(tableSvg('high', true), potato)).toBe(9);
+    expect(count(tableSvg('high', false), potato)).toBe(3);
+    expect(count(tableSvg('mid', true), potato)).toBe(0);
+    expect(tableSvg('low', true)).not.toBe(tableSvg('mid', true));
   });
 });

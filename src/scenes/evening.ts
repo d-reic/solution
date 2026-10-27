@@ -2,6 +2,7 @@ import { CLUES, LINES, STORY, UI, WEEKS, fill, rm } from '../content';
 import { billCost, clueAvailable, eveningSpend, homeTalk, homeTalkOptions, jakubPresent, letterTonight } from '../reducer';
 import type { Bill, GameState } from '../state';
 import { TUNING as T } from '../tuning';
+import { tableSvg } from './table';
 import { $, type Dispatch, html, type View } from './view';
 
 const level = (household: number) => (household >= 70 ? 'high' : household >= 35 ? 'mid' : 'low');
@@ -15,7 +16,7 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
       <h2>${U.title}</h2>
       <div class="home">
         <div class="kitchen" data-kitchen>
-          <div class="table" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="table" data-table aria-hidden="true"></div>
           <p data-scene></p>
           <p class="said" data-lotte></p>
           <p class="said" data-inge></p>
@@ -101,6 +102,7 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
     );
   }
 
+  let drawnTable = '';
   function update(s: GameState) {
     const ev = s.evening;
     if (s.scene !== 'evening' || !ev) return;
@@ -109,6 +111,11 @@ export function eveningView(state: GameState, dispatch: Dispatch): View {
     const lv = level(s.household);
     const kitchen = $(el, '[data-kitchen]');
     kitchen.dataset.level = lv;
+    const tableKey = `${lv}-${ev.paying.food}`;
+    if (tableKey !== drawnTable) {
+      drawnTable = tableKey;
+      $(el, '[data-table]').innerHTML = tableSvg(lv, ev.paying.food);
+    }
     $(el, '[data-scene]').textContent = E.kitchen[lv];
     // Follows the food box as it is ticked: no food tonight, and Lotte gives her plate to Inge.
     $(el, '[data-lotte]').textContent = !ev.paying.food ? E.lotte.hungry : E.lotte[lv];
