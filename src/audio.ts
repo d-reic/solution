@@ -94,3 +94,37 @@ export function whistle() {
     tone('sine', f, f * 0.98, 1.3, 0.07, d);
   }
 }
+
+/** Distant steam whistle as the goods wagon backs up. */
+export function trainWhistle() {
+  tone('sine', 520, 500, 0.9, 0.035);
+  tone('sine', 655, 630, 0.9, 0.025);
+}
+
+/** The only music in the game: a tinny square-wave Wagner figure (public domain) for the victory screen. */
+export function fanfare() {
+  const a = ctx();
+  if (!a) return;
+  const N: Record<string, number> = { Fs4: 369.99, B4: 493.88, D5: 587.33, Fs5: 739.99, A5: 880, B5: 987.77 };
+  const seq: [string, number][] = [
+    ['Fs4', 0.12], ['B4', 0.36], ['Fs4', 0.12], ['B4', 0.12], ['D5', 0.36], ['B4', 0.12], ['D5', 0.12],
+    ['Fs5', 0.36], ['D5', 0.12], ['Fs5', 0.12], ['A5', 0.72], ['Fs5', 0.12], ['A5', 0.12], ['B5', 0.36],
+    ['A5', 0.12], ['Fs5', 0.12], ['D5', 0.36], ['B4', 0.12], ['Fs5', 0.12], ['B5', 1.1],
+  ];
+  let t = a.currentTime + 0.1;
+  for (const [n, d] of seq) {
+    for (const [type, mul, vol] of [['square', 1, 0.06], ['sawtooth', 0.5, 0.04]] as const) {
+      const o = a.createOscillator();
+      const g = a.createGain();
+      o.type = type;
+      o.frequency.value = N[n] * mul;
+      g.gain.setValueAtTime(vol, t);
+      g.gain.setValueAtTime(vol, t + d * 0.8);
+      g.gain.linearRampToValueAtTime(0, t + d * 0.98);
+      o.connect(g).connect(a.destination);
+      o.start(t);
+      o.stop(t + d);
+    }
+    t += d;
+  }
+}

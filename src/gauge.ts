@@ -24,8 +24,8 @@ export function fitCanvas(canvas: HTMLCanvasElement) {
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
   }
-  const ctx = canvas.getContext('2d')!;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const ctx = canvas.getContext('2d');
+  ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { ctx, w, h };
 }
 
@@ -33,16 +33,18 @@ export interface GaugeView {
   needle: number;
   bandCenter: number;
   bandWidth: number;
+  /** Amber band on each side of green; 0 until it's unlocked. */
+  amberWidth: number;
   /** Where the last press landed, and how long ago (s). */
-  mark: { pos: number; good: boolean; age: number } | null;
+  mark: { pos: number; result: 'good' | 'amber' | 'scrap'; age: number } | null;
   /** Dims the face while the press can't be used. */
   idle: boolean;
 }
 
 export function drawGauge(canvas: HTMLCanvasElement, v: GaugeView) {
   const { ctx, w, h } = fitCanvas(canvas);
+  if (!ctx || w < 40 || h < 40) return; // not laid out yet
   ctx.clearRect(0, 0, w, h);
-  if (w < 40 || h < 40) return; // not laid out yet
   // The arc's top sits r * 1.1 above the hub; leave room for the hub below.
   const r = Math.min(w * 0.44, (h - 8) / 1.22);
   const cx = w / 2;
@@ -67,6 +69,11 @@ export function drawGauge(canvas: HTMLCanvasElement, v: GaugeView) {
     ctx.stroke();
   };
   arc(0, 1, C.scrap);
+  if (v.amberWidth > 0) {
+    const half = v.bandWidth / 2;
+    arc(v.bandCenter - half - v.amberWidth, v.bandCenter - half, C.lamp);
+    arc(v.bandCenter + half, v.bandCenter + half + v.amberWidth, C.lamp);
+  }
   arc(v.bandCenter - v.bandWidth / 2, v.bandCenter + v.bandWidth / 2, C.green);
 
   // Ticks
@@ -94,7 +101,7 @@ export function drawGauge(canvas: HTMLCanvasElement, v: GaugeView) {
     const r0 = r + band * 0.1;
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = v.mark.good ? C.green : C.warn;
+    ctx.fillStyle = v.mark.result === 'good' ? C.green : v.mark.result === 'amber' ? C.lamp : C.warn;
     ctx.translate(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
     ctx.rotate(a + Math.PI / 2);
     ctx.beginPath();
@@ -122,7 +129,7 @@ export function drawGauge(canvas: HTMLCanvasElement, v: GaugeView) {
   ctx.fill();
 
   if (v.idle) {
-    ctx.fillStyle = 'rgba(25,31,28,.45)';
+    ctx.fillStyle = 'rgba(75,97,82,.6)'; // machine green, so only the face looks dimmed
     ctx.fillRect(0, 0, w, h);
   }
 }
@@ -130,8 +137,8 @@ export function drawGauge(canvas: HTMLCanvasElement, v: GaugeView) {
 /** Small wear dial: 0–100, red above the narrowing point. */
 export function drawWear(canvas: HTMLCanvasElement, wear: number, narrowAbove: number) {
   const { ctx, w, h } = fitCanvas(canvas);
+  if (!ctx || w < 20 || h < 20) return; // not laid out yet
   ctx.clearRect(0, 0, w, h);
-  if (w < 20 || h < 20) return; // not laid out yet
   const r = Math.min(w * 0.42, h * 0.8);
   const cx = w / 2;
   const cy = h * 0.5 + r * 0.42;

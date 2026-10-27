@@ -178,20 +178,30 @@ describe('tick', () => {
     s = run(s, T.shiftLength);
     expect(s.report?.met).toBe(true);
     expect(s.score).toBe(quotaFor(1) * T.pointsPerPart + T.quotaBonusPoints);
-    expect(s.money).toBeCloseTo(quotaFor(1) * T.payPerPart + T.quotaBonusPay);
+    expect(s.money).toBeCloseTo(T.startingMoney + quotaFor(1) * T.payPerPart + T.quotaBonusPay);
     expect(s.ledger.good).toBe(quotaFor(1));
   });
 });
 
 describe('advance', () => {
-  it('moves through shifts and into the next week', () => {
+  it('goes shift, report, evening, next shift; and a week report after shift 3', () => {
     let s = start();
-    const seen: [number, number][] = [];
+    const seen: string[] = [];
     for (let i = 0; i < 4; i++) {
-      seen.push([s.week, s.shift]);
-      s = reduce(run(s, T.shiftLength), { type: 'advance' });
+      seen.push(`${s.week}-${s.shift}`);
+      s = { ...s, today: { ...s.today, good: quotaFor(s.week) } };
+      s = run(s, T.shiftLength);
+      expect(s.scene).toBe('shiftReport');
+      s = reduce(s, { type: 'advance' });
+      expect(s.scene).toBe('evening');
+      s = reduce(s, { type: 'advance' });
+      if (i === 2) {
+        expect(s.scene).toBe('weekReport');
+        s = reduce(s, { type: 'advance' });
+      }
     }
-    expect(seen).toEqual([[1, 1], [1, 2], [1, 3], [2, 1]]);
+    expect(seen).toEqual(['1-1', '1-2', '1-3', '2-1']);
+    expect(s.scene).toBe('shift');
     expect(s.clock).toBe(0);
     expect(s.today.good).toBe(0);
   });
